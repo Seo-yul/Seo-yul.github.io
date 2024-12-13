@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <form style="text-align: center;" id="greeting-form">
+      <input type="text" id="username" placeholder="Please type your name." required/>
+    </form>
+    <button id="logout-btn" class="hidden">로그아웃</button>
+
+    <h1 style="text-align: center; font: 1em" id="greeting" class="greetings hidden">안녕하세요!</h1>
+    <h1 style="text-align: center; font-size: 10em" class="clock">00:00:00</h2>
+
+
+    <div id="todo-container">
+      <form id="todo-form">
+        <input type="text" id="todo-input" placeholder="Write a to do." required />
+      </form>
+      <ul id="todo-list"></ul>
+    </div>
+
+
+
+
+    <h3 id="bbong">
+      <span class="bbong" style="color: #D00000; font-weight: bold;">가장</span>
+      <span class="bbong" style="color: #0054A6;">한국적인</span>
+      <span class="bbong">것이</span>
+      <span class="bbong" style="color: #D00000; font-weight: bold;">가장</span>
+      <span class="bbong" style="color: #A01050;">세계적인</span>
+      <span class="bbong">것이다.</span>
+    </h3>
+    
+    <script type="module" src="js/clock.js"></script>
+    <script type="module" src="js/greetings.js"></script>
+    <script type="module" src="js/todo.js"></script>
+  </body>
+</html>

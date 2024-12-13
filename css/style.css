@@ -1,0 +1,137 @@
+.hidden {
+    display: none;
+}
+#username {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+#input-btn {
+    padding: 10px 20px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+#logout-btn {
+    text-align: center;
+    padding: 10px 20px;
+    border: none;
+    background-color: #7c3038;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.greetings {
+    color: #eee;
+    text-shadow: 2px 2px 4px rgb(0, 0, 0);
+}
+
+
+
+
+.clock {
+    color: #eee;
+    text-shadow: 2px 2px 4px rgb(0, 0, 0);
+}
+
+#todo-input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+  
+
+
+
+#bbong {
+    text-shadow: 1px 1px 1px #fff; 
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 1em;
+    background-color: rgba(255, 243, 243, 0.9); /* 배경 추가로 가독성 향상 */
+    padding: 10px 0;
+    margin: 0;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1); /* 상단 그림자 추가 */
+}
+.bbong {
+    text-shadow: 1px 1px 1px #fff; 
+    
+}
+
+
+
+#todo-container {
+    position: absolute;
+    width: 50%;
+    right: 0;
+    bottom: 0;
+    height: 50%;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+#todo-form {
+    display: flex;
+    justify-content: center;
+    margin: 15px 0;
+}
+
+#todo-input {
+    width: 90%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1.1em;
+    outline: none;
+}
+
+#todo-list {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+    max-width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#todo-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #fafafa;
+    margin-bottom: 10px;
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#todo-list li:hover {
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#todo-list li button {
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.85em;
+    transition: background-color 0.2s ease;
+}
+
+#todo-list li button:hover {
+    background-color: #ff4d4d;
+}
