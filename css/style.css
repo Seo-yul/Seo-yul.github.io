@@ -45,28 +45,29 @@
 }
 
   
-
-
-
-#bbong {
-    text-shadow: 1px 1px 1px #fff; 
-    position: fixed;
-    bottom: 0;
+#weather-container {
+    position: absolute;
+    width: 50%;
     left: 0;
-    width: 100%;
-    text-align: center;
-    font-size: 1em;
-    background-color: rgba(255, 243, 243, 0.9); /* 배경 추가로 가독성 향상 */
-    padding: 10px 0;
-    margin: 0;
-    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1); /* 상단 그림자 추가 */
-}
-.bbong {
-    text-shadow: 1px 1px 1px #fff; 
-    
+    bottom: 14px;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    margin-right: 0;
 }
 
-
+#weather {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #80808080;
+    padding: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    color: #eee;
+    margin-right: 50%;
+}
 
 #todo-container {
     position: absolute;
@@ -134,4 +135,23 @@
 
 #todo-list li button:hover {
     background-color: #ff4d4d;
+}
+
+
+#bbong {
+    text-shadow: 1px 1px 1px #fff; 
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 1em;
+    background-color: rgba(255, 243, 243, 0.9); /* 배경 추가로 가독성 향상 */
+    padding: 10px 0;
+    margin: 0;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1); /* 상단 그림자 추가 */
+}
+.bbong {
+    text-shadow: 1px 1px 1px #fff; 
+    
 }
