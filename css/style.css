@@ -745,6 +745,10 @@ img {
   border-left: 3px solid var(--accent-orange);
 }
 
+.cert-item__badge {
+  flex-shrink: 0;
+}
+
 .cert-item__abbr {
   font-family: var(--font-mono);
   font-size: 14px;
