@@ -300,6 +300,16 @@
   <!-- Text: Cloud Native Community -->
   <text x="500" y="695" text-anchor="middle" font-family="'Arial Black', 'Impact', 'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="48" fill="#0086FF">Cloud Native Community</text>
 
-  <!-- Text: Korea -->
-  <text x="500" y="850" text-anchor="middle" font-family="'Arial Black', 'Impact', 'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="110" fill="#0086FF">Korea</text>
+  <!-- Text: Korea with Taegeuk replacing 'o' -->
+  <text x="343" y="850" text-anchor="start" font-family="'Arial Black', 'Impact', 'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="110" fill="#0086FF">K</text>
+
+  <!-- Taegeuk (replacing 'o') -->
+  <g transform="translate(495, 850)">
+    <g transform="scale(0.30) translate(-100, -100) rotate(33.69)">
+      <path fill="#cd2e3a" d="M50 0a75 75 0 1 1-150 0 100 100 0 1 1 200 0"/>
+      <path fill="#0047a0" d="M0 0a50 50 0 1 1 100 0 100 100 0 1 1-200 0 50 50 0 1 0 100 0"/>
+    </g>
+  </g>
+
+  <text x="495" y="850" text-anchor="start" font-family="'Arial Black', 'Impact', 'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="110" fill="#0086FF">rea</text>
 </svg>
