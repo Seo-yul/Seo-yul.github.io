@@ -232,19 +232,19 @@
   <!-- "COMMUNITY" in sky blue -->
   <text x="1030" y="120" font-family="'Arial Black', 'Impact', 'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="58" fill="#7ECEF4" letter-spacing="3">COMMUNITY</text>
 
-  <!-- "K" -->
-  <text x="610" y="340" font-family="'Arial Black', 'Impact', 'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="160" fill="url(#koreaGrad)" letter-spacing="12">K</text>
+  <!-- "K" - 태극 빨간색 -->
+  <text x="610" y="340" font-family="'Arial Black', 'Impact', 'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="160" fill="#CC3333" letter-spacing="12">K</text>
 
-  <!-- Taeguk replacing O — taeguk itself IS the O, no ring -->
+  <!-- Taeguk replacing O — taegeuk.svg 스타일 적용 -->
   <g transform="translate(810, 275)">
     <g clip-path="url(#taegukClip)">
-      <path d="M-60,0 a60,60 0 0,1 120,0" fill="#c41230"/>
-      <path d="M-60,0 a60,60 0 0,0 120,0" fill="#003478"/>
-      <circle cx="-30" cy="0" r="30" fill="#c41230"/>
-      <circle cx="30" cy="0" r="30" fill="#003478"/>
+      <g transform="rotate(33.69) scale(0.6)">
+        <path fill="#CC3333" d="M50 0a75 75 0 1 1-150 0 100 100 0 1 1 200 0"/>
+        <path fill="#0047A0" d="M0 0a50 50 0 1 1 100 0 100 100 0 1 1-200 0 50 50 0 1 0 100 0"/>
+      </g>
     </g>
   </g>
 
-  <!-- "REA" -->
-  <text x="882" y="340" font-family="'Arial Black', 'Impact', 'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="160" fill="url(#koreaGrad)" letter-spacing="12">REA</text>
+  <!-- "REA" - 태극 파란색 -->
+  <text x="882" y="340" font-family="'Arial Black', 'Impact', 'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="160" fill="#0047A0" letter-spacing="12">REA</text>
 </svg>
