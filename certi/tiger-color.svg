@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="500" height="500">
-  <g transform="translate(0, 0) scale(0.8621, 0.8621) translate(0, 580) scale(0.1, -0.1)" fill="#0086FF">
+  <defs>
+    <linearGradient id="tigerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a2a6c"/>
+      <stop offset="50%" stop-color="#c41230"/>
+      <stop offset="100%" stop-color="#1a2a6c"/>
+    </linearGradient>
+  </defs>
+  <!-- Horizontal flip: translate(500,0) scale(-1,1) -->
+  <g transform="translate(500, 0) scale(-1, 1)">
+    <g transform="scale(0.8621, 0.8621) translate(0, 580) scale(0.1, -0.1)" fill="url(#tigerGrad)">
 <path d="M1919 5430 c-139 -24 -259 -150 -304 -321 -18 -65 -19 -223 -4 -285
 15 -57 15 -57 -156 -164 -181 -114 -316 -176 -560 -260 -115 -40 -250 -88
 -300 -107 -89 -35 -359 -165 -382 -185 -9 -7 -13 -46 -13 -126 l0 -115 68 64
@@ -140,5 +149,6 @@ c-10 14 -21 26 -26 26 -5 0 -39 -19 -76 -42 -76 -47 -209 -108 -235 -108 -15
 248 -357 596 -639 l142 -116 181 0 180 0 -53 77 c-69 102 -247 280 -429 431
 -217 180 -323 300 -450 512 -81 136 -179 354 -215 480 -16 55 -34 100 -41 100
 -6 0 -31 -16 -55 -36z"/>
+    </g>
   </g>
 </svg>

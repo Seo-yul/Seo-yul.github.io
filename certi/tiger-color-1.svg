@@ -1,26 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="500" height="500">
-  <!-- Checkerboard border pattern -->
-  <!-- Top row -->
-  <rect x="0" y="0" width="166.4" height="71.8" fill="#0086FF"/>
-  <rect x="166.4" y="0" width="167.2" height="71.8" fill="#93EAFF"/>
-  <rect x="333.6" y="0" width="166.4" height="71.8" fill="#0086FF"/>
-  <!-- Left column -->
-  <rect x="0" y="71.8" width="71" height="95.2" fill="#0086FF"/>
-  <rect x="0" y="167" width="71" height="166" fill="#93EAFF"/>
-  <rect x="0" y="333" width="71" height="95" fill="#0086FF"/>
-  <!-- Right column -->
-  <rect x="429" y="71.8" width="71" height="95.2" fill="#0086FF"/>
-  <rect x="429" y="167" width="71" height="166" fill="#93EAFF"/>
-  <rect x="429" y="333" width="71" height="95" fill="#0086FF"/>
-  <!-- Bottom row -->
-  <rect x="0" y="428" width="166.4" height="72" fill="#0086FF"/>
-  <rect x="166.4" y="428" width="167.2" height="72" fill="#93EAFF"/>
-  <rect x="333.6" y="428" width="166.4" height="72" fill="#0086FF"/>
-  <!-- White center -->
-  <rect x="71" y="71.8" width="358" height="356.2" fill="#FFFFFF"/>
-  <!-- Tiger paths from potrace -->
-  <g transform="translate(71, 71.8) scale(0.6172, 0.6138) translate(0, 580) scale(0.1, -0.1)" fill="#0086FF">
+  <!-- Horizontal flip: translate(500,0) scale(-1,1) -->
+  <g transform="translate(500, 0) scale(-1, 1)">
+    <g transform="scale(0.8621, 0.8621) translate(0, 580) scale(0.1, -0.1)" fill="#1a2a6c">
 <path d="M1919 5430 c-139 -24 -259 -150 -304 -321 -18 -65 -19 -223 -4 -285
 15 -57 15 -57 -156 -164 -181 -114 -316 -176 -560 -260 -115 -40 -250 -88
 -300 -107 -89 -35 -359 -165 -382 -185 -9 -7 -13 -46 -13 -126 l0 -115 68 64
@@ -160,5 +142,6 @@ c-10 14 -21 26 -26 26 -5 0 -39 -19 -76 -42 -76 -47 -209 -108 -235 -108 -15
 248 -357 596 -639 l142 -116 181 0 180 0 -53 77 c-69 102 -247 280 -429 431
 -217 180 -323 300 -450 512 -81 136 -179 354 -215 480 -16 55 -34 100 -41 100
 -6 0 -31 -16 -55 -36z"/>
+    </g>
   </g>
 </svg>
