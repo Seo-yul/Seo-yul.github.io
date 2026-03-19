@@ -438,25 +438,41 @@
     }
 
     /* ── About ── */
-    .about-grid {
-      display: grid;
-      gap: 24px;
-    }
     .about-card {
-      padding: 28px 32px;
+      padding: 32px 36px;
     }
     .about-card p {
       color: rgba(224, 232, 248, 0.8);
       font-size: 1.1rem;
-      line-height: 1.8;
+      line-height: 1.9;
     }
-    .about-card__num {
-      font-family: var(--font-heading);
-      font-size: 0.95rem;
-      font-weight: 600;
+    .about-card p + p {
+      margin-top: 16px;
+    }
+
+    /* ── Quote ── */
+    .section-quote {
+      text-align: center;
+      max-width: 720px;
+      margin: 0 auto 0;
+      padding: 0 24px;
+    }
+    .section-quote__text {
+      font-size: 1.15rem;
+      font-style: italic;
+      line-height: 1.8;
+      color: rgba(224, 232, 248, 0.55);
+      position: relative;
+    }
+    .section-quote__text::before {
+      content: '\201C';
+      font-size: 3rem;
       color: var(--accent);
-      margin-bottom: 12px;
-      display: block;
+      opacity: 0.3;
+      position: absolute;
+      top: -20px;
+      left: -24px;
+      font-style: normal;
     }
 
     /* ── Tech Stack ── */
@@ -498,8 +514,14 @@
     .project-card { padding: 36px; }
     .project-card__title {
       font-size: 1.5rem;
-      margin-bottom: 12px;
+      margin-bottom: 4px;
       color: var(--text);
+    }
+    .project-card__period {
+      font-size: 0.85rem;
+      color: rgba(224, 232, 248, 0.45);
+      margin-bottom: 12px;
+      letter-spacing: 0.02em;
     }
     .project-card__desc {
       color: rgba(224, 232, 248, 0.75);
@@ -784,21 +806,16 @@
   <section class="section" id="about" aria-label="About">
     <p class="section__label">Who I Am</p>
     <h2 class="section__title">About</h2>
-    <div class="about-grid">
-      <div class="card-3d about-card fly-in from-left" data-tilt>
-        <span class="about-card__num">01</span>
-        <p>Experienced Cloud Application Engineer specializing in the Kubernetes ecosystem, infrastructure automation, and observability. I architect and build platforms that let development teams ship faster and operate with confidence.</p>
-      </div>
-      <div class="card-3d about-card fly-in" data-tilt>
-        <span class="about-card__num">02</span>
-        <p>Active contributor to the cloud-native community in Korea, helping bridge the gap between cutting-edge technology and practical enterprise adoption. I believe the best infrastructure is the kind nobody has to think about.</p>
-      </div>
-      <div class="card-3d about-card fly-in from-left" data-tilt>
-        <span class="about-card__num">03</span>
-        <p>Recently, I've been deeply interested in enterprise AX (AI Transformation), focusing on running AI workloads effectively on cloud-native infrastructure and taking a leading role in driving AI adoption across organizations.</p>
-      </div>
+    <div class="card-3d about-card fly-in" data-tilt>
+      <p>Experienced Cloud Application Engineer specializing in the Kubernetes ecosystem, infrastructure automation, and observability. I architect and build platforms that let development teams ship faster and operate with confidence.</p>
+      <p>Active contributor to the cloud-native community in Korea, helping bridge the gap between cutting-edge technology and practical enterprise adoption. I believe the best infrastructure is the kind nobody has to think about.</p>
+      <p>Recently, I've been deeply interested in enterprise AX (AI Transformation), focusing on running AI workloads effectively on cloud-native infrastructure and taking a leading role in driving AI adoption across organizations.</p>
     </div>
   </section>
+
+  <div class="section section-quote fly-in">
+    <p class="section-quote__text">I don't just modernize systems — I build the culture around it.</p>
+  </div>
 
   <!-- Tech Stack -->
   <section class="section" id="tech" aria-label="Tech Stack">
@@ -857,6 +874,7 @@
     <div class="projects-grid">
       <div class="card-3d project-card fly-in from-left" data-tilt>
         <h3 class="project-card__title">AXMP AI Agent Studio</h3>
+        <p class="project-card__period">2025.05 — Present</p>
         <p class="project-card__desc">Engineered MCP Server Builder enabling OpenAPI-to-MCP specification conversion. Streamlined AI agent development workflow for enterprise teams.</p>
         <div class="project-card__tags">
           <span class="project-tag">FastAPI</span>
@@ -874,6 +892,7 @@
       </div>
       <div class="card-3d project-card fly-in" data-tilt>
         <h3 class="project-card__title">Modernization Platform APIM</h3>
+        <p class="project-card__period">2021.01 — 2025.04</p>
         <p class="project-card__desc">Architected and implemented Kubernetes-native API gateway management platform. Centralized API lifecycle management across multi-cluster environments.</p>
         <div class="project-card__tags">
           <span class="project-tag">Kubernetes</span>
@@ -902,7 +921,7 @@
       <div class="card-3d activity-card fly-in from-left" data-tilt>
         <h3 class="activity-card__heading">Leadership</h3>
         <ul class="activity-list" role="list">
-          <li>CNCK (Cloud Native Community Korea) — Head of Community Ops &amp; Organizer · 2026–Present</li>
+          <li>CNCK (Cloud Native Community Korea) — Organizer &amp; Head of Community Ops · 2026–Present</li>
           <li>Kubernetes Organization Member — Top 17 All-Time PR in Korea · 2022–2025</li>
           <li>NAVER Cloud Platform Tech Ambassador · 2023–2026.02</li>
           <li>GopherCon Korea 2023/2024 Organizer</li>
