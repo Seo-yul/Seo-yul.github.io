@@ -8,7 +8,8 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☁️</text></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" /></noscript>
   <style>
     /* ── Reset ── */
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -20,7 +21,7 @@
       --accent: #3B82F6;
       --sub: #60A5FA;
       --star: #FFFFFF;
-      --card-bg: rgba(10, 18, 40, 0.6);
+      --card-bg: rgba(10, 18, 40, 0.85);
       --card-border: rgba(59, 130, 246, 0.2);
       --font-heading: 'Space Grotesk', sans-serif;
       --font-body: 'IBM Plex Sans', sans-serif;
@@ -57,7 +58,8 @@
     .nebula {
       position: fixed;
       top: 0; left: 0;
-      width: 200vw; height: 200vh;
+      width: 100vw; height: 100vh;
+      will-change: transform;
       z-index: 1;
       pointer-events: none;
       background:
@@ -156,7 +158,7 @@
       pointer-events: none;
       z-index: 1;
       border-radius: 50%;
-      filter: blur(60px);
+      filter: blur(40px);
       opacity: 0.15;
     }
     .parallax-bg {
@@ -294,8 +296,6 @@
       transform-style: preserve-3d;
       transition: transform 0.15s ease-out, box-shadow 0.3s;
       will-change: transform;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
     }
     .card-3d::before {
       content: '';
@@ -1067,7 +1067,11 @@
         }
 
         if (!prefersReducedMotion) {
-          requestAnimationFrame(draw);
+          if (warpActive) {
+            requestAnimationFrame(draw);
+          } else {
+            setTimeout(draw, 100);
+          }
         }
       }
 
@@ -1112,19 +1116,23 @@
     if (!prefersReducedMotion) {
       document.querySelectorAll('[data-tilt]').forEach(card => {
         card.addEventListener('mousemove', (e) => {
-          const rect = card.getBoundingClientRect();
-          const x = e.clientX - rect.left;
-          const y = e.clientY - rect.top;
-          const centerX = rect.width / 2;
-          const centerY = rect.height / 2;
-          const rotateX = ((y - centerY) / centerY) * -8;
-          const rotateY = ((x - centerX) / centerX) * 8;
-          const reflectionAngle = Math.atan2(y - centerY, x - centerX) * (180 / Math.PI) + 90;
+          if (card._tiltFrame) return;
+          card._tiltFrame = requestAnimationFrame(() => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const rotateX = ((y - centerY) / centerY) * -8;
+            const rotateY = ((x - centerX) / centerX) * 8;
+            const reflectionAngle = Math.atan2(y - centerY, x - centerX) * (180 / Math.PI) + 90;
 
-          card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(8px)`;
-          card.style.setProperty('--mouse-x', `${(x / rect.width) * 100}%`);
-          card.style.setProperty('--mouse-y', `${(y / rect.height) * 100}%`);
-          card.style.setProperty('--reflection-angle', `${reflectionAngle}deg`);
+            card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(8px)`;
+            card.style.setProperty('--mouse-x', `${(x / rect.width) * 100}%`);
+            card.style.setProperty('--mouse-y', `${(y / rect.height) * 100}%`);
+            card.style.setProperty('--reflection-angle', `${reflectionAngle}deg`);
+            card._tiltFrame = null;
+          });
         });
 
         card.addEventListener('mouseleave', () => {
@@ -1179,13 +1187,20 @@
     if (!prefersReducedMotion) {
       const nebula = document.querySelector('.nebula');
       const dust = document.querySelector('.dust-layer');
+      let nebulaTicking = false;
       window.addEventListener('scroll', () => {
-        const t = window.pageYOffset / (document.body.scrollHeight - window.innerHeight);
-        const scale = 1 + t * 0.15;
-        const opacity = 0.7 + t * 0.3;
-        nebula.style.transform = `scale(${scale})`;
-        nebula.style.opacity = Math.min(opacity, 1);
-        dust.style.opacity = 0.8 + t * 0.2;
+        if (!nebulaTicking) {
+          requestAnimationFrame(() => {
+            const t = window.pageYOffset / (document.body.scrollHeight - window.innerHeight);
+            const scale = 1 + t * 0.15;
+            const opacity = 0.7 + t * 0.3;
+            nebula.style.transform = `scale(${scale})`;
+            nebula.style.opacity = Math.min(opacity, 1);
+            dust.style.opacity = 0.8 + t * 0.2;
+            nebulaTicking = false;
+          });
+          nebulaTicking = true;
+        }
       }, { passive: true });
     }
 
