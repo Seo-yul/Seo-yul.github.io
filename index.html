@@ -3,21 +3,750 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Seoyul Yoon — Cloud Native Engineer</title>
-  <meta name="description" content="Seoyul Yoon — Cloud Application Engineer specializing in Kubernetes, platform engineering, and cloud-native systems." />
+  <title>Seoyul Yoon — Cloud Application Engineer</title>
+  <meta name="description" content="Portfolio of Seoyul Yoon — Cloud Application Engineer, Kubestronaut, cloud-native community leader." />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☁️</text></svg>" />
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset ── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #060614;
+      --text: #E0E8F8;
+      --text-dim: #8090b8;
+      --accent: #3B82F6;
+      --sub: #60A5FA;
+      --star: #FFFFFF;
+      --card-bg: rgba(10, 18, 40, 0.6);
+      --card-border: rgba(59, 130, 246, 0.2);
+      --font-heading: 'Space Grotesk', sans-serif;
+      --font-body: 'IBM Plex Sans', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: 700; }
+
+    a { color: var(--accent); text-decoration: none; transition: color 0.3s; }
+    a:hover { color: var(--sub); }
+
+    img { max-width: 100%; display: block; }
+
+    /* ── Star Canvas ── */
+    #star-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ── Nebula Overlay ── */
+    .nebula {
+      position: fixed;
+      top: 0; left: 0;
+      width: 200vw; height: 200vh;
+      z-index: 1;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse 800px 600px at 20% 30%, #0a1628 0%, transparent 70%),
+        radial-gradient(ellipse 600px 900px at 80% 50%, #0d2847 0%, transparent 65%),
+        radial-gradient(ellipse 900px 500px at 50% 80%, #081e3e 0%, transparent 60%),
+        radial-gradient(ellipse 400px 400px at 60% 20%, rgba(59, 130, 246, 0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 500px 300px at 30% 70%, rgba(13, 40, 71, 0.4) 0%, transparent 60%);
+      opacity: 0.7;
+      animation: nebulaFloat 60s ease-in-out infinite alternate;
+    }
+
+    @keyframes nebulaFloat {
+      0%   { transform: translate(0, 0) scale(1); }
+      25%  { transform: translate(-40px, -30px) scale(1.02); }
+      50%  { transform: translate(20px, -60px) scale(0.98); }
+      75%  { transform: translate(-30px, 20px) scale(1.01); }
+      100% { transform: translate(30px, -20px) scale(1); }
+    }
+
+    /* ── Space Dust Particles ── */
+    .dust-layer {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 2;
+      pointer-events: none;
+      background-image:
+        radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 30% 50%, rgba(150,190,255,0.25) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 60% 15%, rgba(255,255,255,0.2) 0%, transparent 100%),
+        radial-gradient(1px 1px at 80% 70%, rgba(130,170,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 45% 85%, rgba(255,255,255,0.15) 0%, transparent 100%);
+      animation: dustDrift 40s linear infinite;
+    }
+
+    @keyframes dustDrift {
+      0%   { transform: translate(0, 0); }
+      100% { transform: translate(-50px, -80px); }
+    }
+
+    /* ── Shooting Stars ── */
+    .shooting-star {
+      position: fixed;
+      z-index: 3;
+      pointer-events: none;
+      width: 150px;
+      height: 2px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.9), rgba(59,130,246,0.6), transparent);
+      border-radius: 50%;
+      opacity: 0;
+    }
+
+    .shooting-star:nth-child(1) {
+      top: 12%; left: -150px;
+      transform: rotate(-35deg);
+      animation: shootingStar 4s 1s ease-in infinite;
+    }
+    .shooting-star:nth-child(2) {
+      top: 35%; left: -150px;
+      transform: rotate(-25deg);
+      animation: shootingStar 5.5s 3.5s ease-in infinite;
+      width: 200px;
+    }
+    .shooting-star:nth-child(3) {
+      top: 55%; left: -150px;
+      transform: rotate(-40deg);
+      animation: shootingStar 4.5s 7s ease-in infinite;
+      width: 120px;
+    }
+    .shooting-star:nth-child(4) {
+      top: 8%; left: -150px;
+      transform: rotate(-20deg);
+      animation: shootingStar 6s 5s ease-in infinite;
+      width: 180px;
+    }
+    .shooting-star:nth-child(5) {
+      top: 75%; left: -150px;
+      transform: rotate(-30deg);
+      animation: shootingStar 3.8s 9s ease-in infinite;
+      width: 100px;
+    }
+
+    @keyframes shootingStar {
+      0%   { opacity: 0; transform: rotate(-35deg) translateX(0); }
+      5%   { opacity: 1; }
+      70%  { opacity: 1; }
+      100% { opacity: 0; transform: rotate(-35deg) translateX(calc(100vw + 300px)); }
+    }
+
+    /* ── Parallax Blur Layers ── */
+    .parallax-bg,
+    .parallax-mid,
+    .parallax-fg {
+      position: fixed;
+      pointer-events: none;
+      z-index: 1;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.15;
+    }
+    .parallax-bg {
+      width: 600px; height: 600px;
+      background: var(--accent);
+      top: -200px; right: -200px;
+    }
+    .parallax-mid {
+      width: 400px; height: 400px;
+      background: var(--sub);
+      bottom: 20%; left: -100px;
+    }
+    .parallax-fg {
+      width: 300px; height: 300px;
+      background: var(--accent);
+      top: 60%; right: 10%;
+      opacity: 0.1;
+    }
+
+    /* ── Navigation ── */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: rgba(6, 6, 20, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+      transition: box-shadow 0.3s;
+    }
+    .nav.scrolled { box-shadow: 0 4px 30px rgba(0,0,0,0.4); }
+    .nav__inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav__logo {
+      font-family: var(--font-heading);
+      font-size: 1.65rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .nav__logo-dot { color: var(--accent); }
+    .nav__hamburger {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      flex-direction: column;
+      gap: 5px;
+      padding: 4px;
+    }
+    .nav__hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .nav__hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav__hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav__hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .nav__links {
+      list-style: none;
+      display: flex;
+      gap: 32px;
+    }
+    .nav__link {
+      color: var(--text-dim);
+      font-size: 1rem;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    .nav__link:hover, .nav__link.active { color: var(--accent); }
+
+    @media (max-width: 768px) {
+      .nav__hamburger { display: flex; }
+      .nav__links {
+        position: absolute;
+        top: 64px; left: 0; right: 0;
+        flex-direction: column;
+        background: rgba(6, 6, 20, 0.95);
+        backdrop-filter: blur(16px);
+        padding: 20px 24px;
+        gap: 16px;
+        transform: translateY(-10px);
+        opacity: 0;
+        pointer-events: none;
+        transition: transform 0.3s, opacity 0.3s;
+        border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+      }
+      .nav__links.open {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: auto;
+      }
+    }
+
+    /* ── Section Base ── */
+    .section {
+      position: relative;
+      z-index: 10;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 100px 24px;
+    }
+    .section__label {
+      font-family: var(--font-heading);
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .section__title {
+      font-size: clamp(2rem, 4.5vw, 2.8rem);
+      margin-bottom: 48px;
+      color: var(--text);
+    }
+
+    /* ── 3D Card System ── */
+    .card-3d {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+      transform-style: preserve-3d;
+      transition: transform 0.15s ease-out, box-shadow 0.3s;
+      will-change: transform;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .card-3d::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      background: radial-gradient(
+        600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        rgba(59, 130, 246, 0.1),
+        transparent 40%
+      );
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .card-3d:hover::before { opacity: 1; }
+    .card-3d:hover {
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(59, 130, 246, 0.08);
+    }
+
+    /* Light reflection on hover */
+    .card-3d::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        to bottom right,
+        transparent 40%,
+        rgba(255, 255, 255, 0.03) 45%,
+        rgba(255, 255, 255, 0.06) 50%,
+        rgba(255, 255, 255, 0.03) 55%,
+        transparent 60%
+      );
+      transform: rotate(var(--reflection-angle, 30deg));
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.5s;
+    }
+    .card-3d:hover::after { opacity: 1; }
+
+    /* ── Scroll-in Animation ── */
+    .fly-in {
+      opacity: 0;
+      transform: perspective(800px) rotateY(15deg) translateZ(-80px) translateX(60px);
+      transition: opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1),
+                  transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .fly-in.from-left {
+      transform: perspective(800px) rotateY(-15deg) translateZ(-80px) translateX(-60px);
+    }
+    .fly-in.visible {
+      opacity: 1;
+      transform: perspective(800px) rotateY(0deg) translateZ(0) translateX(0);
+    }
+
+    /* ── Hero ── */
+    .hero {
+      position: relative;
+      z-index: 10;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+    }
+    .hero__content {
+      transform-style: preserve-3d;
+      perspective: 1000px;
+    }
+    .hero__avatar-wrap {
+      position: relative;
+      width: 160px;
+      height: 160px;
+      margin: 0 auto 32px;
+    }
+    .hero__avatar {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      border: 3px solid var(--accent);
+      object-fit: cover;
+      position: relative;
+      z-index: 1;
+    }
+    .hero__avatar-ring {
+      position: absolute;
+      inset: -8px;
+      border-radius: 50%;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      animation: ring-pulse 3s ease-in-out infinite;
+    }
+    @keyframes ring-pulse {
+      0%, 100% { transform: scale(1); opacity: 0.3; }
+      50% { transform: scale(1.08); opacity: 0.6; }
+    }
+    .hero__name {
+      font-size: clamp(2.8rem, 7vw, 4.2rem);
+      letter-spacing: -1px;
+      margin-bottom: 8px;
+    }
+    .hero__role {
+      font-size: 1.3rem;
+      color: var(--text-dim);
+      margin-bottom: 16px;
+    }
+    .hero__at { color: var(--accent); }
+    .hero__tagline {
+      font-size: 1.15rem;
+      color: rgba(224, 232, 248, 0.5);
+      max-width: 520px;
+      margin: 0 auto 32px;
+      line-height: 1.8;
+    }
+    .hero__socials {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+    .hero__social {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      color: var(--text);
+      transition: transform 0.3s, background 0.3s, border-color 0.3s;
+    }
+    .hero__social:hover {
+      transform: translateY(-3px) scale(1.05);
+      background: rgba(59, 130, 246, 0.2);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* ── About ── */
+    .about-grid {
+      display: grid;
+      gap: 24px;
+    }
+    .about-card {
+      padding: 28px 32px;
+    }
+    .about-card p {
+      color: rgba(224, 232, 248, 0.8);
+      font-size: 1.1rem;
+      line-height: 1.8;
+    }
+    .about-card__num {
+      font-family: var(--font-heading);
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    /* ── Tech Stack ── */
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .tech-card__category {
+      font-family: var(--font-heading);
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--sub);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 14px;
+    }
+    .tech-card__items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .tech-tag {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      background: rgba(59, 130, 246, 0.08);
+      border: 1px solid rgba(59, 130, 246, 0.15);
+      color: rgba(224, 232, 248, 0.85);
+    }
+
+    /* ── Projects ── */
+    .projects-grid {
+      display: grid;
+      gap: 32px;
+    }
+    .project-card { padding: 36px; }
+    .project-card__title {
+      font-size: 1.5rem;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+    .project-card__desc {
+      color: rgba(224, 232, 248, 0.75);
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+    .project-card__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .project-tag {
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      background: rgba(96, 165, 250, 0.1);
+      border: 1px solid rgba(96, 165, 250, 0.2);
+      color: var(--sub);
+    }
+    .project-card__metrics {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+    .metric {
+      text-align: center;
+    }
+    .metric__value {
+      font-family: var(--font-heading);
+      font-size: 1.65rem;
+      font-weight: 700;
+      color: var(--accent);
+      display: block;
+    }
+    .metric__label {
+      font-size: 0.9rem;
+      color: rgba(224, 232, 248, 0.5);
+    }
+
+    /* ── Activities ── */
+    .activities-grid {
+      display: grid;
+      gap: 24px;
+    }
+    .activity-card { padding: 28px 32px; }
+    .activity-card__heading {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--sub);
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .activity-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .activity-list li {
+      padding-left: 20px;
+      position: relative;
+      color: rgba(224, 232, 248, 0.8);
+      font-size: 1.05rem;
+      line-height: 1.6;
+    }
+    .activity-list li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 10px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+    .activity-badge {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      vertical-align: middle;
+      margin-left: 6px;
+    }
+
+    /* ── Certifications ── */
+    .certs-grid {
+      display: grid;
+      gap: 32px;
+    }
+    .cert-card { padding: 36px; }
+    .cert-card__banner {
+      display: block;
+      max-width: 260px;
+      margin-bottom: 24px;
+    }
+    .cert-card__heading {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 20px;
+    }
+    .cert-card__items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .cert-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(59, 130, 246, 0.06);
+      border: 1px solid rgba(59, 130, 246, 0.12);
+      border-radius: 10px;
+      padding: 10px 18px;
+    }
+    .cert-item__icon {
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+    }
+    .cert-item__name {
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    .aws-certs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .aws-tag {
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-weight: 600;
+      background: rgba(96, 165, 250, 0.08);
+      border: 1px solid rgba(96, 165, 250, 0.15);
+      color: var(--sub);
+    }
+
+    /* ── Footer ── */
+    .footer {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 80px 24px 48px;
+      border-top: 1px solid rgba(59, 130, 246, 0.1);
+    }
+    .footer__quote {
+      max-width: 640px;
+      margin: 0 auto 32px;
+      font-size: 1.15rem;
+      font-style: italic;
+      color: rgba(224, 232, 248, 0.6);
+      line-height: 1.8;
+    }
+    .footer__socials {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .footer__social {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(59, 130, 246, 0.08);
+      border: 1px solid rgba(59, 130, 246, 0.15);
+      color: var(--text);
+      transition: transform 0.3s, background 0.3s;
+    }
+    .footer__social:hover {
+      transform: translateY(-2px);
+      background: rgba(59, 130, 246, 0.15);
+      color: var(--accent);
+    }
+    .footer__copy {
+      font-size: 0.95rem;
+      color: rgba(224, 232, 248, 0.35);
+    }
+
+    /* ── Reduced Motion ── */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      html { scroll-behavior: auto; }
+      .fly-in {
+        opacity: 1;
+        transform: none;
+      }
+      .nebula { animation: none; }
+      .dust-layer { animation: none; }
+      .shooting-star { display: none; }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .section { padding: 72px 16px; }
+      .card-3d { padding: 24px 20px; }
+      .project-card { padding: 28px 20px; }
+      .cert-card { padding: 28px 20px; }
+      .project-card__metrics { gap: 20px; }
+      .hero { padding: 100px 16px 60px; }
+    }
+  </style>
 </head>
 <body>
 
+  <!-- Star Canvas -->
+  <canvas id="star-canvas" aria-hidden="true"></canvas>
+
+  <!-- Nebula Overlay -->
+  <div class="nebula" aria-hidden="true"></div>
+
+  <!-- Space Dust -->
+  <div class="dust-layer" aria-hidden="true"></div>
+
+  <!-- Shooting Stars -->
+  <div class="shooting-star" aria-hidden="true"></div>
+  <div class="shooting-star" aria-hidden="true"></div>
+  <div class="shooting-star" aria-hidden="true"></div>
+  <div class="shooting-star" aria-hidden="true"></div>
+  <div class="shooting-star" aria-hidden="true"></div>
+
+  <!-- Parallax Blur Layers -->
+  <div class="parallax-bg" aria-hidden="true"></div>
+  <div class="parallax-mid" aria-hidden="true"></div>
+  <div class="parallax-fg" aria-hidden="true"></div>
+
   <!-- Navigation -->
-  <nav class="nav" id="nav">
+  <nav class="nav" id="nav" aria-label="Main navigation">
     <div class="nav__inner">
-      <a href="#hero" class="nav__logo">SY<span class="nav__logo-dot">.</span></a>
+      <a href="#hero" class="nav__logo" aria-label="Home">SY<span class="nav__logo-dot">.</span></a>
       <button class="nav__hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
-      <ul class="nav__links" id="nav-links">
+      <ul class="nav__links" id="nav-links" role="list">
         <li><a href="#about" class="nav__link">About</a></li>
         <li><a href="#tech" class="nav__link">Tech Stack</a></li>
         <li><a href="#projects" class="nav__link">Projects</a></li>
@@ -28,457 +757,454 @@
   </nav>
 
   <!-- Hero -->
-  <section class="hero" id="hero">
-    <div class="hero__grid-bg" aria-hidden="true"></div>
+  <section class="hero" id="hero" aria-label="Introduction">
     <div class="hero__content">
       <div class="hero__avatar-wrap">
-        <img
-          src="https://avatars.githubusercontent.com/u/19742930?v=4"
-          alt="Seoyul Yoon"
-          class="hero__avatar"
-          width="160"
-          height="160"
-          loading="eager"
-        />
+        <img src="https://avatars.githubusercontent.com/u/19742930?v=4" alt="Seoyul Yoon" class="hero__avatar" width="160" height="160" loading="eager" />
         <div class="hero__avatar-ring" aria-hidden="true"></div>
       </div>
       <h1 class="hero__name">Seoyul Yoon</h1>
       <p class="hero__role">Cloud Application Engineer <span class="hero__at">@</span> SK AX</p>
-      <p class="hero__tagline">A cloud-native engineer who learns from the community<br />and proves it in production.</p>
+      <p class="hero__tagline">A cloud-native engineer who learns from the community and proves it in production.</p>
       <div class="hero__socials">
         <a href="https://github.com/Seo-yul" target="_blank" rel="noopener noreferrer" class="hero__social" aria-label="GitHub">
           <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12Z"/></svg>
         </a>
         <a href="https://www.linkedin.com/in/yoon-seoyul/" target="_blank" rel="noopener noreferrer" class="hero__social" aria-label="LinkedIn">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286ZM5.337 7.433a2.062 2.062 0 1 1 0-4.125 2.062 2.062 0 0 1 0 4.125ZM6.84 20.452H3.834V9H6.84v11.452ZM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003Z"/></svg>
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
         </a>
         <a href="mailto:seoyul@devops.ai.kr" class="hero__social" aria-label="Email">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z"/><path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z"/></svg>
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,7 12,13 2,7"/></svg>
         </a>
-      </div>
-      <div class="hero__scroll-hint" aria-hidden="true">
-        <svg width="20" height="30" viewBox="0 0 20 30" fill="none" stroke="currentColor" stroke-width="1.5">
-          <rect x="1" y="1" width="18" height="28" rx="9" />
-          <circle cx="10" cy="8" r="2" fill="currentColor" class="hero__scroll-dot" />
-        </svg>
       </div>
     </div>
   </section>
 
   <!-- About -->
-  <section class="section" id="about">
-    <div class="container">
-      <h2 class="section__title reveal">
-        <span class="section__title-marker" aria-hidden="true">//</span> About
-      </h2>
-      <div class="about__content reveal">
-        <p class="about__text">
-          Experienced Cloud Application Engineer specializing in the Kubernetes ecosystem, infrastructure automation, and observability. I architect and build platforms that let development teams ship faster and operate with confidence.
-        </p>
-        <p class="about__text">
-          Active contributor to the cloud-native community in Korea, helping bridge the gap between cutting-edge technology and practical enterprise adoption. I believe the best infrastructure is the kind nobody has to think about.
-        </p>
-        <p class="about__text">
-          Recently, I've been deeply interested in enterprise AX (AI Transformation), focusing on running AI workloads effectively on cloud-native infrastructure and taking a leading role in driving AI adoption across organizations.
-        </p>
+  <section class="section" id="about" aria-label="About">
+    <p class="section__label">Who I Am</p>
+    <h2 class="section__title">About</h2>
+    <div class="about-grid">
+      <div class="card-3d about-card fly-in from-left" data-tilt>
+        <span class="about-card__num">01</span>
+        <p>Experienced Cloud Application Engineer specializing in the Kubernetes ecosystem, infrastructure automation, and observability. I architect and build platforms that let development teams ship faster and operate with confidence.</p>
+      </div>
+      <div class="card-3d about-card fly-in" data-tilt>
+        <span class="about-card__num">02</span>
+        <p>Active contributor to the cloud-native community in Korea, helping bridge the gap between cutting-edge technology and practical enterprise adoption. I believe the best infrastructure is the kind nobody has to think about.</p>
+      </div>
+      <div class="card-3d about-card fly-in from-left" data-tilt>
+        <span class="about-card__num">03</span>
+        <p>Recently, I've been deeply interested in enterprise AX (AI Transformation), focusing on running AI workloads effectively on cloud-native infrastructure and taking a leading role in driving AI adoption across organizations.</p>
       </div>
     </div>
   </section>
 
   <!-- Tech Stack -->
-  <section class="section section--alt" id="tech">
-    <div class="container">
-      <h2 class="section__title reveal">
-        <span class="section__title-marker" aria-hidden="true">//</span> Tech Stack
-      </h2>
-
-      <!-- Languages -->
-      <div class="tech-category reveal">
-        <h3 class="tech-category__title">Languages & Frameworks</h3>
-        <div class="tech-grid">
-
-          <div class="tech-card">
-            <svg class="tech-card__icon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
-              <path d="M1.811 10.231c-.047 0-.058-.023-.035-.059l.246-.315c.023-.035.081-.058.128-.058h4.172c.046 0 .058.035.035.07l-.199.303c-.023.036-.082.07-.117.07zM.047 11.306c-.047 0-.059-.023-.035-.058l.245-.316c.023-.035.082-.058.129-.058h5.328c.047 0 .07.035.058.07l-.093.28c-.012.047-.058.07-.105.07zm2.828 1.075c-.047 0-.059-.035-.035-.07l.163-.292c.023-.035.07-.07.117-.07h2.337c.047 0 .07.035.07.082l-.023.28c0 .047-.047.082-.082.082zm12.129-2.36c-.736.187-1.239.327-1.963.514-.176.046-.187.058-.34-.117-.174-.199-.303-.327-.548-.444-.737-.362-1.45-.257-2.115.175-.795.514-1.204 1.274-1.192 2.22.011.935.654 1.706 1.577 1.835.795.105 1.46-.175 1.987-.77.105-.13.198-.27.315-.434H10.47c-.245 0-.304-.152-.222-.35.152-.362.432-.97.596-1.274a.315.315 0 01.292-.187h4.253c-.023.316-.023.631-.07.947a4.983 4.983 0 01-.958 2.29c-.841 1.11-1.94 1.8-3.33 1.986-1.145.152-2.209-.07-3.143-.77-.865-.655-1.356-1.52-1.484-2.595-.152-1.274.222-2.419.993-3.424.83-1.086 1.928-1.776 3.272-2.02 1.098-.2 2.15-.07 3.096.571.62.41 1.063.97 1.356 1.648.07.105.023.164-.117.2m3.868 6.461c-1.064-.024-2.034-.328-2.852-1.029a3.665 3.665 0 01-1.262-2.255c-.21-1.32.152-2.489.947-3.529.853-1.122 1.881-1.706 3.272-1.95 1.192-.21 2.314-.095 3.33.595.923.63 1.496 1.484 1.648 2.605.198 1.578-.257 2.863-1.344 3.962-.771.783-1.718 1.273-2.805 1.495-.315.06-.63.07-.934.106zm2.78-4.72c-.011-.153-.011-.27-.034-.387-.21-1.157-1.274-1.81-2.384-1.554-1.087.245-1.788.935-2.045 2.033-.21.912.234 1.835 1.075 2.21.643.28 1.285.244 1.905-.07.923-.48 1.425-1.228 1.484-2.233z"/>
-            </svg>
-            <span class="tech-card__name">Go</span>
-          </div>
-          <div class="tech-card">
-            <svg class="tech-card__icon" viewBox="0 0 100 100" width="32" height="32" fill="currentColor">
-              <path fill-rule="evenodd" d="M50 2C23.49 2 2 23.49 2 50s21.49 48 48 48 48-21.49 48-48S76.51 2 50 2zm6.275 24.353C54.114 32.296 52.098 37.875 49.766 44.328c10.763 0 20.788 0 32.068 0C69.293 60.932 57.566 76.459 45.838 91.987c-.463-.201-.927-.402-1.39-.603 2.8-10.55 5.6-21.1 8.575-32.31-10.375 0-20.094 0-31.418 0C35.485 41.37 48.487 24.783 61.489 8.197c.396.17.792.339 1.188.509-2.086 5.761-4.171 11.521-6.402 17.647z"/>
-            </svg>
-            <span class="tech-card__name">Operator SDK</span>
-          </div>
-          <div class="tech-card">
-            <svg class="tech-card__icon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
-              <path d="M14.25.18l.9.2.73.26.59.3.45.32.34.34.25.34.16.33.1.3.04.26.02.2-.01.13V8.5l-.05.63-.13.55-.21.46-.26.38-.3.31-.33.25-.35.19-.35.14-.33.1-.3.07-.26.04-.21.02H8.77l-.69.05-.59.14-.5.22-.41.27-.33.32-.27.35-.2.36-.15.37-.1.35-.07.32-.04.27-.02.21v3.06H3.17l-.21-.03-.28-.07-.32-.12-.35-.18-.36-.26-.36-.36-.35-.46-.32-.59-.28-.73-.21-.88-.14-1.05-.05-1.23.06-1.22.16-1.04.24-.87.32-.71.36-.57.4-.44.42-.33.42-.24.4-.16.36-.1.32-.05.24-.01h.16l.06.01h8.16v-.83H6.18l-.01-2.75-.02-.37.05-.34.11-.31.17-.28.25-.26.31-.23.38-.2.44-.18.51-.15.58-.12.64-.1.71-.06.77-.04.84-.02 1.27.05zm-6.3 1.98l-.23.33-.08.41.08.41.23.34.33.22.41.09.41-.09.33-.22.23-.34.08-.41-.08-.41-.23-.33-.33-.22-.41-.09-.41.09zm13.09 3.95l.28.06.32.12.35.18.36.27.36.35.35.47.32.59.28.73.21.88.14 1.04.05 1.23-.06 1.23-.16 1.04-.24.86-.32.71-.36.57-.4.45-.42.33-.42.24-.4.16-.36.09-.32.05-.24.02-.16-.01h-8.22v.82h5.84l.01 2.76.02.36-.05.34-.11.31-.17.29-.25.25-.31.24-.38.2-.44.17-.51.15-.58.13-.64.09-.71.07-.77.04-.84.01-1.27-.04-1.07-.14-.9-.2-.73-.25-.59-.3-.45-.33-.34-.34-.25-.34-.16-.33-.1-.3-.04-.25-.02-.2.01-.13v-5.34l.05-.64.13-.54.21-.46.26-.38.3-.32.33-.24.35-.2.35-.14.33-.1.3-.06.26-.04.21-.02.13-.01h5.84l.69-.05.59-.14.5-.21.41-.28.33-.32.27-.35.2-.36.15-.36.1-.35.07-.32.04-.28.02-.21V6.07h2.09l.14.01zm-6.47 14.25l-.23.33-.08.41.08.41.23.33.33.23.41.08.41-.08.33-.23.23-.33.08-.41-.08-.41-.23-.33-.33-.23-.41-.08-.41.08z"/>
-            </svg>
-            <span class="tech-card__name">Python</span>
-          </div>
-          <div class="tech-card">
-            <svg class="tech-card__icon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
-              <path d="M12 .0387C5.3729.0384.0003 5.3931 0 11.9988c-.001 6.6066 5.372 11.9628 12 11.9625 6.628.0003 12.001-5.3559 12-11.9625-.0003-6.6057-5.3729-11.9604-12-11.96m-.829 5.4153h7.55l-7.5805 5.3284h5.1828L5.279 18.5436q2.9466-6.5444 5.892-13.0896"/>
-            </svg>
-            <span class="tech-card__name">FastAPI</span>
-          </div>
-          <div class="tech-card">
-            <svg class="tech-card__icon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
-              <path d="M6.0988 5.9175C2.7359 5.9175 0 8.6462 0 12s2.736 6.0825 6.0988 6.0825h11.8024C21.2641 18.0825 24 15.3538 24 12s-2.736-6.0825-6.0988-6.0825ZM5.9774 7.851c.493.0124 1.02.2496 1.273.6228.3673.4592.4778 1.0668.8944 1.4932.5604.6118 1.199 1.1505 1.7161 1.802.4892.5954.8386 1.2937 1.1436 1.9975.1244.2335.1257.5202.31.7197.0908.1204.5346.4483.4383.5645.0555.1204.4702.286.3263.4027-.1944.04-.4129.0476-.5616-.1074-.0549.126-.183.0596-.2819.0432a4 4 0 0 0-.025.0736c-.3288.0219-.5754-.3126-.732-.565-.3111-.168-.6642-.2702-.982-.446-.0182.2895.0452.6485-.231.8353-.014.5565.8436.0656.9222.4804-.061.0067-.1286-.0095-.1774.0373-.2239.2172-.4805-.1645-.7385-.007-.3464.174-.3808.3161-.8096.352-.0237-.0359-.0143-.0592.0059-.0811.1207-.1399.1295-.3046.3356-.3643-.2122-.0334-.3899.0833-.5686.1757-.2323.095-.2304-.2141-.5878.0164-.0396-.0322-.0208-.0615.0018-.0864.0908-.1107.2102-.127.345-.1208-.663-.3686-.9751.4507-1.2813.0432-.092.0243-.1265.1068-.1845.1652-.05-.0548-.0123-.1212-.0099-.1857-.0598-.028-.1356-.041-.1179-.1366-.1171-.0395-.1988.0295-.286.0952-.0787-.0608.0532-.1492.0776-.2125.0702-.1216.23-.025.3111-.1126.2306-.1308.552.0814.8155.0455.203.0255.4544-.1825.3526-.39-.2171-.2767-.179-.6386-.1839-.9695-.0268-.1929-.491-.4382-.6252-.6462-.1659-.1873-.295-.4047-.4243-.6182-.4666-.9008-.3198-2.0584-.9077-2.8947-.266.1466-.6125.0774-.8418-.119-.1238.1125-.1292.2598-.139.4161-.297-.2962-.2593-.8559-.022-1.1855.0969-.1302.2127-.2373.342-.3316.0292-.0213.0391-.0419.0385-.0747.1174-.5267.5764-.7391 1.0694-.7267m12.4071.46c.5575 0 1.0806.2159 1.474.6082s.61.9145.61 1.4704c0 .556-.2167 1.078-.61 1.4698v.0006l-.902.8995a2.08 2.08 0 0 1-.8597.5166l-.0164.0047-.0058.0164a2.05 2.05 0 0 1-.474.7308l-.9018.8995c-.3934.3924-.917.6083-1.4745.6083s-1.0806-.216-1.474-.6083c-.813-.8107-.813-2.1294 0-2.9402l.9019-.8995a2.056 2.056 0 0 1 .858-.5143l.017-.0053.0058-.0158a2.07 2.07 0 0 1 .4752-.7337l.9018-.8995c.3934-.3924.9171-.6083 1.4745-.6083zm0 .8965a1.18 1.18 0 0 0-.8388.3462l-.9018.8995a1.181 1.181 0 0 0-.3427.9252l.0053.0572c.0323.2652.149.5044.3374.6917.13.1296.2733.2114.4471.2686a.9.9 0 0 1 .014.1582.884.884 0 0 1-.2609.6304l-.0554.0554c-.3013-.1028-.5525-.253-.7794-.4792a2.06 2.06 0 0 1-.5761-1.0968l-.0099-.0578-.0461.0368a1.1 1.1 0 0 0-.0876.0794l-.9024.8995c-.4623.461-.4623 1.212 0 1.673.2311.2305.535.346.8394.3461.3043 0 .6077-.1156.8388-.3462l.9019-.8995c.4623-.461.4623-1.2113 0-1.673a1.17 1.17 0 0 0-.4367-.2749 1 1 0 0 1-.014-.1611c0-.2591.1023-.505.2901-.6923.3019.1028.57.2694.7962.495.3007.2999.4994.679.5756 1.0968l.0105.0578.0455-.0373a1.1 1.1 0 0 0 .0887-.0794l.902-.8996c.4622-.461.4628-1.2124 0-1.6735a1.18 1.18 0 0 0-.8395-.3462Zm-9.973 5.1567-.0006.0006c-.0793.3078-.1048.8318-.506.847-.033.1776.1228.2445.2655.1874.141-.0645.2081.0508.2557.1657.2177.0317.5394-.0725.5516-.3298-.325-.1867-.4253-.5418-.5662-.8709"/>
-            </svg>
-            <span class="tech-card__name">LangChain</span>
-          </div>
-          <div class="tech-card">
-            <svg class="tech-card__icon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
-              <path d="M8.851 18.56s-.917.534.653.714c1.902.218 2.874.187 4.969-.211 0 0 .552.346 1.321.646-4.699 2.013-10.633-.118-6.943-1.149M8.276 15.933s-1.028.762.542.924c2.032.209 3.636.227 6.413-.308 0 0 .384.389.987.602-5.679 1.661-12.007.13-7.942-1.218M13.116 11.475c1.158 1.333-.304 2.533-.304 2.533s2.939-1.518 1.589-3.418c-1.261-1.772-2.228-2.652 3.007-5.688 0-.001-8.216 2.051-4.292 6.573M19.33 20.504s.679.559-.747.991c-2.712.822-11.288 1.069-13.669.033-.856-.373.75-.89 1.254-.998.527-.114.828-.093.828-.093-.953-.671-6.156 1.317-2.643 1.887 9.58 1.553 17.462-.7 14.977-1.82M9.292 13.21s-4.362 1.036-1.544 1.412c1.189.159 3.561.123 5.77-.062 1.806-.152 3.618-.477 3.618-.477s-.637.272-1.098.587c-4.429 1.165-12.986.623-10.522-.568 2.082-1.006 3.776-.892 3.776-.892M17.116 17.584c4.503-2.34 2.421-4.589.968-4.285-.355.074-.515.138-.515.138s.132-.207.385-.297c2.875-1.011 5.086 2.981-.928 4.562 0 0 .07-.062.09-.118M14.401 0s2.494 2.494-2.365 6.33c-3.896 3.077-.889 4.832 0 6.836-2.274-2.053-3.943-3.858-2.824-5.539 1.644-2.469 6.197-3.665 5.189-7.627M9.734 23.924c4.322.277 10.959-.154 11.116-2.198 0 0-.302.775-3.572 1.391-3.688.694-8.239.613-10.937.168 0 0 .553.457 3.393.639"/>
-            </svg>
-            <span class="tech-card__name">Java</span>
-          </div>
+  <section class="section" id="tech" aria-label="Tech Stack">
+    <p class="section__label">Tools &amp; Technologies</p>
+    <h2 class="section__title">Tech Stack</h2>
+    <div class="tech-grid">
+      <div class="card-3d fly-in from-left" data-tilt>
+        <p class="tech-card__category">Languages &amp; Frameworks</p>
+        <div class="tech-card__items">
+          <span class="tech-tag">Go</span>
+          <span class="tech-tag">Operator SDK</span>
+          <span class="tech-tag">Python</span>
+          <span class="tech-tag">FastAPI</span>
+          <span class="tech-tag">LangGraph</span>
+          <span class="tech-tag">Java</span>
         </div>
       </div>
-
-      <!-- Container & Orchestration -->
-      <div class="tech-category reveal">
-        <h3 class="tech-category__title">Container &amp; Orchestration</h3>
-        <div class="tech-grid">
-          <div class="tech-card">
-            <svg class="tech-card__icon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
-              <path d="M10.204 14.35l.007.01-.999 2.413a5.171 5.171 0 0 1-2.075-2.597l2.578-.437.004.005a.44.44 0 0 1 .484.606zm-.833-2.129a.44.44 0 0 0 .173-.756l.002-.011L7.585 9.7a5.143 5.143 0 0 0-.73 3.255l2.514-.725.002-.009zm1.145-1.98a.44.44 0 0 0 .699-.337l.01-.005.15-2.62a5.144 5.144 0 0 0-3.01 1.442l2.147 1.523.004-.002zm.76 2.75l.723.349.722-.347.18-.78-.5-.623h-.804l-.5.623.179.779zm1.5-3.095a.44.44 0 0 0 .7.336l.008.003 2.134-1.513a5.188 5.188 0 0 0-2.992-1.442l.148 2.615.002.001zm10.876 5.97l-5.773 7.181a1.6 1.6 0 0 1-1.248.594l-9.261.003a1.6 1.6 0 0 1-1.247-.596l-5.776-7.18a1.583 1.583 0 0 1-.307-1.34L2.1 5.573c.108-.47.425-.864.863-1.073L11.305.513a1.606 1.606 0 0 1 1.385 0l8.345 3.985c.438.209.755.604.863 1.073l2.062 8.955c.108.47-.005.963-.308 1.34zm-3.289-2.057c-.042-.01-.103-.026-.145-.034-.174-.033-.315-.025-.479-.038-.35-.037-.638-.067-.895-.148-.105-.04-.18-.165-.216-.216l-.201-.059a6.45 6.45 0 0 0-.105-2.332 6.465 6.465 0 0 0-.936-2.163c.052-.047.15-.133.177-.159.008-.09.001-.183.094-.282.197-.185.444-.338.743-.522.142-.084.273-.137.415-.242.032-.024.076-.062.11-.089.24-.191.295-.52.123-.736-.172-.216-.506-.236-.745-.045-.034.027-.08.062-.111.088-.134.116-.217.23-.33.35-.246.25-.45.458-.673.609-.097.056-.239.037-.303.033l-.19.135a6.545 6.545 0 0 0-4.146-2.003l-.012-.223c-.065-.062-.143-.115-.163-.25-.022-.268.015-.557.057-.905.023-.163.061-.298.068-.475.001-.04-.001-.099-.001-.142 0-.306-.224-.555-.5-.555-.275 0-.499.249-.499.555l.001.014c0 .041-.002.092 0 .128.006.177.044.312.067.475.042.348.078.637.056.906a.545.545 0 0 1-.162.258l-.012.211a6.424 6.424 0 0 0-4.166 2.003 8.373 8.373 0 0 1-.18-.128c-.09.012-.18.04-.297-.029-.223-.15-.427-.358-.673-.608-.113-.12-.195-.234-.329-.349-.03-.026-.077-.062-.111-.088a.594.594 0 0 0-.348-.132.481.481 0 0 0-.398.176c-.172.216-.117.546.123.737l.007.005.104.083c.142.105.272.159.414.242.299.185.546.338.743.522.076.082.09.226.1.288l.16.143a6.462 6.462 0 0 0-1.02 4.506l-.208.06c-.055.072-.133.184-.215.217-.257.081-.546.11-.895.147-.164.014-.305.006-.48.039-.037.007-.09.02-.133.03l-.004.002-.007.002c-.295.071-.484.342-.423.608.061.267.349.429.645.365l.007-.001.01-.003.129-.029c.17-.046.294-.113.448-.172.33-.118.604-.217.87-.256.112-.009.23.069.288.101l.217-.037a6.5 6.5 0 0 0 2.88 3.596l-.09.218c.033.084.069.199.044.282-.097.252-.263.517-.452.813-.091.136-.185.242-.268.399-.02.037-.045.095-.064.134-.128.275-.034.591.213.71.248.12.556-.007.69-.282v-.002c.02-.039.046-.09.062-.127.07-.162.094-.301.144-.458.132-.332.205-.68.387-.897.05-.06.13-.082.215-.105l.113-.205a6.453 6.453 0 0 0 4.609.012l.106.192c.086.028.18.042.256.155.136.232.229.507.342.84.05.156.074.295.145.457.016.037.043.09.062.129.133.276.442.402.69.282.247-.118.341-.435.213-.71-.02-.039-.045-.096-.065-.134-.083-.156-.177-.261-.268-.398-.19-.296-.346-.541-.443-.793-.04-.13.007-.21.038-.294-.018-.022-.059-.144-.083-.202a6.499 6.499 0 0 0 2.88-3.622c.064.01.176.03.213.038.075-.05.144-.114.28-.104.266.039.54.138.87.256.154.06.277.128.448.173.036.01.088.019.13.028l.009.003.007.001c.297.064.584-.098.645-.365.06-.266-.128-.537-.423-.608zM16.4 9.701l-1.95 1.746v.005a.44.44 0 0 0 .173.757l.003.01 2.526.728a5.199 5.199 0 0 0-.108-1.674A5.208 5.208 0 0 0 16.4 9.7zm-4.013 5.325a.437.437 0 0 0-.404-.232.44.44 0 0 0-.372.233h-.002l-1.268 2.292a5.164 5.164 0 0 0 3.326.003l-1.27-2.296h-.01zm1.888-1.293a.44.44 0 0 0-.27.036.44.44 0 0 0-.214.572l-.003.004 1.01 2.438a5.15 5.15 0 0 0 2.081-2.615l-2.6-.44-.004.005z"/>
-            </svg>
-            <span class="tech-card__name">Kubernetes</span>
-          </div>
-          <div class="tech-card">
-            <svg class="tech-card__icon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
-              <path d="M17.2.275L6.75.308a.259.259 0 0 0-.203.098L.056 8.602a.259.259 0 0 0-.05.219l2.356 10.194a.26.26 0 0 0 .14.174l9.43 4.511a.258.258 0 0 0 .224-.002l9.401-4.566a.259.259 0 0 0 .141-.175L23.993 8.75a.258.258 0 0 0-.051-.22L17.403.374A.259.259 0 0 0 17.2.275zm-.123.517l6.385 7.966-2.242 9.964-9.177 4.457-9.205-4.402L.54 8.827 6.875.824zM11.46 2.857c-.933 0-1.84.1-2.426.332h-.002c-1.554.569-2.725 2.105-3.074 3.952v.004c-.309 1.463-.392 2.703-.556 3.824-.07.481-.159.94-.283 1.387-.628.497-1.079 1.263-1.244 2.138v.004c-.116.547-.181 1.04-.237 1.5h-.644v.518h8.891c-.061.464-.122.996-.181 1.42H7.596v.517h7.939c-.242-.078-.486-.218-.756-.502h-.697l-.85.488-.232-.396.162-.092h-1.069c.113-.776.17-1.601.373-2.564v-.004c.22-1.164.96-2.112 1.895-2.453l.004-.002h.002c.318-.127.928-.205 1.543-.205.613 0 1.244.075 1.622.207.935.341 1.676 1.29 1.895 2.453v.004c.204.963.26 1.788.373 2.564h-.742l.162.092-.233.396-.85-.488h-.75c-.219.25-.474.412-.747.502h4.392v-.518h-.842c-.103-.743-.181-1.67-.382-2.623v-.002a4.14 4.14 0 0 0-.264-.863h1.863v-.517h-2.13a3.488 3.488 0 0 0-.8-.906h1.8v-.518H17.95a8.862 8.862 0 0 1-.193-.775h1.484v-.518h-1.576c-.013-.081-.027-.161-.039-.244-.164-1.12-.246-2.36-.555-3.824v-.004c-.348-1.848-1.52-3.383-3.075-3.952l-.002-.002h-.002c-.65-.227-1.596-.33-2.531-.33zm0 .386c.904 0 1.833.11 2.404.309h.002c1.4.514 2.5 1.934 2.826 3.666v.003c.303 1.436.385 2.66.552 3.805.076.515.173 1.013.315 1.505-.449-.135-1.05-.197-1.648-.197-.12 0-.236.003-.352.008l-1.863-1.865a2.17 2.17 0 0 0 .11-.246l2.13 1.23.13-.224-2.185-1.262c.016-.069.027-.14.036-.21l2.302.616.068-.248-2.354-.63c-.02-1.153-1.008-2.078-2.208-2.078-1.205 0-2.196.931-2.206 2.091l-2.303.617.066.25 2.252-.605c.01.076.024.151.041.224L7.436 11.24l.129.222 2.087-1.207c.034.089.074.176.12.258l-1.266 1.266a6.959 6.959 0 0 0-1.045-.075c-.603 0-1.186.064-1.578.22a2.668 2.668 0 0 0-.285.124c.076-.335.137-.675.187-1.021.168-1.144.248-2.37.551-3.805l.002-.001v-.002c.326-1.733 1.426-3.153 2.828-3.666h.002l.004-.002c.488-.194 1.381-.307 2.287-.307z"/>
-            </svg>
-            <span class="tech-card__name">Podman</span>
-          </div>
-          <div class="tech-card">
-            <svg class="tech-card__icon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
-              <path d="M12.337 0c-.475 0-.861 1.016-.861 2.269 0 .527.069 1.011.183 1.396a8.514 8.514 0 0 0-3.961 1.22 5.229 5.229 0 0 0-.595-1.093c-.606-.866-1.34-1.436-1.79-1.43a.381.381 0 0 0-.217.066c-.39.273-.123 1.326.596 2.353.267.381.559.705.84.948a8.683 8.683 0 0 0-1.528 1.716h1.734a7.179 7.179 0 0 1 5.381-2.421 7.18 7.18 0 0 1 5.382 2.42h1.733a8.687 8.687 0 0 0-1.32-1.53c.35-.249.735-.643 1.078-1.133.719-1.027.986-2.08.596-2.353a.382.382 0 0 0-.217-.065c-.45-.007-1.184.563-1.79 1.43a4.897 4.897 0 0 0-.676 1.325a8.52 8.52 0 0 0-3.899-1.42c.12-.39.193-.887.193-1.429 0-1.253-.386-2.269-.862-2.269zM1.624 9.443v5.162h1.358v-1.968h1.64v1.968h1.357V9.443H4.62v1.838H2.98V9.443zm5.912 0v5.162h3.21v-1.108H8.893v-.95h1.64v-1.142h-1.64v-.84h1.853V9.443zm4.698 0v5.162h3.218v-1.362h-1.86v-3.8zm4.706 0v5.162h1.364v-2.643l1.357 1.225 1.35-1.232v2.65h1.365V9.443h-.614l-2.1 1.914-2.109-1.914zm-11.82 7.28a8.688 8.688 0 0 0 1.412 1.548 5.206 5.206 0 0 0-.841.948c-.719 1.027-.985 2.08-.596 2.353.39.273 1.289-.338 2.007-1.364a5.23 5.23 0 0 0 .595-1.092a8.514 8.514 0 0 0 3.961 1.219 5.01 5.01 0 0 0-.183 1.396c0 1.253.386 2.269.861 2.269.476 0 .862-1.016.862-2.269 0-.542-.072-1.04-.193-1.43a8.52 8.52 0 0 0 3.9-1.42c.121.4.352.865.675 1.327.719 1.026 1.617 1.637 2.007 1.364.39-.273.123-1.326-.596-2.353-.343-.49-.727-.885-1.077-1.135a8.69 8.69 0 0 0 1.202-1.36h-1.771a7.174 7.174 0 0 1-5.227 2.252 7.174 7.174 0 0 1-5.226-2.252z"/>
-            </svg>
-            <span class="tech-card__name">Helm</span>
-          </div>
+      <div class="card-3d fly-in" data-tilt>
+        <p class="tech-card__category">Container &amp; Orchestration</p>
+        <div class="tech-card__items">
+          <span class="tech-tag">Kubernetes</span>
+          <span class="tech-tag">Podman</span>
+          <span class="tech-tag">Helm</span>
         </div>
       </div>
-  
-      <!-- Observability -->
-      <div class="tech-category reveal">
-        <h3 class="tech-category__title">Observability</h3>
-        <div class="tech-grid">
-
-          <div class="tech-card">
-            <svg class="tech-card__icon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
-              <path d="M0 4.02Zm.412-.503c-.038 0-.072 0-.102.01a.336.336 0 0 0-.087.035H.215a.325.325 0 0 0-.113.113.416.416 0 0 0-.053.1c-.008.021-.019.036-.023.067a.423.423 0 0 0-.015.071v-.01H.004v.018L0 3.936l.007-.023v.046L0 4.004v.015h.004l.003-.004v-.003a1.323 1.323 0 0 0 .095.472l.019.046v.007l.06.144.023.06.064.163a19.736 19.736 0 0 0 1.724 3.254L2 8.173l.023.038c.922 1.44 2.037 2.885 3.202 4.095l.037.04c.832.859 1.686 1.6 2.514 2.129a4 4 0 0 0 .37.216l.038.019-.026.019c-1.127 1.64-2.42 2.834-3.742 3.704C2.51 19.763.91 20.172.91 20.172s4.237 1.164 8.887-1.013c3.534-1.664 5.368-4.903 5.787-5.621l2.124-3.61c.333-.458.522-.647.54-.68.065-.065.538-.614 1.524-.946 1.46-.488 3.667-.783 4.188-.832a.113.113 0 0 0 .03-.132.076.076 0 0 0-.056-.05 4.177 4.177 0 0 0-.544-.037 9.234 9.234 0 0 0-1.399.068 18.39 18.39 0 0 0-1.383.204 29.78 29.78 0 0 0-1.066.204l-.053.012h-.023a3.493 3.493 0 0 1-.574.037 2.737 2.737 0 0 1-.473-.075 7.3 7.3 0 0 1-.465-.129 6.79 6.79 0 0 0-.484-.143 4.645 4.645 0 0 0-1.463-.152 2.797 2.797 0 0 0-.657.133l-.167.06a2.767 2.767 0 0 0-1.22.972c-.401.536-1.233 2.178-2.374 2.613l-.023-.023h.01a77.214 77.214 0 0 0-.9-.829l-.021-.015-.2-.189-.053-.042a60.73 60.73 0 0 0-2.307-2.014 28.411 28.411 0 0 0-1.504-1.13l-.227-.163a30.725 30.725 0 0 0-3.93-2.332c-.114-.064-.23-.102-.36-.166-.038-.016-.076-.038-.102-.038l.196.11-.079-.038h-.01V4.18a1.013 1.013 0 0 0-.054-.023l-.023-.015-.03-.015a1.01 1.01 0 0 1-.102-.05l-.072-.033a1.512 1.512 0 0 1-.098-.046c-.03-.01-.057-.022-.076-.022a1.296 1.296 0 0 0-.22-.08l-.007-.004-.015-.007h-.007l-.012-.004v-.004h-.022a.37.37 0 0 1-.038-.019l-.038-.018a.113.113 0 0 0-.034-.012h-.004l-.234-.094a2.854 2.854 0 0 0-.242-.087.601.601 0 0 0-.151-.03ZM0 3.891Zm.094.593.012.027Zm.012.03c.022.06.041.118.068.17zm.068.174.003.012zM16.757 8.3a.386.386 0 0 1 .113.015.386.386 0 0 1 .269.473.386.386 0 0 1-.473.264.386.386 0 0 1-.264-.468.386.386 0 0 1 .355-.284z"/>
-            </svg>
-            <span class="tech-card__name">Fluent Bit</span>
-          </div>
-          <div class="tech-card">
-            <svg class="tech-card__icon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
-              <path d="M12.6974 13.1173c-1.0224 1.0224-1.0224 2.68 0 3.7024 1.0224 1.0224 2.68 1.0224 3.7024 0 1.0224-1.0223 1.0224-2.68 0-3.7024-1.0223-1.0223-2.68-1.0223-3.7024 0zm2.7677 2.7701c-.5063.5063-1.3267.5063-1.833 0s-.5063-1.3266 0-1.833c.5063-.5062 1.3267-.5062 1.833 0 .5063.504.5063 1.3267 0 1.833zM16.356.2355l-1.6041 1.6042c-.314.314-.314.83 0 1.144L21.015 9.247c.314.314.83.314 1.144 0l1.6042-1.6041c.314-.314.314-.83 0-1.144L17.4976.2354c-.314-.314-.8276-.314-1.1416 0zM5.1173 20.734c.2848-.2848.2848-.7497 0-1.0345l-.8155-.8155c-.2848-.2848-.7497-.2848-1.0345 0l-1.6845 1.6845-.0024.0024-.4625-.4625c-.2556-.2556-.6718-.2556-.925 0-.2556.2556-.2556.6718 0 .925l2.775 2.775c.2556.2556.6718.2556.925 0 .2532-.2556.2556-.6718 0-.925l-.4625-.4625.0024-.0024zm8.4856-15.893-3.5637 3.5637c-.3164.3164-.3164.8374 0 1.1538l2.2006 2.2005c1.5554-1.1197 3.7365-.981 5.1361.4187l1.7819-1.7818c.3164-.3165.3164-.8374 0-1.1538l-4.401-4.401c-.3165-.319-.8374-.319-1.1539 0zm-2.2881 7.8455-1.2999-1.2999c-.3043-.3043-.8033-.3043-1.1076 0l-4.5836 4.586c-.3042.3043-.3042.8033 0 1.1076l2.5973 2.5973c.3043.3043.8033.3043 1.1076 0l2.9478-2.9527c-.6231-1.2877-.5112-2.8431.3384-4.0383z"/>
-            </svg>
-            <span class="tech-card__name">OpenTelemetry</span>
-          </div>
-          <div class="tech-card">
-            <svg class="tech-card__icon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
-              <path d="M12 0C5.373 0 0 5.372 0 12c0 6.627 5.373 12 12 12s12-5.373 12-12c0-6.628-5.373-12-12-12zm0 22.46c-1.885 0-3.414-1.26-3.414-2.814h6.828c0 1.553-1.528 2.813-3.414 2.813zm5.64-3.745H6.36v-2.046h11.28v2.046zm-.04-3.098H6.391c-.037-.043-.075-.086-.111-.13-1.155-1.401-1.427-2.133-1.69-2.879-.005-.025 1.4.287 2.395.511 0 0 .513.119 1.262.255-.72-.843-1.147-1.915-1.147-3.01 0-2.406 1.845-4.508 1.18-6.207.648.053 1.34 1.367 1.387 3.422.689-.951.977-2.69.977-3.755 0-1.103.727-2.385 1.454-2.429-.648 1.069.168 1.984.894 4.256.272.854.237 2.29.447 3.201.07-1.892.395-4.652 1.595-5.605-.529 1.2.079 2.702.494 3.424.671 1.164 1.078 2.047 1.078 3.716a4.642 4.642 0 01-1.11 2.996c.792-.149 1.34-.283 1.34-.283l2.573-.502s-.374 1.538-1.81 3.019z"/>
-            </svg>
-            <span class="tech-card__name">Prometheus</span>
-          </div>
-          <div class="tech-card">
-            <svg class="tech-card__icon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
-              <path d="M23.02 10.59a8.578 8.578 0 0 0-.862-3.034 8.911 8.911 0 0 0-1.789-2.445c.337-1.342-.413-2.505-.413-2.505-1.292-.08-2.113.4-2.416.62-.052-.02-.102-.044-.154-.064-.22-.089-.446-.172-.677-.247-.231-.073-.47-.14-.711-.197a9.867 9.867 0 0 0-.875-.161C14.557.753 12.94 0 12.94 0c-1.804 1.145-2.147 2.744-2.147 2.744l-.018.093c-.098.029-.2.057-.298.088-.138.042-.275.094-.413.143-.138.055-.275.107-.41.166a8.869 8.869 0 0 0-1.557.87l-.063-.029c-2.497-.955-4.716.195-4.716.195-.203 2.658.996 4.33 1.235 4.636a11.608 11.608 0 0 0-.607 2.635C1.636 12.677.953 15.014.953 15.014c1.926 2.214 4.171 2.351 4.171 2.351.003-.002.006-.002.006-.005.285.509.615.994.986 1.446.156.19.32.371.488.548-.704 2.009.099 3.68.099 3.68 2.144.08 3.553-.937 3.849-1.173a9.784 9.784 0 0 0 3.164.501h.08l.055-.003.107-.002.103-.005.003.002c1.01 1.44 2.788 1.646 2.788 1.646 1.264-1.332 1.337-2.653 1.337-2.94v-.058c0-.02-.003-.039-.003-.06.265-.187.52-.387.758-.6a7.875 7.875 0 0 0 1.415-1.7c1.43.083 2.437-.885 2.437-.885-.236-1.49-1.085-2.216-1.264-2.354l-.018-.013-.016-.013a.217.217 0 0 1-.031-.02c.008-.092.016-.18.02-.27.011-.162.016-.323.016-.48v-.253l-.005-.098-.008-.135a1.891 1.891 0 0 0-.01-.13c-.003-.042-.008-.083-.013-.125l-.016-.124-.018-.122a6.215 6.215 0 0 0-2.032-3.73 6.015 6.015 0 0 0-3.222-1.46 6.292 6.292 0 0 0-.85-.048l-.107.002h-.063l-.044.003-.104.008a4.777 4.777 0 0 0-3.335 1.695c-.332.4-.592.84-.768 1.297a4.594 4.594 0 0 0-.312 1.817l.003.091c.005.055.007.11.013.164a3.615 3.615 0 0 0 .698 1.82 3.53 3.53 0 0 0 1.827 1.282c.33.098.66.14.971.137.039 0 .078 0 .114-.002l.063-.003c.02 0 .041-.003.062-.003.034-.002.065-.007.099-.01.007 0 .018-.003.028-.003l.031-.005.06-.008a1.18 1.18 0 0 0 .112-.02c.036-.008.072-.013.109-.024a2.634 2.634 0 0 0 .914-.415c.028-.02.056-.041.085-.065a.248.248 0 0 0 .039-.35.244.244 0 0 0-.309-.06l-.078.042c-.09.044-.184.083-.283.116a2.476 2.476 0 0 1-.475.096c-.028.003-.054.006-.083.006l-.083.002c-.026 0-.054 0-.08-.002l-.102-.006h-.012l-.024.006c-.016-.003-.031-.003-.044-.006-.031-.002-.06-.007-.091-.01a2.59 2.59 0 0 1-.724-.213 2.557 2.557 0 0 1-.667-.438 2.52 2.52 0 0 1-.805-1.475 2.306 2.306 0 0 1-.029-.444l.006-.122v-.023l.002-.031c.003-.021.003-.04.005-.06a3.163 3.163 0 0 1 1.352-2.29 3.12 3.12 0 0 1 .937-.43 2.946 2.946 0 0 1 .776-.101h.06l.07.002.045.003h.026l.07.005a4.041 4.041 0 0 1 1.635.49 3.94 3.94 0 0 1 1.602 1.662 3.77 3.77 0 0 1 .397 1.414l.005.076.003.075c.002.026.002.05.002.075 0 .024.003.052 0 .07v.065l-.002.073-.008.174a6.195 6.195 0 0 1-.08.639 5.1 5.1 0 0 1-.267.927 5.31 5.31 0 0 1-.624 1.13 5.052 5.052 0 0 1-3.237 2.014 4.82 4.82 0 0 1-.649.066l-.039.003h-.287a6.607 6.607 0 0 1-1.716-.265 6.776 6.776 0 0 1-3.4-2.274 6.75 6.75 0 0 1-.746-1.15 6.616 6.616 0 0 1-.714-2.596l-.005-.083-.002-.02v-.056l-.003-.073v-.096l-.003-.104v-.07l.003-.163c.008-.22.026-.45.054-.678a8.707 8.707 0 0 1 .28-1.355c.128-.444.286-.872.473-1.277a7.04 7.04 0 0 1 1.456-2.1 5.925 5.925 0 0 1 .953-.763c.169-.111.343-.213.524-.306.089-.05.182-.091.273-.135.047-.02.093-.042.138-.062a7.177 7.177 0 0 1 .714-.267l.145-.045c.049-.015.098-.026.148-.041.098-.029.197-.052.296-.076.049-.013.1-.02.15-.033l.15-.032.151-.028.076-.013.075-.01.153-.024c.057-.01.114-.013.171-.023l.169-.021c.036-.003.073-.008.106-.01l.073-.008.036-.003.042-.002c.057-.003.114-.008.171-.01l.086-.006h.023l.037-.003.145-.007a7.999 7.999 0 0 1 1.708.125 7.917 7.917 0 0 1 2.048.68 8.253 8.253 0 0 1 1.672 1.09l.09.077.089.078c.06.052.114.107.171.159.057.052.112.106.166.16.052.055.107.107.159.164a8.671 8.671 0 0 1 1.41 1.978c.012.026.028.052.04.078l.04.078.075.156c.023.051.05.1.07.153l.065.15a8.848 8.848 0 0 1 .45 1.34.19.19 0 0 0 .201.142.186.186 0 0 0 .172-.184c.01-.246.002-.532-.024-.856z"/>
-            </svg>
-            <span class="tech-card__name">Grafana</span>
-          </div>
-          <div class="tech-card">
-            <svg class="tech-card__icon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
-              <path d="M19.57 17.04l-1.997-1.316-1.665 2.782-1.937-.567-1.706 2.604.087.82 9.274-1.71-.538-5.794zm-8.649-2.498l1.488-.204c.241.108.409.15.697.223.45.117.97.23 1.741-.16.18-.088.553-.43.704-.625l6.096-1.106.622 7.527-10.444 1.882zm11.325-2.712l-.602.115L20.488 0 .789 2.285l2.427 19.693 2.306-.334c-.184-.263-.471-.581-.96-.989-.68-.564-.44-1.522-.039-2.127.53-1.022 3.26-2.322 3.106-3.956-.056-.594-.15-1.368-.702-1.898-.02.22.017.432.017.432s-.227-.289-.34-.683c-.112-.15-.2-.199-.319-.4-.085.233-.073.503-.073.503s-.186-.437-.216-.807c-.11.166-.137.48-.137.48s-.241-.69-.186-1.062c-.11-.323-.436-.965-.343-2.424.6.421 1.924.321 2.44-.439.171-.251.288-.939-.086-2.293-.24-.868-.835-2.16-1.066-2.651l-.028.02c.122.395.374 1.223.47 1.625.293 1.218.372 1.642.234 2.204-.116.488-.397.808-1.107 1.165-.71.358-1.653-.514-1.713-.562-.69-.55-1.224-1.447-1.284-1.883-.062-.477.275-.763.445-1.153-.243.07-.514.192-.514.192s.323-.334.722-.624c.165-.109.262-.178.436-.323a9.762 9.762 0 0 0-.456.003s.42-.227.855-.392c-.318-.014-.623-.003-.623-.003s.937-.419 1.678-.727c.509-.208 1.006-.147 1.286.257.367.53.752.817 1.569.996.501-.223.653-.337 1.284-.509.554-.61.99-.688.99-.688s-.216.198-.274.51c.314-.249.66-.455.66-.455s-.134.164-.259.426l.03.043c.366-.22.797-.394.797-.394s-.123.156-.268.358c.277-.002.838.012 1.056.037 1.285.028 1.552-1.374 2.045-1.55.618-.22.894-.353 1.947.68.903.888 1.609 2.477 1.259 2.833-.294.295-.874-.115-1.516-.916a3.466 3.466 0 0 1-.716-1.562 1.533 1.533 0 0 0-.497-.85s.23.51.23.96c0 .246.03 1.165.424 1.68-.039.076-.057.374-.1.43-.458-.554-1.443-.95-1.604-1.067.544.445 1.793 1.468 2.273 2.449.453.927.186 1.777.416 1.997.065.063.976 1.197 1.15 1.767.306.994.019 2.038-.381 2.685l-1.117.174c-.163-.045-.273-.068-.42-.153.08-.143.241-.5.243-.572l-.063-.111c-.348.492-.93.97-1.414 1.245-.633.359-1.363.304-1.838.156-1.348-.415-2.623-1.327-2.93-1.566 0 0-.01.191.048.234.34.383 1.119 1.077 1.872 1.56l-1.605.177.759 5.908c-.337.048-.39.071-.757.124-.325-1.147-.946-1.895-1.624-2.332-.599-.384-1.424-.47-2.214-.314l-.05.059a2.851 2.851 0 0 1 1.863.444c.654.413 1.181 1.481 1.375 2.124.248.822.42 1.7-.248 2.632-.476.662-1.864 1.028-2.986.237.3.481.705.876 1.25.95.809.11 1.577-.03 2.106-.574.452-.464.69-1.434.628-2.456l.714-.104.258 1.834 11.827-1.424zM15.05 6.848c-.034.075-.085.125-.007.37l.004.014.013.032.032.073c.14.287.295.558.552.696.067-.011.136-.019.207-.023.242-.01.395.028.492.08.009-.048.01-.119.005-.222-.018-.364.072-.982-.626-1.308-.264-.122-.634-.084-.757.068a.302.302 0 0 1 .058.013c.186.066.06.13.027.207m1.958 3.392c-.092-.05-.52-.03-.821.005-.574.068-1.193.267-1.328.372-.247.191-.135.523.047.66.511.382.96.638 1.432.575.29-.038.546-.497.728-.914.124-.288.124-.598-.058-.698m-5.077-2.942c.162-.154-.805-.355-1.556.156-.554.378-.571 1.187-.041 1.646.053.046.096.078.137.104a4.77 4.77 0 0 1 1.396-.412c.113-.125.243-.345.21-.745-.044-.542-.455-.456-.146-.749"/>
-            </svg>
-            <span class="tech-card__name">Datadog</span>
-          </div>
+      <div class="card-3d fly-in from-left" data-tilt>
+        <p class="tech-card__category">Observability</p>
+        <div class="tech-card__items">
+          <span class="tech-tag">Fluent Bit</span>
+          <span class="tech-tag">OpenTelemetry</span>
+          <span class="tech-tag">Prometheus</span>
+          <span class="tech-tag">Grafana</span>
+          <span class="tech-tag">Datadog</span>
         </div>
       </div>
-      
-      <!-- Infrastructure as Code -->
-      <div class="tech-category reveal">
-        <h3 class="tech-category__title">Infrastructure as Code</h3>
-        <div class="tech-grid">
-          <div class="tech-card">
-            <svg class="tech-card__icon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
-              <path d="M1.44 0v7.575l6.561 3.79V3.787zm21.12 4.227l-6.561 3.791v7.574l6.56-3.787zM8.72 4.23v7.575l6.561 3.787V8.018zm0 8.405v7.575L15.28 24v-7.578z"/>
-            </svg>
-            <span class="tech-card__name">Terraform</span>
-          </div>
-          <div class="tech-card">
-            <svg class="tech-card__icon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
-              <path d="M10.617 11.473l4.686 3.695-3.102-7.662zM12 0C5.371 0 0 5.371 0 12s5.371 12 12 12 12-5.371 12-12S18.629 0 12 0zm5.797 17.305c-.011.471-.403.842-.875.83-.236 0-.416-.09-.664-.293l-6.19-5-2.079 5.203H6.191L11.438 5.44c.124-.314.427-.52.764-.506.326-.014.63.189.742.506l4.774 11.494c.045.111.08.234.08.348-.001.009-.001.009-.001.023z"/>
-            </svg>
-            <span class="tech-card__name">Ansible</span>
-          </div>
+      <div class="card-3d fly-in" data-tilt>
+        <p class="tech-card__category">Infrastructure as Code</p>
+        <div class="tech-card__items">
+          <span class="tech-tag">Terraform</span>
+          <span class="tech-tag">Ansible</span>
         </div>
       </div>
-
-      <!-- CI/CD -->
-      <div class="tech-category reveal">
-        <h3 class="tech-category__title">CI / CD</h3>
-        <div class="tech-grid">
-          <div class="tech-card">
-            <svg class="tech-card__icon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
-              <path d="M10.984 13.836a.5.5 0 0 1-.353-.146l-.745-.743a.5.5 0 1 1 .706-.708l.392.391 1.181-1.18a.5.5 0 0 1 .708.707l-1.535 1.533a.504.504 0 0 1-.354.146zm9.353-.147l1.534-1.532a.5.5 0 0 0-.707-.707l-1.181 1.18-.392-.391a.5.5 0 1 0-.706.708l.746.743a.497.497 0 0 0 .706-.001zM4.527 7.452l2.557-1.585A1 1 0 0 0 7.09 4.17L4.533 2.56A1 1 0 0 0 3 3.406v3.196a1.001 1.001 0 0 0 1.527.85zm2.03-2.436L4 6.602V3.406l2.557 1.61zM24 12.5c0 1.93-1.57 3.5-3.5 3.5a3.503 3.503 0 0 1-3.46-3h-2.08a3.503 3.503 0 0 1-3.46 3 3.502 3.502 0 0 1-3.46-3h-.558c-.972 0-1.85-.399-2.482-1.042V17c0 1.654 1.346 3 3 3h.04c.244-1.693 1.7-3 3.46-3 1.93 0 3.5 1.57 3.5 3.5S13.43 24 11.5 24a3.502 3.502 0 0 1-3.46-3H8c-2.206 0-4-1.794-4-4V9.899A5.008 5.008 0 0 1 0 5c0-2.757 2.243-5 5-5s5 2.243 5 5a5.005 5.005 0 0 1-4.952 4.998A2.482 2.482 0 0 0 7.482 12h.558c.244-1.693 1.7-3 3.46-3a3.502 3.502 0 0 1 3.46 3h2.08a3.503 3.503 0 0 1 3.46-3c1.93 0 3.5 1.57 3.5 3.5zm-15 8c0 1.378 1.122 2.5 2.5 2.5s2.5-1.122 2.5-2.5-1.122-2.5-2.5-2.5S9 19.122 9 20.5zM5 9c2.206 0 4-1.794 4-4S7.206 1 5 1 1 2.794 1 5s1.794 4 4 4zm9 3.5c0-1.378-1.122-2.5-2.5-2.5S9 11.122 9 12.5s1.122 2.5 2.5 2.5 2.5-1.122 2.5-2.5zm9 0c0-1.378-1.122-2.5-2.5-2.5S18 11.122 18 12.5s1.122 2.5 2.5 2.5 2.5-1.122 2.5-2.5zm-13 8a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0zm2 0a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0zm12 0c0 1.93-1.57 3.5-3.5 3.5a3.503 3.503 0 0 1-3.46-3.002c-.007.001-.013.005-.021.005l-.506.017h-.017a.5.5 0 0 1-.016-.999l.506-.017c.018-.002.035.006.052.007A3.503 3.503 0 0 1 20.5 17c1.93 0 3.5 1.57 3.5 3.5zm-1 0c0-1.378-1.122-2.5-2.5-2.5S18 19.122 18 20.5s1.122 2.5 2.5 2.5 2.5-1.122 2.5-2.5z"/>
-            </svg>
-            <span class="tech-card__name">GitHub Actions</span>
-          </div>
+      <div class="card-3d fly-in from-left" data-tilt>
+        <p class="tech-card__category">CI / CD</p>
+        <div class="tech-card__items">
+          <span class="tech-tag">GitHub Actions</span>
         </div>
       </div>
-
     </div>
   </section>
 
   <!-- Projects -->
-  <section class="section" id="projects">
-    <div class="container">
-      <h2 class="section__title reveal">
-        <span class="section__title-marker" aria-hidden="true">//</span> Projects
-      </h2>
-      <div class="projects-grid">
-        <article class="project-card reveal">
-          <div class="project-card__header">
-            <svg class="project-card__icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.5 3.4L17 8l-3.5 1.6L12 13l-1.5-3.4L7 8l3.5-1.6L12 3z"/><path d="M5 16l1 2.3L8.5 19l-2.5 1L5 22l-1-2L1.5 19 4 18l1-2z"/><path d="M19 16l1 2.3 2.5 1-2.5 1L19 22l-1-2-2.5-1 2.5-1 1-2z"/></svg>
-            <h3 class="project-card__title">AXMP AI Agent Studio</h3>
-          </div>
-          <p class="project-card__desc">
-            Engineered MCP Server Builder enabling OpenAPI-to-MCP specification conversion. Streamlined AI agent development workflow for enterprise teams.
-          </p>
-          <div class="project-card__tags">
-            <span class="tag">FastAPI</span>
-            <span class="tag">Go Operator</span>
-            <span class="tag">MCP</span>
-            <span class="tag">AI Agent</span>
-            <span class="tag">Kubernetes</span>
-          </div>
-          <div class="project-card__metric">
-            <span class="metric__value">OpenAPI → MCP → AI Agent</span>
+  <section class="section" id="projects" aria-label="Projects">
+    <p class="section__label">Work</p>
+    <h2 class="section__title">Projects</h2>
+    <div class="projects-grid">
+      <div class="card-3d project-card fly-in from-left" data-tilt>
+        <h3 class="project-card__title">AXMP AI Agent Studio</h3>
+        <p class="project-card__desc">Engineered MCP Server Builder enabling OpenAPI-to-MCP specification conversion. Streamlined AI agent development workflow for enterprise teams.</p>
+        <div class="project-card__tags">
+          <span class="project-tag">FastAPI</span>
+          <span class="project-tag">Go Operator</span>
+          <span class="project-tag">MCP</span>
+          <span class="project-tag">AI Agent</span>
+          <span class="project-tag">Kubernetes</span>
+        </div>
+        <div class="project-card__metrics">
+          <div class="metric">
+            <span class="metric__value">OpenAPI &rarr; MCP &rarr; AI Agent</span>
             <span class="metric__label">AI Transformation</span>
           </div>
-        </article>
-
-        <article class="project-card reveal">
-          <div class="project-card__header">
-            <svg class="project-card__icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="16" y="16" width="6" height="6" rx="1"/><path d="M12 8v4M8 16l4-4 4 4"/></svg>
-            <h3 class="project-card__title">Modernization Platform APIM</h3>
+        </div>
+      </div>
+      <div class="card-3d project-card fly-in" data-tilt>
+        <h3 class="project-card__title">Modernization Platform APIM</h3>
+        <p class="project-card__desc">Architected and implemented Kubernetes-native API gateway management platform. Centralized API lifecycle management across multi-cluster environments.</p>
+        <div class="project-card__tags">
+          <span class="project-tag">Kubernetes</span>
+          <span class="project-tag">API Gateway</span>
+          <span class="project-tag">Platform Engineering</span>
+        </div>
+        <div class="project-card__metrics">
+          <div class="metric">
+            <span class="metric__value">3d &rarr; 1d</span>
+            <span class="metric__label">Delivery Time</span>
           </div>
-          <p class="project-card__desc">
-            Architected and implemented Kubernetes-native API gateway management platform. Centralized API lifecycle management across multi-cluster environments.
-          </p>
-          <div class="project-card__tags">
-            <span class="tag">Kubernetes</span>
-            <span class="tag">API Gateway</span>
-            <span class="tag">Platform Engineering</span>
+          <div class="metric">
+            <span class="metric__value">60%</span>
+            <span class="metric__label">Build time reduced</span>
           </div>
-          <div class="project-card__metrics">
-            <div class="project-card__metric">
-              <span class="metric__value">3d → 1d</span>
-              <span class="metric__label">Delivery Time</span>
-            </div>
-            <div class="project-card__metric">
-              <span class="metric__value">60%</span>
-              <span class="metric__label">Build time reduced</span>
-            </div>
-          </div>
-        </article>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Activities & Achievements -->
-  <section class="section section--alt" id="activities">
-    <div class="container">
-      <h2 class="section__title reveal">
-        <span class="section__title-marker" aria-hidden="true">//</span> Activities &amp; Achievements
-      </h2>
-      <div class="timeline">
-        <div class="timeline__group reveal">
-          <h3 class="timeline__group-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            Leadership
-          </h3>
-          <div class="timeline__items">
-            <div class="timeline__item">
-              <span class="timeline__dot timeline__dot--accent" aria-hidden="true"></span>
-              <div class="timeline__content">
-                <strong>Cloud Native Community Korea (CNCK)</strong>
-                <span class="timeline__role">Head of Community Ops & Organizer · 2026 – Present</span>
-              </div>
-            </div>
-            <div class="timeline__item">
-              <span class="timeline__dot" aria-hidden="true"></span>
-              <div class="timeline__content">
-                <strong>Kubernetes Organization Member</strong>
-                <span class="timeline__role timeline__role--inactive">Top 17 All-Time PR Contributor in Korea · 2022 – 2025</span>
-              </div>
-            </div>
-            <div class="timeline__item">
-              <span class="timeline__dot" aria-hidden="true"></span>
-              <div class="timeline__content">
-                <strong>NAVER Cloud Platform Tech Ambassador</strong>
-                <span class="timeline__role timeline__role--inactive">Tech Community Management & Offline Meetup Lead · 2023 – 2026.02</span>
-              </div>
-            </div>
-            <div class="timeline__item">
-              <span class="timeline__dot" aria-hidden="true"></span>
-              <div class="timeline__content">
-                <strong>GopherCon Korea 2023, 2024 Organizer</strong>
-                <span class="timeline__role timeline__role--inactive">Korea's First Golang Conference · Event Operations & Sponsorship</span>
-              </div>
-            </div>
-            <div class="timeline__item">
-              <span class="timeline__dot" aria-hidden="true"></span>
-              <div class="timeline__content">
-                <strong>KCD Korea 2023 Organizer</strong>
-                <span class="timeline__role timeline__role--inactive">Committee (Swag Planning)</span>
-                <img class="timeline__badge" src="certi/KCD-Korea-2023-Organizer.png" alt="KCD Korea 2023 Organizer badge" width="80" height="80" />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="timeline__group reveal">
-          <h3 class="timeline__group-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-            Speaking
-          </h3>
-          <div class="timeline__items">
-            <div class="timeline__item">
-              <span class="timeline__dot" aria-hidden="true"></span>
-              <div class="timeline__content">
-                <strong>Datadog User Group Korea</strong>
-                <span class="timeline__role">Log-Based API Management Strategies and Gateway Utilization in MSA · 2025.02</span>
-              </div>
-            </div>
-            <div class="timeline__item">
-              <span class="timeline__dot" aria-hidden="true"></span>
-              <div class="timeline__content">
-                <strong>AWS Korea User Group</strong>
-                <span class="timeline__role">Mastering Infrastructure Benchmark Testing · 2022.06</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="timeline__group reveal">
-          <h3 class="timeline__group-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
-            Award
-          </h3>
-          <div class="timeline__items">
-            <div class="timeline__item">
-              <span class="timeline__dot" aria-hidden="true"></span>
-              <div class="timeline__content">
-                <strong>Open Source Contribution Academy</strong>
-                <span class="timeline__role">Excellence Award · 2022</span>
-              </div>
-            </div>
-          </div>
-        </div>
+  <!-- Activities -->
+  <section class="section" id="activities" aria-label="Activities">
+    <p class="section__label">Community</p>
+    <h2 class="section__title">Activities</h2>
+    <div class="activities-grid">
+      <div class="card-3d activity-card fly-in from-left" data-tilt>
+        <h3 class="activity-card__heading">Leadership</h3>
+        <ul class="activity-list" role="list">
+          <li>CNCK (Cloud Native Community Korea) — Head of Community Ops &amp; Organizer · 2026–Present</li>
+          <li>Kubernetes Organization Member — Top 17 All-Time PR in Korea · 2022–2025</li>
+          <li>NAVER Cloud Platform Tech Ambassador · 2023–2026.02</li>
+          <li>GopherCon Korea 2023/2024 Organizer</li>
+          <li>KCD Korea 2023 Organizer <img src="certi/KCD-Korea-2023-Organizer.png" alt="KCD Korea 2023 Organizer badge" class="activity-badge" loading="lazy" /></li>
+        </ul>
+      </div>
+      <div class="card-3d activity-card fly-in" data-tilt>
+        <h3 class="activity-card__heading">Speaking</h3>
+        <ul class="activity-list" role="list">
+          <li>Datadog User Group Korea · 2025.02</li>
+          <li>AWS Korea User Group · 2022.06</li>
+        </ul>
+      </div>
+      <div class="card-3d activity-card fly-in from-left" data-tilt>
+        <h3 class="activity-card__heading">Award</h3>
+        <ul class="activity-list" role="list">
+          <li>Open Source Contribution Academy — Excellence Award · 2022</li>
+        </ul>
       </div>
     </div>
   </section>
 
   <!-- Certifications -->
-  <section class="section" id="certifications">
-    <div class="container">
-      <h2 class="section__title reveal">
-        <span class="section__title-marker" aria-hidden="true">//</span> Certifications
-      </h2>
-      <div class="certs-grid">
-        <div class="cert-group cert-group--k8s reveal">
-          <h3 class="cert-group__title">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="#58a6ff"><path d="M10.204 14.35l.007.01-.999 2.413a5.171 5.171 0 0 1-2.075-2.597l2.578-.437.004.005a.44.44 0 0 1 .484.606zm-.833-2.129a.44.44 0 0 0 .173-.756l.002-.011L7.585 9.7a5.143 5.143 0 0 0-.73 3.255l2.514-.725.002-.009zm1.145-1.98a.44.44 0 0 0 .699-.337l.01-.005.15-2.62a5.144 5.144 0 0 0-3.01 1.442l2.147 1.523.004-.002zm.76 2.75l.723.349.722-.347.18-.78-.5-.623h-.804l-.5.623.179.779zm1.5-3.095a.44.44 0 0 0 .7.336l.008.003 2.134-1.513a5.188 5.188 0 0 0-2.992-1.442l.148 2.615.002.001zm10.876 5.97l-5.773 7.181a1.6 1.6 0 0 1-1.248.594l-9.261.003a1.6 1.6 0 0 1-1.247-.596l-5.776-7.18a1.583 1.583 0 0 1-.307-1.34L2.1 5.573c.108-.47.425-.864.863-1.073L11.305.513a1.606 1.606 0 0 1 1.385 0l8.345 3.985c.438.209.755.604.863 1.073l2.062 8.955c.108.47-.005.963-.308 1.34zm-3.289-2.057c-.042-.01-.103-.026-.145-.034-.174-.033-.315-.025-.479-.038-.35-.037-.638-.067-.895-.148-.105-.04-.18-.165-.216-.216l-.201-.059a6.45 6.45 0 0 0-.105-2.332 6.465 6.465 0 0 0-.936-2.163c.052-.047.15-.133.177-.159.008-.09.001-.183.094-.282.197-.185.444-.338.743-.522.142-.084.273-.137.415-.242.032-.024.076-.062.11-.089.24-.191.295-.52.123-.736-.172-.216-.506-.236-.745-.045-.034.027-.08.062-.111.088-.134.116-.217.23-.33.35-.246.25-.45.458-.673.609-.097.056-.239.037-.303.033l-.19.135a6.545 6.545 0 0 0-4.146-2.003l-.012-.223c-.065-.062-.143-.115-.163-.25-.022-.268.015-.557.057-.905.023-.163.061-.298.068-.475.001-.04-.001-.099-.001-.142 0-.306-.224-.555-.5-.555-.275 0-.499.249-.499.555l.001.014c0 .041-.002.092 0 .128.006.177.044.312.067.475.042.348.078.637.056.906a.545.545 0 0 1-.162.258l-.012.211a6.424 6.424 0 0 0-4.166 2.003 8.373 8.373 0 0 1-.18-.128c-.09.012-.18.04-.297-.029-.223-.15-.427-.358-.673-.608-.113-.12-.195-.234-.329-.349-.03-.026-.077-.062-.111-.088a.594.594 0 0 0-.348-.132.481.481 0 0 0-.398.176c-.172.216-.117.546.123.737l.007.005.104.083c.142.105.272.159.414.242.299.185.546.338.743.522.076.082.09.226.1.288l.16.143a6.462 6.462 0 0 0-1.02 4.506l-.208.06c-.055.072-.133.184-.215.217-.257.081-.546.11-.895.147-.164.014-.305.006-.48.039-.037.007-.09.02-.133.03l-.004.002-.007.002c-.295.071-.484.342-.423.608.061.267.349.429.645.365l.007-.001.01-.003.129-.029c.17-.046.294-.113.448-.172.33-.118.604-.217.87-.256.112-.009.23.069.288.101l.217-.037a6.5 6.5 0 0 0 2.88 3.596l-.09.218c.033.084.069.199.044.282-.097.252-.263.517-.452.813-.091.136-.185.242-.268.399-.02.037-.045.095-.064.134-.128.275-.034.591.213.71.248.12.556-.007.69-.282v-.002c.02-.039.046-.09.062-.127.07-.162.094-.301.144-.458.132-.332.205-.68.387-.897.05-.06.13-.082.215-.105l.113-.205a6.453 6.453 0 0 0 4.609.012l.106.192c.086.028.18.042.256.155.136.232.229.507.342.84.05.156.074.295.145.457.016.037.043.09.062.129.133.276.442.402.69.282.247-.118.341-.435.213-.71-.02-.039-.045-.096-.065-.134-.083-.156-.177-.261-.268-.398-.19-.296-.346-.541-.443-.793-.04-.13.007-.21.038-.294-.018-.022-.059-.144-.083-.202a6.499 6.499 0 0 0 2.88-3.622c.064.01.176.03.213.038.075-.05.144-.114.28-.104.266.039.54.138.87.256.154.06.277.128.448.173.036.01.088.019.13.028l.009.003.007.001c.297.064.584-.098.645-.365.06-.266-.128-.537-.423-.608zM16.4 9.701l-1.95 1.746v.005a.44.44 0 0 0 .173.757l.003.01 2.526.728a5.199 5.199 0 0 0-.108-1.674A5.208 5.208 0 0 0 16.4 9.7zm-4.013 5.325a.437.437 0 0 0-.404-.232.44.44 0 0 0-.372.233h-.002l-1.268 2.292a5.164 5.164 0 0 0 3.326.003l-1.27-2.296h-.01zm1.888-1.293a.44.44 0 0 0-.27.036.44.44 0 0 0-.214.572l-.003.004 1.01 2.438a5.15 5.15 0 0 0 2.081-2.615l-2.6-.44-.004.005z"/></svg>
-            Kubernetes
-          </h3>
-          <div class="cert-group__banner">
-            <img src="certi/kubestronaut-horizontal-color.svg" alt="Kubestronaut" height="40" />
+  <section class="section" id="certifications" aria-label="Certifications">
+    <p class="section__label">Credentials</p>
+    <h2 class="section__title">Certifications</h2>
+    <div class="certs-grid">
+      <div class="card-3d cert-card fly-in from-left" data-tilt>
+        <img src="certi/kubestronaut-horizontal-color.svg" alt="Kubestronaut banner" class="cert-card__banner" loading="lazy" />
+        <h3 class="cert-card__heading">Kubernetes</h3>
+        <div class="cert-card__items">
+          <div class="cert-item">
+            <img src="certi/cks-color.svg" alt="CKS certification" class="cert-item__icon" loading="lazy" />
+            <span class="cert-item__name">CKS</span>
           </div>
-          <ul class="cert-list">
-            <li class="cert-item">
-              <img class="cert-item__badge" src="certi/cks-color.svg" alt="CKS badge" width="36" height="36" />
-              <span class="cert-item__abbr">CKS</span>
-              <span class="cert-item__name">Certified Kubernetes Security Specialist</span>
-            </li>
-            <li class="cert-item">
-              <img class="cert-item__badge" src="certi/kcsa-color.svg" alt="KCSA badge" width="36" height="36" />
-              <span class="cert-item__abbr">KCSA</span>
-              <span class="cert-item__name">Kubernetes and Cloud Native Security Associate</span>
-            </li>
-            <li class="cert-item">
-              <img class="cert-item__badge" src="certi/kcna-color.svg" alt="KCNA badge" width="36" height="36" />
-              <span class="cert-item__abbr">KCNA</span>
-              <span class="cert-item__name">Kubernetes and Cloud Native Associate</span>
-            </li>
-            <li class="cert-item">
-              <img class="cert-item__badge" src="certi/ckad-color.svg" alt="CKAD badge" width="36" height="36" />
-              <span class="cert-item__abbr">CKAD</span>
-              <span class="cert-item__name">Certified Kubernetes Application Developer</span>
-            </li>
-            <li class="cert-item">
-              <img class="cert-item__badge" src="certi/cka-color.svg" alt="CKA badge" width="36" height="36" />
-              <span class="cert-item__abbr">CKA</span>
-              <span class="cert-item__name">Certified Kubernetes Administrator</span>
-            </li>
-          </ul>
+          <div class="cert-item">
+            <img src="certi/kcsa-color.svg" alt="KCSA certification" class="cert-item__icon" loading="lazy" />
+            <span class="cert-item__name">KCSA</span>
+          </div>
+          <div class="cert-item">
+            <img src="certi/kcna-color.svg" alt="KCNA certification" class="cert-item__icon" loading="lazy" />
+            <span class="cert-item__name">KCNA</span>
+          </div>
+          <div class="cert-item">
+            <img src="certi/ckad-color.svg" alt="CKAD certification" class="cert-item__icon" loading="lazy" />
+            <span class="cert-item__name">CKAD</span>
+          </div>
+          <div class="cert-item">
+            <img src="certi/cka-color.svg" alt="CKA certification" class="cert-item__icon" loading="lazy" />
+            <span class="cert-item__name">CKA</span>
+          </div>
         </div>
-
-        <div class="cert-group cert-group--aws reveal">
-          <h3 class="cert-group__title">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="#ff9900"><path d="M6.763 10.036c0 .296.032.535.088.71.064.176.144.368.256.576.04.063.056.127.056.183 0 .08-.048.16-.152.24l-.503.335a.383.383 0 0 1-.208.072c-.08 0-.16-.04-.239-.112a2.47 2.47 0 0 1-.287-.374 6.18 6.18 0 0 1-.248-.47c-.622.734-1.405 1.101-2.347 1.101-.67 0-1.205-.191-1.596-.574-.391-.384-.59-.894-.59-1.533 0-.678.239-1.23.726-1.644.487-.415 1.133-.623 1.955-.623.272 0 .551.024.846.064.296.04.6.104.918.176v-.583c0-.607-.127-1.03-.375-1.277-.255-.248-.686-.367-1.3-.367-.28 0-.568.032-.863.104-.296.072-.583.16-.862.272a2.287 2.287 0 0 1-.28.104.488.488 0 0 1-.127.023c-.112 0-.168-.08-.168-.247v-.391c0-.128.016-.224.056-.28a.597.597 0 0 1 .224-.167c.279-.144.614-.264 1.005-.36A4.84 4.84 0 0 1 5.1 5.6c.757 0 1.31.172 1.667.518.35.344.526.87.526 1.572v2.07h-.53v.276zm-3.26 1.22c.263 0 .534-.048.822-.144.287-.096.543-.271.758-.51.128-.152.224-.32.272-.512.047-.191.08-.423.08-.694v-.335a6.66 6.66 0 0 0-.735-.136 6.02 6.02 0 0 0-.75-.048c-.535 0-.926.104-1.19.32-.263.215-.39.518-.39.917 0 .375.095.655.295.846.191.2.47.296.838.296zm6.452.399c-.144 0-.24-.024-.304-.08-.064-.048-.12-.16-.168-.311L7.586 5.55a1.398 1.398 0 0 1-.072-.32c0-.128.064-.2.191-.2h.783c.151 0 .255.025.31.08.065.048.113.16.16.312l1.342 5.284 1.245-5.284c.04-.16.088-.264.151-.312a.549.549 0 0 1 .32-.08h.638c.152 0 .256.025.32.08.063.048.12.16.151.312l1.261 5.348 1.381-5.348c.048-.16.104-.264.16-.312a.52.52 0 0 1 .311-.08h.743c.127 0 .2.065.2.2 0 .04-.009.08-.017.128a1.137 1.137 0 0 1-.056.2l-1.923 6.17c-.048.16-.104.263-.168.311a.51.51 0 0 1-.303.08h-.687c-.151 0-.255-.024-.32-.08-.063-.056-.119-.16-.15-.32l-1.238-5.148-1.23 5.14c-.04.16-.087.264-.15.32-.065.056-.177.08-.32.08zm10.256.215c-.415 0-.83-.048-1.229-.143-.399-.096-.71-.2-.918-.32-.128-.071-.215-.151-.247-.223a.563.563 0 0 1-.048-.224v-.407c0-.167.064-.247.183-.247a.454.454 0 0 1 .144.024c.048.016.12.048.2.08.27.12.566.215.878.279.319.064.63.096.95.096.502 0 .894-.088 1.165-.264a.86.86 0 0 0 .415-.758.777.777 0 0 0-.215-.559c-.144-.151-.415-.287-.806-.415l-1.157-.36c-.583-.183-1.014-.454-1.277-.813a1.902 1.902 0 0 1-.4-1.158c0-.335.073-.63.216-.886.144-.255.335-.479.575-.654.24-.184.51-.32.83-.415A3.6 3.6 0 0 1 18.2 5.6c.183 0 .375.008.559.032.191.024.367.056.534.096.16.048.311.096.455.151.143.056.24.112.295.168.08.048.136.096.168.152a.384.384 0 0 1 .048.2v.375c0 .168-.064.256-.184.256a.831.831 0 0 1-.303-.096 3.652 3.652 0 0 0-1.532-.311c-.455 0-.815.071-1.062.223-.248.152-.375.383-.375.694 0 .224.08.416.24.567.16.152.454.304.878.44l1.134.358c.574.184.99.44 1.237.767.247.327.367.702.367 1.117 0 .343-.072.655-.207.926a2.11 2.11 0 0 1-.59.694c-.248.191-.543.335-.886.431a3.986 3.986 0 0 1-1.118.16zM21.698 16.207c-2.626 1.94-6.442 2.969-9.722 2.969-4.598 0-8.74-1.7-11.87-4.526-.247-.224-.024-.527.272-.351 3.384 1.963 7.559 3.153 11.877 3.153 2.914 0 6.114-.607 9.06-1.852.439-.2.814.288.383.607zM22.792 14.961c-.336-.43-2.22-.207-3.074-.103-.255.032-.295-.192-.064-.36 1.5-1.053 3.967-.749 4.254-.399.287.36-.08 2.826-1.485 4.007-.215.184-.423.088-.327-.151.32-.79 1.03-2.57.696-2.994z"/></svg>
-            AWS
-          </h3>
-          <ul class="cert-list">
-            <li class="cert-item">
-              <span class="cert-item__abbr">DEA</span>
-              <span class="cert-item__name">Data Engineer Associate</span>
-            </li>
-            <li class="cert-item">
-              <span class="cert-item__abbr">SOA</span>
-              <span class="cert-item__name">SysOps Administrator Associate</span>
-            </li>
-            <li class="cert-item">
-              <span class="cert-item__abbr">DVA</span>
-              <span class="cert-item__name">Developer Associate</span>
-            </li>
-            <li class="cert-item">
-              <span class="cert-item__abbr">SAA</span>
-              <span class="cert-item__name">Solutions Architect Associate</span>
-            </li>
-          </ul>
+      </div>
+      <div class="card-3d cert-card fly-in" data-tilt>
+        <h3 class="cert-card__heading">AWS</h3>
+        <div class="aws-certs">
+          <span class="aws-tag">DEA</span>
+          <span class="aws-tag">SOA</span>
+          <span class="aws-tag">DVA</span>
+          <span class="aws-tag">SAA</span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Philosophy & Footer -->
-  <footer class="footer" id="philosophy">
-    <div class="container">
-      <blockquote class="philosophy reveal">
-        <p class="philosophy__text">
-          "AI runs on infrastructure, but transformation runs on people. Cloud-native community taught me that the best technology is built together."
-        </p>
-      </blockquote>
-      <div class="footer__socials">
-        <a href="https://github.com/Seo-yul" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12Z"/></svg>
-        </a>
-        <a href="https://www.linkedin.com/in/yoon-seoyul/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286ZM5.337 7.433a2.062 2.062 0 1 1 0-4.125 2.062 2.062 0 0 1 0 4.125ZM6.84 20.452H3.834V9H6.84v11.452ZM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003Z"/></svg>
-        </a>
-        <a href="mailto:seoyul@devops.ai.kr" aria-label="Email">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z"/><path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z"/></svg>
-        </a>
-      </div>
-      <p class="footer__copy">&copy; 2026 Seoyul Yoon</p>
+  <!-- Footer -->
+  <footer class="footer" role="contentinfo">
+    <blockquote class="footer__quote">
+      "AI runs on infrastructure, but transformation runs on people. Cloud-native community taught me that the best technology is built together."
+    </blockquote>
+    <div class="footer__socials">
+      <a href="https://github.com/Seo-yul" target="_blank" rel="noopener noreferrer" class="footer__social" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12Z"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/in/yoon-seoyul/" target="_blank" rel="noopener noreferrer" class="footer__social" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      </a>
+      <a href="mailto:seoyul@devops.ai.kr" class="footer__social" aria-label="Email">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,7 12,13 2,7"/></svg>
+      </a>
     </div>
+    <p class="footer__copy">&copy; 2026 Seoyul Yoon</p>
   </footer>
 
-  <script src="js/main.js"></script>
+  <script>
+    /* ── Reduced Motion Check ── */
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* ── Star Field Canvas (from index11, blue-tinted) ── */
+    (function () {
+      const canvas = document.getElementById('star-canvas');
+      const ctx = canvas.getContext('2d');
+      let W, H, stars = [], scrollY = 0, warpActive = true, warpProgress = 0;
+      const STAR_COUNT = 500;
+      const LAYERS = 3;
+
+      function resize() {
+        W = canvas.width = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+      }
+
+      function createStars() {
+        stars = [];
+        for (let i = 0; i < STAR_COUNT; i++) {
+          const layer = Math.floor(Math.random() * LAYERS);
+          stars.push({
+            x: Math.random() * W,
+            y: Math.random() * H,
+            r: Math.random() * 1.5 + 0.3 + layer * 0.3,
+            layer: layer,
+            speed: 0.02 + layer * 0.015,
+            twinkle: Math.random() * Math.PI * 2,
+            twinkleSpeed: 0.01 + Math.random() * 0.03,
+            baseAlpha: 0.4 + Math.random() * 0.6
+          });
+        }
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+
+        const warpFactor = warpActive ? Math.min(warpProgress, 1) : 0;
+
+        for (const s of stars) {
+          s.twinkle += s.twinkleSpeed;
+          const alpha = s.baseAlpha * (0.6 + 0.4 * Math.sin(s.twinkle));
+
+          /* parallax offset based on scroll */
+          const parallax = scrollY * s.speed;
+          const y = ((s.y + parallax) % H + H) % H;
+
+          ctx.beginPath();
+
+          if (warpFactor > 0 && warpProgress < 2) {
+            /* warp stretch effect */
+            const stretch = warpFactor * 15 * (s.layer + 1);
+            ctx.moveTo(s.x, y - stretch);
+            ctx.lineTo(s.x + s.r * 0.5, y);
+            ctx.lineTo(s.x, y + s.r);
+            ctx.lineTo(s.x - s.r * 0.5, y);
+            ctx.closePath();
+            ctx.fillStyle = `rgba(150, 190, 255, ${alpha})`;
+          } else {
+            ctx.arc(s.x, y, s.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+          }
+
+          ctx.fill();
+
+          /* glow for bigger stars — blue tinted */
+          if (s.r > 1.2) {
+            ctx.beginPath();
+            ctx.arc(s.x, y, s.r * 3, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(59, 130, 246, ${alpha * 0.08})`;
+            ctx.fill();
+          }
+        }
+
+        if (warpActive) {
+          warpProgress += 0.02;
+          if (warpProgress > 2.5) warpActive = false;
+        }
+
+        if (!prefersReducedMotion) {
+          requestAnimationFrame(draw);
+        }
+      }
+
+      window.addEventListener('resize', () => { resize(); createStars(); });
+      window.addEventListener('scroll', () => { scrollY = window.pageYOffset; }, { passive: true });
+
+      resize();
+      createStars();
+
+      if (prefersReducedMotion) {
+        warpActive = false;
+        draw(); /* single frame */
+      } else {
+        draw();
+      }
+    })();
+
+    /* ── Nav scroll + hamburger ── */
+    const nav = document.getElementById('nav');
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('nav-links');
+
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    hamburger.addEventListener('click', () => {
+      const open = hamburger.classList.toggle('open');
+      navLinks.classList.toggle('open');
+      hamburger.setAttribute('aria-expanded', open);
+    });
+
+    navLinks.querySelectorAll('.nav__link').forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('open');
+        navLinks.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    /* ── 3D Card Tilt (mouse-tracking, from index9) ── */
+    if (!prefersReducedMotion) {
+      document.querySelectorAll('[data-tilt]').forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          const rotateX = ((y - centerY) / centerY) * -8;
+          const rotateY = ((x - centerX) / centerX) * 8;
+          const reflectionAngle = Math.atan2(y - centerY, x - centerX) * (180 / Math.PI) + 90;
+
+          card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(8px)`;
+          card.style.setProperty('--mouse-x', `${(x / rect.width) * 100}%`);
+          card.style.setProperty('--mouse-y', `${(y / rect.height) * 100}%`);
+          card.style.setProperty('--reflection-angle', `${reflectionAngle}deg`);
+        });
+
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) translateZ(0)';
+        });
+      });
+    }
+
+    /* ── Scroll-triggered fly-in (from index9) ── */
+    if (!prefersReducedMotion) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const delay = Array.from(entry.target.parentElement.children)
+              .filter(c => c.classList.contains('fly-in'))
+              .indexOf(entry.target) * 120;
+            setTimeout(() => {
+              entry.target.classList.add('visible');
+            }, delay);
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15 });
+
+      document.querySelectorAll('.fly-in').forEach(el => observer.observe(el));
+    } else {
+      document.querySelectorAll('.fly-in').forEach(el => el.classList.add('visible'));
+    }
+
+    /* ── Parallax blur layers on scroll (from index9, blue tinted) ── */
+    if (!prefersReducedMotion) {
+      const bgLayer = document.querySelector('.parallax-bg');
+      const midLayer = document.querySelector('.parallax-mid');
+      const fgLayer = document.querySelector('.parallax-fg');
+
+      let ticking = false;
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          requestAnimationFrame(() => {
+            const sy = window.scrollY;
+            bgLayer.style.transform = `translateY(${sy * 0.05}px)`;
+            midLayer.style.transform = `translateY(${sy * 0.12}px)`;
+            fgLayer.style.transform = `translateY(${sy * 0.2}px)`;
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }, { passive: true });
+    }
+
+    /* ── Nebula / dust scroll zoom (from index11) ── */
+    if (!prefersReducedMotion) {
+      const nebula = document.querySelector('.nebula');
+      const dust = document.querySelector('.dust-layer');
+      window.addEventListener('scroll', () => {
+        const t = window.pageYOffset / (document.body.scrollHeight - window.innerHeight);
+        const scale = 1 + t * 0.15;
+        const opacity = 0.7 + t * 0.3;
+        nebula.style.transform = `scale(${scale})`;
+        nebula.style.opacity = Math.min(opacity, 1);
+        dust.style.opacity = 0.8 + t * 0.2;
+      }, { passive: true });
+    }
+
+    /* ── Active nav link highlight on scroll ── */
+    const sections = document.querySelectorAll('section[id]');
+    const navLinkEls = document.querySelectorAll('.nav__link');
+    const activeObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          navLinkEls.forEach(link => {
+            link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+          });
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+
+    sections.forEach(section => activeObserver.observe(section));
+  </script>
+
 </body>
 </html>
