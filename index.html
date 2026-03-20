@@ -111,43 +111,49 @@
       background: linear-gradient(90deg, rgba(255,255,255,0.9), rgba(59,130,246,0.6), transparent);
       border-radius: 50%;
       opacity: 0;
+      --angle: -35deg;
     }
 
     .shooting-star:nth-child(1) {
-      top: 12%; left: -150px;
+      top: 12%; right: -150px;
+      --angle: -35deg;
       transform: rotate(-35deg);
       animation: shootingStar 4s 1s ease-in infinite;
     }
     .shooting-star:nth-child(2) {
-      top: 35%; left: -150px;
+      top: 35%; right: -150px;
+      --angle: -25deg;
       transform: rotate(-25deg);
       animation: shootingStar 5.5s 3.5s ease-in infinite;
       width: 200px;
     }
     .shooting-star:nth-child(3) {
-      top: 55%; left: -150px;
+      top: 55%; right: -150px;
+      --angle: -40deg;
       transform: rotate(-40deg);
       animation: shootingStar 4.5s 7s ease-in infinite;
       width: 120px;
     }
     .shooting-star:nth-child(4) {
-      top: 8%; left: -150px;
+      top: 8%; right: -150px;
+      --angle: -20deg;
       transform: rotate(-20deg);
       animation: shootingStar 6s 5s ease-in infinite;
       width: 180px;
     }
     .shooting-star:nth-child(5) {
-      top: 75%; left: -150px;
+      top: 75%; right: -150px;
+      --angle: -30deg;
       transform: rotate(-30deg);
       animation: shootingStar 3.8s 9s ease-in infinite;
       width: 100px;
     }
 
     @keyframes shootingStar {
-      0%   { opacity: 0; transform: rotate(-35deg) translateX(0); }
+      0%   { opacity: 0; transform: rotate(var(--angle)) translateX(0); }
       5%   { opacity: 1; }
       70%  { opacity: 1; }
-      100% { opacity: 0; transform: rotate(-35deg) translateX(calc(100vw + 300px)); }
+      100% { opacity: 0; transform: rotate(var(--angle)) translateX(calc(-100vw - 300px)); }
     }
 
     /* ── Parallax Blur Layers ── */
