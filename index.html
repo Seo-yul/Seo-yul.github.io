@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,23 +8,96 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☁️</text></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" /></noscript>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Poppins:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Poppins:wght@400;500;600;700&display=swap" /></noscript>
+  <!-- Prevent flash of wrong theme -->
+  <script>
+    (function(){
+      var t = localStorage.getItem('theme');
+      if (t === 'universe') document.documentElement.setAttribute('data-theme','universe');
+    })();
+  </script>
   <style>
     /* ── Reset ── */
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
+    /* ── Light Theme (default) ── */
     :root {
+      --bg: #F4F3EE;
+      --text: #141413;
+      --text-dim: #5c5b56;
+      --text-muted: #8a8880;
+      --accent: #C15F3C;
+      --accent-hover: #d97757;
+      --accent-sub: #C15F3C;
+      --accent-light: rgba(193,95,60,0.08);
+      --card-bg: #FFFFFF;
+      --card-bg-alt: #f0efe8;
+      --card-border: rgba(193,95,60,0.12);
+      --card-shadow: rgba(20,20,19,0.06);
+      --card-glow: rgba(193,95,60,0.06);
+      --nav-bg: rgba(244,243,238,0.85);
+      --nav-border: #e8e6dc;
+      --nav-mobile-bg: rgba(244,243,238,0.97);
+      --ring-color: rgba(193,95,60,0.25);
+      --social-bg: rgba(193,95,60,0.08);
+      --social-border: rgba(193,95,60,0.12);
+      --social-hover-bg: rgba(193,95,60,0.15);
+      --tag-bg: #f0efe8;
+      --tag-border: rgba(193,95,60,0.1);
+      --project-tag-bg: rgba(193,95,60,0.08);
+      --project-tag-border: rgba(193,95,60,0.12);
+      --project-tag-color: #C15F3C;
+      --cert-item-bg: #f0efe8;
+      --cert-item-border: rgba(193,95,60,0.12);
+      --aws-bg: rgba(120,140,93,0.08);
+      --aws-border: rgba(120,140,93,0.18);
+      --aws-color: #788c5d;
+      --footer-border: #e8e6dc;
+      --about-border-left: 3px solid #C15F3C;
+      --project-border-top: 3px solid #C15F3C;
+      --divider-color: #b0aea5;
+      --font-heading: 'Poppins', sans-serif;
+      --font-body: 'Lora', serif;
+      --ease-out: cubic-bezier(0.23,1,0.32,1);
+    }
+
+    /* ── Universe Theme ── */
+    [data-theme="universe"] {
       --bg: #060614;
       --text: #E0E8F8;
       --text-dim: #8090b8;
+      --text-muted: rgba(224,232,248,0.5);
       --accent: #3B82F6;
-      --sub: #60A5FA;
-      --star: #FFFFFF;
-      --card-bg: rgba(10, 18, 40, 0.85);
-      --card-border: rgba(59, 130, 246, 0.2);
-      --font-heading: 'Space Grotesk', sans-serif;
-      --font-body: 'IBM Plex Sans', sans-serif;
+      --accent-hover: #60A5FA;
+      --accent-sub: #60A5FA;
+      --accent-light: rgba(59,130,246,0.1);
+      --card-bg: rgba(10,18,40,0.85);
+      --card-bg-alt: rgba(59,130,246,0.06);
+      --card-border: rgba(59,130,246,0.2);
+      --card-shadow: rgba(0,0,0,0.5);
+      --card-glow: rgba(59,130,246,0.1);
+      --nav-bg: rgba(6,6,20,0.85);
+      --nav-border: rgba(59,130,246,0.1);
+      --nav-mobile-bg: rgba(6,6,20,0.95);
+      --ring-color: rgba(59,130,246,0.25);
+      --social-bg: rgba(59,130,246,0.1);
+      --social-border: rgba(59,130,246,0.2);
+      --social-hover-bg: rgba(59,130,246,0.2);
+      --tag-bg: rgba(59,130,246,0.08);
+      --tag-border: rgba(59,130,246,0.15);
+      --project-tag-bg: rgba(96,165,250,0.1);
+      --project-tag-border: rgba(96,165,250,0.2);
+      --project-tag-color: #60A5FA;
+      --cert-item-bg: rgba(59,130,246,0.06);
+      --cert-item-border: rgba(59,130,246,0.12);
+      --aws-bg: rgba(96,165,250,0.08);
+      --aws-border: rgba(96,165,250,0.15);
+      --aws-color: #60A5FA;
+      --footer-border: rgba(59,130,246,0.1);
+      --about-border-left: none;
+      --project-border-top: none;
+      --divider-color: rgba(59,130,246,0.3);
     }
 
     html { scroll-behavior: smooth; }
@@ -33,19 +106,25 @@
       font-family: var(--font-body);
       background: var(--bg);
       color: var(--text);
-      line-height: 1.7;
+      line-height: 1.75;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
+      transition: background-color 0.6s ease, color 0.4s ease;
     }
 
     h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: 700; }
 
     a { color: var(--accent); text-decoration: none; transition: color 0.3s; }
-    a:hover { color: var(--sub); }
+    a:hover { color: var(--accent-hover); }
 
     img { max-width: 100%; display: block; }
 
-    /* ── Star Canvas ── */
+    /* ── Background Toggle ── */
+    .bg-universe { display: none !important; }
+    [data-theme="universe"] .bg-universe { display: block !important; }
+    [data-theme="universe"] .bg-light { display: none !important; }
+
+    /* ── Universe Backgrounds ── */
     #star-canvas {
       position: fixed;
       top: 0; left: 0;
@@ -54,7 +133,6 @@
       pointer-events: none;
     }
 
-    /* ── Nebula Overlay ── */
     .nebula {
       position: fixed;
       top: 0; left: 0;
@@ -66,8 +144,8 @@
         radial-gradient(ellipse 800px 600px at 20% 30%, #0a1628 0%, transparent 70%),
         radial-gradient(ellipse 600px 900px at 80% 50%, #0d2847 0%, transparent 65%),
         radial-gradient(ellipse 900px 500px at 50% 80%, #081e3e 0%, transparent 60%),
-        radial-gradient(ellipse 400px 400px at 60% 20%, rgba(59, 130, 246, 0.08) 0%, transparent 70%),
-        radial-gradient(ellipse 500px 300px at 30% 70%, rgba(13, 40, 71, 0.4) 0%, transparent 60%);
+        radial-gradient(ellipse 400px 400px at 60% 20%, rgba(59,130,246,0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 500px 300px at 30% 70%, rgba(13,40,71,0.4) 0%, transparent 60%);
       opacity: 0.7;
       animation: nebulaFloat 60s ease-in-out infinite alternate;
     }
@@ -80,7 +158,6 @@
       100% { transform: translate(30px, -20px) scale(1); }
     }
 
-    /* ── Space Dust Particles ── */
     .dust-layer {
       position: fixed;
       top: 0; left: 0;
@@ -101,7 +178,6 @@
       100% { transform: translate(-50px, -80px); }
     }
 
-    /* ── Shooting Stars ── */
     .shooting-star {
       position: fixed;
       z-index: 3;
@@ -113,41 +189,11 @@
       opacity: 0;
       --angle: -35deg;
     }
-
-    .shooting-star:nth-child(1) {
-      top: 12%; right: -150px;
-      --angle: -35deg;
-      transform: rotate(-35deg);
-      animation: shootingStar 4s 1s ease-in infinite;
-    }
-    .shooting-star:nth-child(2) {
-      top: 35%; right: -150px;
-      --angle: -25deg;
-      transform: rotate(-25deg);
-      animation: shootingStar 5.5s 3.5s ease-in infinite;
-      width: 200px;
-    }
-    .shooting-star:nth-child(3) {
-      top: 55%; right: -150px;
-      --angle: -40deg;
-      transform: rotate(-40deg);
-      animation: shootingStar 4.5s 7s ease-in infinite;
-      width: 120px;
-    }
-    .shooting-star:nth-child(4) {
-      top: 8%; right: -150px;
-      --angle: -20deg;
-      transform: rotate(-20deg);
-      animation: shootingStar 6s 5s ease-in infinite;
-      width: 180px;
-    }
-    .shooting-star:nth-child(5) {
-      top: 75%; right: -150px;
-      --angle: -30deg;
-      transform: rotate(-30deg);
-      animation: shootingStar 3.8s 9s ease-in infinite;
-      width: 100px;
-    }
+    .shooting-star:nth-child(2) { top: 12%; right: -150px; transform: rotate(-35deg); animation: shootingStar 4s 1s ease-in infinite; }
+    .shooting-star:nth-child(3) { top: 35%; right: -150px; --angle: -25deg; transform: rotate(-25deg); animation: shootingStar 5.5s 3.5s ease-in infinite; width: 200px; }
+    .shooting-star:nth-child(4) { top: 55%; right: -150px; --angle: -40deg; transform: rotate(-40deg); animation: shootingStar 4.5s 7s ease-in infinite; width: 120px; }
+    .shooting-star:nth-child(5) { top: 8%; right: -150px; --angle: -20deg; transform: rotate(-20deg); animation: shootingStar 6s 5s ease-in infinite; width: 180px; }
+    .shooting-star:nth-child(6) { top: 75%; right: -150px; --angle: -30deg; transform: rotate(-30deg); animation: shootingStar 3.8s 9s ease-in infinite; width: 100px; }
 
     @keyframes shootingStar {
       0%   { opacity: 0; transform: rotate(var(--angle)) translateX(0); }
@@ -156,10 +202,7 @@
       100% { opacity: 0; transform: rotate(var(--angle)) translateX(calc(-100vw - 300px)); }
     }
 
-    /* ── Parallax Blur Layers ── */
-    .parallax-bg,
-    .parallax-mid,
-    .parallax-fg {
+    .parallax-bg, .parallax-mid, .parallax-fg {
       position: fixed;
       pointer-events: none;
       z-index: 1;
@@ -167,21 +210,47 @@
       filter: blur(40px);
       opacity: 0.15;
     }
-    .parallax-bg {
-      width: 600px; height: 600px;
-      background: var(--accent);
-      top: -200px; right: -200px;
+    .parallax-bg { width: 600px; height: 600px; background: var(--accent); top: -200px; right: -200px; }
+    .parallax-mid { width: 400px; height: 400px; background: var(--accent-sub); bottom: 20%; left: -100px; }
+    .parallax-fg { width: 300px; height: 300px; background: var(--accent); top: 60%; right: 10%; opacity: 0.1; }
+
+    /* ── Light Backgrounds ── */
+    #particle-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      pointer-events: none;
     }
-    .parallax-mid {
-      width: 400px; height: 400px;
-      background: var(--sub);
-      bottom: 20%; left: -100px;
+
+    .orb {
+      position: fixed;
+      pointer-events: none;
+      z-index: 0;
+      border-radius: 50%;
+      filter: blur(80px);
+      will-change: transform;
     }
-    .parallax-fg {
-      width: 300px; height: 300px;
-      background: var(--accent);
-      top: 60%; right: 10%;
-      opacity: 0.1;
+    .orb--terra { width: 700px; height: 500px; background: radial-gradient(ellipse at center, rgba(193,95,60,0.07), transparent 70%); top: -100px; right: -200px; }
+    .orb--blue  { width: 500px; height: 600px; background: radial-gradient(ellipse at center, rgba(106,155,204,0.06), transparent 70%); bottom: 10%; left: -150px; }
+    .orb--green { width: 400px; height: 400px; background: radial-gradient(ellipse at center, rgba(120,140,93,0.05), transparent 70%); top: 55%; right: 5%; }
+
+    .deco-arc {
+      position: fixed;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.08;
+    }
+    .deco-arc--1 { top: 15%; left: -60px; width: 300px; height: 300px; border: 2px solid var(--accent); border-radius: 50%; clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%); }
+    .deco-arc--2 { bottom: 20%; right: -40px; width: 200px; height: 200px; border: 1.5px solid #6a9bcc; border-radius: 50%; clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%); }
+
+    #grain-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.25;
+      width: 100%; height: 100%;
     }
 
     /* ── Navigation ── */
@@ -189,13 +258,14 @@
       position: fixed;
       top: 0; left: 0; right: 0;
       z-index: 1000;
-      background: rgba(6, 6, 20, 0.85);
+      background: var(--nav-bg);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(59, 130, 246, 0.1);
-      transition: box-shadow 0.3s;
+      border-bottom: 1px solid var(--nav-border);
+      transition: box-shadow 0.3s, background-color 0.4s, border-color 0.4s;
     }
-    .nav.scrolled { box-shadow: 0 4px 30px rgba(0,0,0,0.4); }
+    .nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
+    [data-theme="universe"] .nav.scrolled { box-shadow: 0 4px 30px rgba(0,0,0,0.4); }
     .nav__inner {
       max-width: 1100px;
       margin: 0 auto;
@@ -212,6 +282,45 @@
       color: var(--text);
     }
     .nav__logo-dot { color: var(--accent); }
+
+    /* ── Theme Toggle ── */
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      background: var(--accent-light);
+      cursor: pointer;
+      transition: background 0.3s, border-color 0.3s, transform 0.3s;
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .theme-toggle:hover {
+      transform: scale(1.08);
+      border-color: var(--accent);
+    }
+    .theme-toggle__icon {
+      position: absolute;
+      transition: opacity 0.4s, transform 0.4s;
+      font-size: 20px;
+      line-height: 1;
+    }
+    /* Light mode: show sun, hide universe */
+    .theme-toggle__sun { opacity: 1; transform: rotate(0deg) scale(1); }
+    .theme-toggle__universe { opacity: 0; transform: rotate(-90deg) scale(0.5); }
+    /* Universe mode: show universe, hide sun */
+    [data-theme="universe"] .theme-toggle__sun { opacity: 0; transform: rotate(90deg) scale(0.5); }
+    [data-theme="universe"] .theme-toggle__universe { opacity: 1; transform: rotate(0deg) scale(1); }
+
+    .nav__right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
     .nav__hamburger {
       display: none;
       background: none;
@@ -227,8 +336,9 @@
       height: 2px;
       background: var(--text);
       border-radius: 2px;
-      transition: transform 0.3s, opacity 0.3s;
+      transition: transform 0.3s, opacity 0.3s, background 0.3s;
     }
+    .nav__hamburger.open span { background: var(--accent); }
     .nav__hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
     .nav__hamburger.open span:nth-child(2) { opacity: 0; }
     .nav__hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
@@ -239,6 +349,7 @@
     }
     .nav__link {
       color: var(--text-dim);
+      font-family: var(--font-heading);
       font-size: 1rem;
       font-weight: 500;
       transition: color 0.3s;
@@ -251,15 +362,15 @@
         position: absolute;
         top: 64px; left: 0; right: 0;
         flex-direction: column;
-        background: rgba(6, 6, 20, 0.95);
+        background: var(--nav-mobile-bg);
         backdrop-filter: blur(16px);
         padding: 20px 24px;
         gap: 16px;
         transform: translateY(-10px);
         opacity: 0;
         pointer-events: none;
-        transition: transform 0.3s, opacity 0.3s;
-        border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+        transition: transform 0.3s, opacity 0.3s, background-color 0.4s;
+        border-bottom: 1px solid var(--nav-border);
       }
       .nav__links.open {
         transform: translateY(0);
@@ -278,86 +389,85 @@
     }
     .section__label {
       font-family: var(--font-heading);
-      font-size: 0.95rem;
+      font-size: 0.85rem;
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 3px;
+      letter-spacing: 2.5px;
       color: var(--accent);
       margin-bottom: 8px;
+      transition: color 0.4s;
     }
     .section__title {
       font-size: clamp(2rem, 4.5vw, 2.8rem);
       margin-bottom: 48px;
       color: var(--text);
+      transition: color 0.4s;
     }
 
-    /* ── 3D Card System ── */
-    .card-3d {
+    /* ── Section Divider ── */
+    .section-divider {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 0;
+      position: relative;
+      z-index: 10;
+    }
+    .section-divider span {
+      width: 3px;
+      height: 16px;
+      background: var(--divider-color);
+      border-radius: 2px;
+      transform: rotate(15deg);
+      opacity: 0.4;
+      transition: background-color 0.4s;
+    }
+
+    /* ── Card System ── */
+    .card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 16px;
       padding: 32px;
       position: relative;
       overflow: hidden;
-      transform-style: preserve-3d;
-      transition: transform 0.15s ease-out, box-shadow 0.3s;
-      will-change: transform;
+      transition: transform 0.4s var(--ease-out),
+                  box-shadow 0.4s var(--ease-out),
+                  background-color 0.4s ease,
+                  border-color 0.4s ease;
     }
-    .card-3d::before {
+    .card::before {
       content: '';
       position: absolute;
       inset: 0;
       border-radius: 16px;
       background: radial-gradient(
-        600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-        rgba(59, 130, 246, 0.1),
+        500px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        var(--card-glow),
         transparent 40%
       );
       pointer-events: none;
       opacity: 0;
       transition: opacity 0.4s;
     }
-    .card-3d:hover::before { opacity: 1; }
-    .card-3d:hover {
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(59, 130, 246, 0.08);
+    .card:hover::before { opacity: 1; }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px var(--card-shadow), 0 0 0 1px var(--card-glow);
     }
-
-    /* Light reflection on hover */
-    .card-3d::after {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(
-        to bottom right,
-        transparent 40%,
-        rgba(255, 255, 255, 0.03) 45%,
-        rgba(255, 255, 255, 0.06) 50%,
-        rgba(255, 255, 255, 0.03) 55%,
-        transparent 60%
-      );
-      transform: rotate(var(--reflection-angle, 30deg));
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.5s;
-    }
-    .card-3d:hover::after { opacity: 1; }
 
     /* ── Scroll-in Animation ── */
-    .fly-in {
+    .rise-in {
       opacity: 0;
-      transform: perspective(800px) rotateY(15deg) translateZ(-80px) translateX(60px);
-      transition: opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1),
-                  transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+      transform: translateY(30px);
+      transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
     }
-    .fly-in.from-left {
-      transform: perspective(800px) rotateY(-15deg) translateZ(-80px) translateX(-60px);
+    .rise-in.from-left {
+      transform: translateX(-30px) translateY(10px);
     }
-    .fly-in.visible {
+    .rise-in.visible {
       opacity: 1;
-      transform: perspective(800px) rotateY(0deg) translateZ(0) translateX(0);
+      transform: translateY(0) translateX(0);
     }
 
     /* ── Hero ── */
@@ -370,10 +480,6 @@
       justify-content: center;
       text-align: center;
       padding: 120px 24px 80px;
-    }
-    .hero__content {
-      transform-style: preserve-3d;
-      perspective: 1000px;
     }
     .hero__avatar-wrap {
       position: relative;
@@ -390,35 +496,49 @@
       transform: scale(1.2);
       position: relative;
       z-index: 1;
+      transition: border-color 0.4s;
     }
     .hero__avatar-ring {
       position: absolute;
-      inset: -8px;
+      inset: -10px;
       border-radius: 50%;
-      border: 1px solid rgba(59, 130, 246, 0.3);
-      animation: ring-pulse 3s ease-in-out infinite;
+      border: 2px dashed var(--ring-color);
+      animation: ring-rotate 60s linear infinite;
+      transition: border-color 0.4s;
     }
-    @keyframes ring-pulse {
-      0%, 100% { transform: scale(1); opacity: 0.3; }
-      50% { transform: scale(1.08); opacity: 0.6; }
+    @keyframes ring-rotate {
+      to { transform: rotate(360deg); }
     }
     .hero__name {
       font-size: clamp(2.8rem, 7vw, 4.2rem);
-      letter-spacing: -1px;
+      letter-spacing: -0.5px;
       margin-bottom: 8px;
+      transition: color 0.4s;
     }
     .hero__role {
       font-size: 1.3rem;
       color: var(--text-dim);
       margin-bottom: 16px;
+      transition: color 0.4s;
     }
     .hero__at { color: var(--accent); }
     .hero__tagline {
       font-size: 1.15rem;
-      color: rgba(224, 232, 248, 0.5);
+      color: var(--text-muted);
       max-width: 520px;
       margin: 0 auto 32px;
       line-height: 1.8;
+      transition: color 0.4s;
+    }
+    .hero__tagline .word {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
+    }
+    .hero__tagline .word.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
     .hero__socials {
       display: flex;
@@ -432,14 +552,14 @@
       width: 44px;
       height: 44px;
       border-radius: 12px;
-      background: rgba(59, 130, 246, 0.1);
-      border: 1px solid rgba(59, 130, 246, 0.2);
-      color: var(--text);
-      transition: transform 0.3s, background 0.3s, border-color 0.3s;
+      background: var(--social-bg);
+      border: 1px solid var(--social-border);
+      color: var(--text-dim);
+      transition: transform 0.3s, background 0.3s, border-color 0.3s, color 0.3s;
     }
     .hero__social:hover {
       transform: translateY(-3px) scale(1.05);
-      background: rgba(59, 130, 246, 0.2);
+      background: var(--social-hover-bg);
       border-color: var(--accent);
       color: var(--accent);
     }
@@ -447,15 +567,16 @@
     /* ── About ── */
     .about-card {
       padding: 32px 36px;
+      border-left: var(--about-border-left);
+      transition: border-color 0.4s;
     }
     .about-card p {
-      color: rgba(224, 232, 248, 0.8);
+      color: var(--text-dim);
       font-size: 1.1rem;
-      line-height: 1.9;
+      line-height: 1.95;
+      transition: color 0.4s;
     }
-    .about-card p + p {
-      margin-top: 16px;
-    }
+    .about-card p + p { margin-top: 16px; }
 
     /* ── Quote ── */
     .section-quote {
@@ -465,21 +586,24 @@
       padding: 0 24px;
     }
     .section-quote__text {
-      font-size: 1.15rem;
+      font-size: 1.2rem;
       font-style: italic;
       line-height: 1.8;
-      color: rgba(224, 232, 248, 0.55);
+      color: var(--text-muted);
       position: relative;
+      transition: color 0.4s;
     }
     .section-quote__text::before {
       content: '\201C';
-      font-size: 3rem;
+      font-size: 3.5rem;
       color: var(--accent);
-      opacity: 0.3;
+      opacity: 0.35;
       position: absolute;
-      top: -20px;
-      left: -24px;
+      top: -24px;
+      left: -28px;
       font-style: normal;
+      font-family: Georgia, serif;
+      transition: color 0.4s;
     }
 
     /* ── Tech Stack ── */
@@ -490,12 +614,13 @@
     }
     .tech-card__category {
       font-family: var(--font-heading);
-      font-size: 0.95rem;
+      font-size: 0.85rem;
       font-weight: 600;
-      color: var(--sub);
+      color: var(--accent-sub);
       text-transform: uppercase;
-      letter-spacing: 1.5px;
+      letter-spacing: 1.2px;
       margin-bottom: 14px;
+      transition: color 0.4s;
     }
     .tech-card__items {
       display: flex;
@@ -506,11 +631,17 @@
       display: inline-block;
       padding: 6px 14px;
       border-radius: 8px;
+      font-family: var(--font-heading);
       font-size: 0.95rem;
       font-weight: 500;
-      background: rgba(59, 130, 246, 0.08);
-      border: 1px solid rgba(59, 130, 246, 0.15);
-      color: rgba(224, 232, 248, 0.85);
+      background: var(--tag-bg);
+      border: 1px solid var(--tag-border);
+      color: var(--text-dim);
+      transition: color 0.3s, border-color 0.3s, background-color 0.4s;
+    }
+    .tech-tag:hover {
+      color: var(--accent);
+      border-color: var(--accent);
     }
 
     /* ── Projects ── */
@@ -518,22 +649,29 @@
       display: grid;
       gap: 32px;
     }
-    .project-card { padding: 36px; }
+    .project-card {
+      padding: 36px;
+      border-top: var(--project-border-top);
+    }
     .project-card__title {
       font-size: 1.5rem;
       margin-bottom: 4px;
       color: var(--text);
+      transition: color 0.4s;
     }
     .project-card__period {
+      font-family: var(--font-heading);
       font-size: 0.85rem;
-      color: rgba(224, 232, 248, 0.45);
+      color: var(--text-muted);
       margin-bottom: 12px;
       letter-spacing: 0.02em;
+      transition: color 0.4s;
     }
     .project-card__desc {
-      color: rgba(224, 232, 248, 0.75);
+      color: var(--text-dim);
       line-height: 1.8;
       margin-bottom: 20px;
+      transition: color 0.4s;
     }
     .project-card__tags {
       display: flex;
@@ -544,30 +682,32 @@
     .project-tag {
       padding: 4px 12px;
       border-radius: 6px;
+      font-family: var(--font-heading);
       font-size: 0.9rem;
       font-weight: 500;
-      background: rgba(96, 165, 250, 0.1);
-      border: 1px solid rgba(96, 165, 250, 0.2);
-      color: var(--sub);
+      background: var(--project-tag-bg);
+      border: 1px solid var(--project-tag-border);
+      color: var(--project-tag-color);
+      transition: background-color 0.4s, border-color 0.4s, color 0.4s;
     }
     .project-card__metrics {
       display: flex;
       gap: 32px;
       flex-wrap: wrap;
     }
-    .metric {
-      text-align: center;
-    }
+    .metric { text-align: center; }
     .metric__value {
       font-family: var(--font-heading);
       font-size: 1.65rem;
       font-weight: 700;
       color: var(--accent);
       display: block;
+      transition: color 0.4s;
     }
     .metric__label {
       font-size: 0.9rem;
-      color: rgba(224, 232, 248, 0.5);
+      color: var(--text-muted);
+      transition: color 0.4s;
     }
 
     /* ── Activities ── */
@@ -577,12 +717,13 @@
     }
     .activity-card { padding: 28px 32px; }
     .activity-card__heading {
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: 600;
-      color: var(--sub);
+      color: var(--accent-sub);
       margin-bottom: 16px;
       text-transform: uppercase;
       letter-spacing: 1px;
+      transition: color 0.4s;
     }
     .activity-list {
       list-style: none;
@@ -593,9 +734,10 @@
     .activity-list li {
       padding-left: 20px;
       position: relative;
-      color: rgba(224, 232, 248, 0.8);
+      color: var(--text-dim);
       font-size: 1.05rem;
       line-height: 1.6;
+      transition: color 0.4s;
     }
     .activity-list li::before {
       content: '';
@@ -606,6 +748,7 @@
       height: 6px;
       border-radius: 50%;
       background: var(--accent);
+      transition: background-color 0.4s;
     }
     .activity-badge {
       display: inline-block;
@@ -631,6 +774,7 @@
       font-weight: 600;
       color: var(--text);
       margin-bottom: 20px;
+      transition: color 0.4s;
     }
     .cert-card__items {
       display: flex;
@@ -641,16 +785,14 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      background: rgba(59, 130, 246, 0.06);
-      border: 1px solid rgba(59, 130, 246, 0.12);
+      background: var(--cert-item-bg);
+      border: 1px solid var(--cert-item-border);
       border-radius: 10px;
       padding: 10px 18px;
+      transition: border-color 0.3s, background-color 0.4s;
     }
-    .cert-item__icon {
-      width: 36px;
-      height: 36px;
-      flex-shrink: 0;
-    }
+    .cert-item:hover { border-color: var(--accent); }
+    .cert-item__icon { width: 36px; height: 36px; flex-shrink: 0; }
     .cert-item__name {
       font-family: var(--font-heading);
       font-size: 1rem;
@@ -668,10 +810,12 @@
       font-family: var(--font-heading);
       font-size: 1rem;
       font-weight: 600;
-      background: rgba(96, 165, 250, 0.08);
-      border: 1px solid rgba(96, 165, 250, 0.15);
-      color: var(--sub);
+      background: var(--aws-bg);
+      border: 1px solid var(--aws-border);
+      color: var(--aws-color);
+      transition: border-color 0.3s, background-color 0.4s, color 0.4s;
     }
+    .aws-tag:hover { border-color: var(--aws-color); }
 
     /* ── Footer ── */
     .footer {
@@ -679,15 +823,17 @@
       z-index: 10;
       text-align: center;
       padding: 80px 24px 48px;
-      border-top: 1px solid rgba(59, 130, 246, 0.1);
+      border-top: 1px solid var(--footer-border);
+      transition: border-color 0.4s;
     }
     .footer__quote {
       max-width: 640px;
       margin: 0 auto 32px;
       font-size: 1.15rem;
       font-style: italic;
-      color: rgba(224, 232, 248, 0.6);
+      color: var(--text-muted);
       line-height: 1.8;
+      transition: color 0.4s;
     }
     .footer__socials {
       display: flex;
@@ -702,19 +848,21 @@
       width: 40px;
       height: 40px;
       border-radius: 10px;
-      background: rgba(59, 130, 246, 0.08);
-      border: 1px solid rgba(59, 130, 246, 0.15);
-      color: var(--text);
-      transition: transform 0.3s, background 0.3s;
+      background: var(--social-bg);
+      border: 1px solid var(--social-border);
+      color: var(--text-dim);
+      transition: transform 0.3s, background 0.3s, color 0.3s, border-color 0.4s;
     }
     .footer__social:hover {
       transform: translateY(-2px);
-      background: rgba(59, 130, 246, 0.15);
+      background: var(--social-hover-bg);
       color: var(--accent);
     }
     .footer__copy {
+      font-family: var(--font-heading);
       font-size: 0.95rem;
-      color: rgba(224, 232, 248, 0.35);
+      color: var(--text-muted);
+      transition: color 0.4s;
     }
 
     /* ── Reduced Motion ── */
@@ -725,19 +873,17 @@
         transition-duration: 0.01ms !important;
       }
       html { scroll-behavior: auto; }
-      .fly-in {
-        opacity: 1;
-        transform: none;
-      }
+      .rise-in { opacity: 1; transform: none; }
+      .hero__tagline .word { opacity: 1; transform: none; }
       .nebula { animation: none; }
       .dust-layer { animation: none; }
-      .shooting-star { display: none; }
+      .shooting-star { display: none !important; }
     }
 
     /* ── Responsive ── */
     @media (max-width: 600px) {
       .section { padding: 72px 16px; }
-      .card-3d { padding: 24px 20px; }
+      .card { padding: 24px 20px; }
       .project-card { padding: 28px 20px; }
       .cert-card { padding: 28px 20px; }
       .project-card__metrics { gap: 20px; }
@@ -747,34 +893,35 @@
 </head>
 <body>
 
-  <!-- Star Canvas -->
-  <canvas id="star-canvas" aria-hidden="true"></canvas>
+  <!-- ═══ Universe Backgrounds ═══ -->
+  <canvas id="star-canvas" class="bg-universe" aria-hidden="true"></canvas>
+  <div class="nebula bg-universe" aria-hidden="true"></div>
+  <div class="dust-layer bg-universe" aria-hidden="true"></div>
+  <div class="shooting-star bg-universe" aria-hidden="true"></div>
+  <div class="shooting-star bg-universe" aria-hidden="true"></div>
+  <div class="shooting-star bg-universe" aria-hidden="true"></div>
+  <div class="shooting-star bg-universe" aria-hidden="true"></div>
+  <div class="shooting-star bg-universe" aria-hidden="true"></div>
+  <div class="parallax-bg bg-universe" aria-hidden="true"></div>
+  <div class="parallax-mid bg-universe" aria-hidden="true"></div>
+  <div class="parallax-fg bg-universe" aria-hidden="true"></div>
 
-  <!-- Nebula Overlay -->
-  <div class="nebula" aria-hidden="true"></div>
-
-  <!-- Space Dust -->
-  <div class="dust-layer" aria-hidden="true"></div>
-
-  <!-- Shooting Stars -->
-  <div class="shooting-star" aria-hidden="true"></div>
-  <div class="shooting-star" aria-hidden="true"></div>
-  <div class="shooting-star" aria-hidden="true"></div>
-  <div class="shooting-star" aria-hidden="true"></div>
-  <div class="shooting-star" aria-hidden="true"></div>
-
-  <!-- Parallax Blur Layers -->
-  <div class="parallax-bg" aria-hidden="true"></div>
-  <div class="parallax-mid" aria-hidden="true"></div>
-  <div class="parallax-fg" aria-hidden="true"></div>
+  <!-- ═══ Light Backgrounds ═══ -->
+  <canvas id="particle-canvas" class="bg-light" aria-hidden="true"></canvas>
+  <div class="orb orb--terra bg-light" aria-hidden="true"></div>
+  <div class="orb orb--blue bg-light" aria-hidden="true"></div>
+  <div class="orb orb--green bg-light" aria-hidden="true"></div>
+  <div class="deco-arc deco-arc--1 bg-light" aria-hidden="true"></div>
+  <div class="deco-arc deco-arc--2 bg-light" aria-hidden="true"></div>
+  <svg style="position:absolute;width:0;height:0" aria-hidden="true">
+    <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+  </svg>
+  <div id="grain-overlay" class="bg-light" aria-hidden="true" style="filter:url(#grain)"></div>
 
   <!-- Navigation -->
   <nav class="nav" id="nav" aria-label="Main navigation">
     <div class="nav__inner">
       <a href="#hero" class="nav__logo" aria-label="Home">SY<span class="nav__logo-dot">.</span></a>
-      <button class="nav__hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
       <ul class="nav__links" id="nav-links" role="list">
         <li><a href="#about" class="nav__link">About</a></li>
         <li><a href="#tech" class="nav__link">Tech Stack</a></li>
@@ -782,6 +929,15 @@
         <li><a href="#activities" class="nav__link">Activities</a></li>
         <li><a href="#certifications" class="nav__link">Certifications</a></li>
       </ul>
+      <div class="nav__right">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+          <span class="theme-toggle__icon theme-toggle__sun">&#x2600;&#xFE0F;</span>
+          <span class="theme-toggle__icon theme-toggle__universe">&#x2B50;</span>
+        </button>
+        <button class="nav__hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
     </div>
   </nav>
 
@@ -794,7 +950,7 @@
       </div>
       <h1 class="hero__name">Seoyul Yoon</h1>
       <p class="hero__role">Cloud Application Engineer <span class="hero__at">@</span> SK AX</p>
-      <p class="hero__tagline">A cloud-native engineer who learns from the community and proves it in production.</p>
+      <p class="hero__tagline" id="tagline">A cloud-native engineer who learns from the community and proves it in production.</p>
       <div class="hero__socials">
         <a href="https://github.com/Seo-yul" target="_blank" rel="noopener noreferrer" class="hero__social" aria-label="GitHub">
           <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12Z"/></svg>
@@ -813,23 +969,27 @@
   <section class="section" id="about" aria-label="About">
     <p class="section__label">Who I Am</p>
     <h2 class="section__title">About</h2>
-    <div class="card-3d about-card fly-in" data-tilt>
+    <div class="card about-card rise-in">
       <p>Experienced Cloud Application Engineer specializing in the Kubernetes ecosystem, infrastructure automation, and observability. I architect and build platforms that let development teams ship faster and operate with confidence.</p>
       <p>Active contributor to the cloud-native community in Korea, helping bridge the gap between cutting-edge technology and practical enterprise adoption. I believe the best infrastructure is the kind nobody has to think about.</p>
       <p>Recently, I've been deeply interested in enterprise AX (AI Transformation), focusing on running AI workloads effectively on cloud-native infrastructure and taking a leading role in driving AI adoption across organizations.</p>
     </div>
   </section>
 
-  <div class="section section-quote fly-in">
+  <div class="section-divider rise-in" aria-hidden="true"><span></span><span></span><span></span></div>
+
+  <div class="section section-quote rise-in">
     <p class="section-quote__text">I don't just modernize systems — I build the culture around it.</p>
   </div>
+
+  <div class="section-divider rise-in" aria-hidden="true"><span></span><span></span><span></span></div>
 
   <!-- Tech Stack -->
   <section class="section" id="tech" aria-label="Tech Stack">
     <p class="section__label">Tools &amp; Technologies</p>
     <h2 class="section__title">Tech Stack</h2>
     <div class="tech-grid">
-      <div class="card-3d fly-in from-left" data-tilt>
+      <div class="card rise-in from-left">
         <p class="tech-card__category">Languages &amp; Frameworks</p>
         <div class="tech-card__items">
           <span class="tech-tag">Go</span>
@@ -840,7 +1000,7 @@
           <span class="tech-tag">Java</span>
         </div>
       </div>
-      <div class="card-3d fly-in" data-tilt>
+      <div class="card rise-in">
         <p class="tech-card__category">Container &amp; Orchestration</p>
         <div class="tech-card__items">
           <span class="tech-tag">Kubernetes</span>
@@ -848,7 +1008,7 @@
           <span class="tech-tag">Helm</span>
         </div>
       </div>
-      <div class="card-3d fly-in from-left" data-tilt>
+      <div class="card rise-in from-left">
         <p class="tech-card__category">Observability</p>
         <div class="tech-card__items">
           <span class="tech-tag">Fluent Bit</span>
@@ -858,14 +1018,14 @@
           <span class="tech-tag">Datadog</span>
         </div>
       </div>
-      <div class="card-3d fly-in" data-tilt>
+      <div class="card rise-in">
         <p class="tech-card__category">Infrastructure as Code</p>
         <div class="tech-card__items">
           <span class="tech-tag">Terraform</span>
           <span class="tech-tag">Ansible</span>
         </div>
       </div>
-      <div class="card-3d fly-in from-left" data-tilt>
+      <div class="card rise-in from-left">
         <p class="tech-card__category">CI / CD</p>
         <div class="tech-card__items">
           <span class="tech-tag">GitHub Actions</span>
@@ -879,7 +1039,7 @@
     <p class="section__label">Work</p>
     <h2 class="section__title">Projects</h2>
     <div class="projects-grid">
-      <div class="card-3d project-card fly-in from-left" data-tilt>
+      <div class="card project-card rise-in from-left">
         <h3 class="project-card__title">AXMP AI Agent Studio</h3>
         <p class="project-card__period">2025.05 — Present</p>
         <p class="project-card__desc">Engineered MCP Server Builder enabling OpenAPI-to-MCP specification conversion. Streamlined AI agent development workflow for enterprise teams.</p>
@@ -897,7 +1057,7 @@
           </div>
         </div>
       </div>
-      <div class="card-3d project-card fly-in" data-tilt>
+      <div class="card project-card rise-in">
         <h3 class="project-card__title">Modernization Platform APIM</h3>
         <p class="project-card__period">2021.01 — 2025.04</p>
         <p class="project-card__desc">Architected and implemented Kubernetes-native API gateway management platform. Centralized API lifecycle management across multi-cluster environments.</p>
@@ -925,7 +1085,7 @@
     <p class="section__label">Community</p>
     <h2 class="section__title">Activities</h2>
     <div class="activities-grid">
-      <div class="card-3d activity-card fly-in from-left" data-tilt>
+      <div class="card activity-card rise-in from-left">
         <h3 class="activity-card__heading">Leadership</h3>
         <ul class="activity-list" role="list">
           <li>CNCK (Cloud Native Community Korea) — Organizer &amp; Head of Community Ops · 2026–Present</li>
@@ -935,14 +1095,14 @@
           <li>KCD Korea 2023 Organizer <img src="certi/KCD-Korea-2023-Organizer.png" alt="KCD Korea 2023 Organizer badge" class="activity-badge" loading="lazy" /></li>
         </ul>
       </div>
-      <div class="card-3d activity-card fly-in" data-tilt>
+      <div class="card activity-card rise-in">
         <h3 class="activity-card__heading">Speaking</h3>
         <ul class="activity-list" role="list">
           <li>Datadog User Group Korea · 2025.02</li>
           <li>AWS Korea User Group · 2022.06</li>
         </ul>
       </div>
-      <div class="card-3d activity-card fly-in from-left" data-tilt>
+      <div class="card activity-card rise-in from-left">
         <h3 class="activity-card__heading">Award</h3>
         <ul class="activity-list" role="list">
           <li>Open Source Contribution Academy — Excellence Award · 2022</li>
@@ -956,7 +1116,7 @@
     <p class="section__label">Credentials</p>
     <h2 class="section__title">Certifications</h2>
     <div class="certs-grid">
-      <div class="card-3d cert-card fly-in from-left" data-tilt>
+      <div class="card cert-card rise-in from-left">
         <img src="certi/kubestronaut-horizontal-color.svg" alt="Kubestronaut banner" class="cert-card__banner" loading="lazy" />
         <h3 class="cert-card__heading">Kubernetes</h3>
         <div class="cert-card__items">
@@ -982,7 +1142,7 @@
           </div>
         </div>
       </div>
-      <div class="card-3d cert-card fly-in" data-tilt>
+      <div class="card cert-card rise-in">
         <h3 class="cert-card__heading">AWS</h3>
         <div class="aws-certs">
           <span class="aws-tag">DEA</span>
@@ -1017,103 +1177,203 @@
     /* ── Reduced Motion Check ── */
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    /* ── Star Field Canvas (from index11, blue-tinted) ── */
-    (function () {
-      const canvas = document.getElementById('star-canvas');
-      const ctx = canvas.getContext('2d');
-      let W, H, stars = [], scrollY = 0, warpActive = true, warpProgress = 0;
-      const STAR_COUNT = 500;
-      const LAYERS = 3;
+    /* ── Theme State ── */
+    let currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+    let starAnimId = null;
+    let particleAnimId = null;
 
-      function resize() {
-        W = canvas.width = window.innerWidth;
-        H = canvas.height = window.innerHeight;
+    /* ════════════════════════════════════════════
+       Star Field Canvas (Universe Theme)
+       ════════════════════════════════════════════ */
+    const starCanvas = document.getElementById('star-canvas');
+    const starCtx = starCanvas.getContext('2d');
+    let starW, starH, stars = [], starScrollY = 0, warpActive = false, warpProgress = 0;
+    const STAR_COUNT = 500;
+    const STAR_LAYERS = 3;
+
+    function starResize() {
+      starW = starCanvas.width = window.innerWidth;
+      starH = starCanvas.height = window.innerHeight;
+    }
+
+    function createStars() {
+      stars = [];
+      for (let i = 0; i < STAR_COUNT; i++) {
+        const layer = Math.floor(Math.random() * STAR_LAYERS);
+        stars.push({
+          x: Math.random() * starW,
+          y: Math.random() * starH,
+          r: Math.random() * 1.5 + 0.3 + layer * 0.3,
+          layer, speed: 0.02 + layer * 0.015,
+          twinkle: Math.random() * Math.PI * 2,
+          twinkleSpeed: 0.01 + Math.random() * 0.03,
+          baseAlpha: 0.4 + Math.random() * 0.6
+        });
       }
+    }
 
-      function createStars() {
-        stars = [];
-        for (let i = 0; i < STAR_COUNT; i++) {
-          const layer = Math.floor(Math.random() * LAYERS);
-          stars.push({
-            x: Math.random() * W,
-            y: Math.random() * H,
-            r: Math.random() * 1.5 + 0.3 + layer * 0.3,
-            layer: layer,
-            speed: 0.02 + layer * 0.015,
-            twinkle: Math.random() * Math.PI * 2,
-            twinkleSpeed: 0.01 + Math.random() * 0.03,
-            baseAlpha: 0.4 + Math.random() * 0.6
-          });
+    function drawStars() {
+      starCtx.clearRect(0, 0, starW, starH);
+      const warpFactor = warpActive ? Math.min(warpProgress, 1) : 0;
+
+      for (const s of stars) {
+        s.twinkle += s.twinkleSpeed;
+        const alpha = s.baseAlpha * (0.6 + 0.4 * Math.sin(s.twinkle));
+        const parallax = starScrollY * s.speed;
+        const y = ((s.y + parallax) % starH + starH) % starH;
+
+        starCtx.beginPath();
+        if (warpFactor > 0 && warpProgress < 2) {
+          const stretch = warpFactor * 15 * (s.layer + 1);
+          starCtx.moveTo(s.x, y - stretch);
+          starCtx.lineTo(s.x + s.r * 0.5, y);
+          starCtx.lineTo(s.x, y + s.r);
+          starCtx.lineTo(s.x - s.r * 0.5, y);
+          starCtx.closePath();
+          starCtx.fillStyle = `rgba(150, 190, 255, ${alpha})`;
+        } else {
+          starCtx.arc(s.x, y, s.r, 0, Math.PI * 2);
+          starCtx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+        }
+        starCtx.fill();
+
+        if (s.r > 1.2) {
+          starCtx.beginPath();
+          starCtx.arc(s.x, y, s.r * 3, 0, Math.PI * 2);
+          starCtx.fillStyle = `rgba(59, 130, 246, ${alpha * 0.08})`;
+          starCtx.fill();
         }
       }
 
-      function draw() {
-        ctx.clearRect(0, 0, W, H);
+      if (warpActive) {
+        warpProgress += 0.02;
+        if (warpProgress > 2.5) warpActive = false;
+      }
 
-        const warpFactor = warpActive ? Math.min(warpProgress, 1) : 0;
-
-        for (const s of stars) {
-          s.twinkle += s.twinkleSpeed;
-          const alpha = s.baseAlpha * (0.6 + 0.4 * Math.sin(s.twinkle));
-
-          /* parallax offset based on scroll */
-          const parallax = scrollY * s.speed;
-          const y = ((s.y + parallax) % H + H) % H;
-
-          ctx.beginPath();
-
-          if (warpFactor > 0 && warpProgress < 2) {
-            /* warp stretch effect */
-            const stretch = warpFactor * 15 * (s.layer + 1);
-            ctx.moveTo(s.x, y - stretch);
-            ctx.lineTo(s.x + s.r * 0.5, y);
-            ctx.lineTo(s.x, y + s.r);
-            ctx.lineTo(s.x - s.r * 0.5, y);
-            ctx.closePath();
-            ctx.fillStyle = `rgba(150, 190, 255, ${alpha})`;
-          } else {
-            ctx.arc(s.x, y, s.r, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
-          }
-
-          ctx.fill();
-
-          /* glow for bigger stars — blue tinted */
-          if (s.r > 1.2) {
-            ctx.beginPath();
-            ctx.arc(s.x, y, s.r * 3, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(59, 130, 246, ${alpha * 0.08})`;
-            ctx.fill();
-          }
-        }
-
+      if (currentTheme === 'universe' && !prefersReducedMotion) {
         if (warpActive) {
-          warpProgress += 0.02;
-          if (warpProgress > 2.5) warpActive = false;
-        }
-
-        if (!prefersReducedMotion) {
-          if (warpActive) {
-            requestAnimationFrame(draw);
-          } else {
-            setTimeout(draw, 100);
-          }
+          starAnimId = requestAnimationFrame(drawStars);
+        } else {
+          starAnimId = setTimeout(drawStars, 100);
         }
       }
+    }
 
-      window.addEventListener('resize', () => { resize(); createStars(); });
-      window.addEventListener('scroll', () => { scrollY = window.pageYOffset; }, { passive: true });
+    function startStars() {
+      starResize(); createStars();
+      warpActive = true; warpProgress = 0;
+      if (prefersReducedMotion) { warpActive = false; drawStars(); }
+      else drawStars();
+    }
 
-      resize();
-      createStars();
+    function stopStars() {
+      if (starAnimId) { cancelAnimationFrame(starAnimId); clearTimeout(starAnimId); starAnimId = null; }
+      starCtx.clearRect(0, 0, starW, starH);
+    }
 
-      if (prefersReducedMotion) {
-        warpActive = false;
-        draw(); /* single frame */
+    /* ════════════════════════════════════════════
+       Warm Particle Canvas (Light Theme)
+       ════════════════════════════════════════════ */
+    const particleCanvas = document.getElementById('particle-canvas');
+    const particleCtx = particleCanvas.getContext('2d');
+    let pW, pH, particles = [];
+    const PARTICLE_COUNT = 40;
+
+    function particleResize() {
+      pW = particleCanvas.width = window.innerWidth;
+      pH = particleCanvas.height = window.innerHeight;
+    }
+
+    function createParticles() {
+      particles = [];
+      for (let i = 0; i < PARTICLE_COUNT; i++) {
+        particles.push({
+          x: Math.random() * pW,
+          y: Math.random() * pH,
+          r: Math.random() * 2.5 + 1.5,
+          speedY: -(Math.random() * 0.3 + 0.1),
+          speedX: (Math.random() - 0.5) * 0.15,
+          phase: Math.random() * Math.PI * 2,
+          phaseSpeed: 0.008 + Math.random() * 0.015,
+          baseAlpha: 0.08 + Math.random() * 0.12,
+          color: Math.random() > 0.6 ? [193,95,60]
+            : Math.random() > 0.5 ? [217,119,87] : [176,174,165]
+        });
+      }
+    }
+
+    function drawParticles() {
+      particleCtx.clearRect(0, 0, pW, pH);
+      for (const p of particles) {
+        p.phase += p.phaseSpeed;
+        p.y += p.speedY;
+        p.x += p.speedX;
+        if (p.y < -10) { p.y = pH + 10; p.x = Math.random() * pW; }
+        if (p.x < -10) p.x = pW + 10;
+        if (p.x > pW + 10) p.x = -10;
+
+        const alpha = p.baseAlpha * (0.5 + 0.5 * Math.sin(p.phase));
+        const [r, g, b] = p.color;
+        particleCtx.beginPath();
+        particleCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        particleCtx.fillStyle = `rgba(${r},${g},${b},${alpha})`;
+        particleCtx.fill();
+        if (p.r > 2.5) {
+          particleCtx.beginPath();
+          particleCtx.arc(p.x, p.y, p.r * 3, 0, Math.PI * 2);
+          particleCtx.fillStyle = `rgba(${r},${g},${b},${alpha * 0.15})`;
+          particleCtx.fill();
+        }
+      }
+      if (currentTheme === 'light' && !prefersReducedMotion) {
+        particleAnimId = setTimeout(drawParticles, 33);
+      }
+    }
+
+    function startParticles() {
+      particleResize(); createParticles();
+      if (prefersReducedMotion) drawParticles();
+      else drawParticles();
+    }
+
+    function stopParticles() {
+      if (particleAnimId) { clearTimeout(particleAnimId); particleAnimId = null; }
+      particleCtx.clearRect(0, 0, pW, pH);
+    }
+
+    /* ════════════════════════════════════════════
+       Theme Toggle
+       ════════════════════════════════════════════ */
+    function setTheme(theme) {
+      currentTheme = theme;
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('theme', theme);
+
+      if (theme === 'universe') {
+        stopParticles();
+        startStars();
       } else {
-        draw();
+        stopStars();
+        startParticles();
       }
-    })();
+    }
+
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+      setTheme(currentTheme === 'light' ? 'universe' : 'light');
+    });
+
+    /* Initialize correct canvas */
+    window.addEventListener('resize', () => {
+      if (currentTheme === 'universe') { starResize(); createStars(); }
+      else { particleResize(); createParticles(); }
+    });
+
+    window.addEventListener('scroll', () => {
+      starScrollY = window.pageYOffset;
+    }, { passive: true });
+
+    if (currentTheme === 'universe') startStars();
+    else startParticles();
 
     /* ── Nav scroll + hamburger ── */
     const nav = document.getElementById('nav');
@@ -1138,97 +1398,98 @@
       });
     });
 
-    /* ── 3D Card Tilt (mouse-tracking, from index9) ── */
+    /* ── Card Hover Glow ── */
     if (!prefersReducedMotion) {
-      document.querySelectorAll('[data-tilt]').forEach(card => {
+      document.querySelectorAll('.card').forEach(card => {
         card.addEventListener('mousemove', (e) => {
-          if (card._tiltFrame) return;
-          card._tiltFrame = requestAnimationFrame(() => {
+          if (card._glowFrame) return;
+          card._glowFrame = requestAnimationFrame(() => {
             const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            const rotateX = ((y - centerY) / centerY) * -8;
-            const rotateY = ((x - centerX) / centerX) * 8;
-            const reflectionAngle = Math.atan2(y - centerY, x - centerX) * (180 / Math.PI) + 90;
-
-            card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(8px)`;
-            card.style.setProperty('--mouse-x', `${(x / rect.width) * 100}%`);
-            card.style.setProperty('--mouse-y', `${(y / rect.height) * 100}%`);
-            card.style.setProperty('--reflection-angle', `${reflectionAngle}deg`);
-            card._tiltFrame = null;
+            card.style.setProperty('--mouse-x', `${((e.clientX - rect.left) / rect.width) * 100}%`);
+            card.style.setProperty('--mouse-y', `${((e.clientY - rect.top) / rect.height) * 100}%`);
+            card._glowFrame = null;
           });
-        });
-
-        card.addEventListener('mouseleave', () => {
-          card.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) translateZ(0)';
         });
       });
     }
 
-    /* ── Scroll-triggered fly-in (from index9) ── */
+    /* ── Scroll-triggered rise-in ── */
     if (!prefersReducedMotion) {
       const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            const delay = Array.from(entry.target.parentElement.children)
-              .filter(c => c.classList.contains('fly-in'))
-              .indexOf(entry.target) * 120;
-            setTimeout(() => {
-              entry.target.classList.add('visible');
-            }, delay);
+            const siblings = Array.from(entry.target.parentElement.children)
+              .filter(c => c.classList.contains('rise-in'));
+            const delay = siblings.indexOf(entry.target) * 120;
+            setTimeout(() => entry.target.classList.add('visible'), delay);
             observer.unobserve(entry.target);
           }
         });
       }, { threshold: 0.15 });
-
-      document.querySelectorAll('.fly-in').forEach(el => observer.observe(el));
+      document.querySelectorAll('.rise-in').forEach(el => observer.observe(el));
     } else {
-      document.querySelectorAll('.fly-in').forEach(el => el.classList.add('visible'));
+      document.querySelectorAll('.rise-in').forEach(el => el.classList.add('visible'));
     }
 
-    /* ── Parallax blur layers on scroll (from index9, blue tinted) ── */
+    /* ── Parallax (both themes) ── */
     if (!prefersReducedMotion) {
       const bgLayer = document.querySelector('.parallax-bg');
       const midLayer = document.querySelector('.parallax-mid');
       const fgLayer = document.querySelector('.parallax-fg');
-
-      let ticking = false;
-      window.addEventListener('scroll', () => {
-        if (!ticking) {
-          requestAnimationFrame(() => {
-            const sy = window.scrollY;
-            bgLayer.style.transform = `translateY(${sy * 0.05}px)`;
-            midLayer.style.transform = `translateY(${sy * 0.12}px)`;
-            fgLayer.style.transform = `translateY(${sy * 0.2}px)`;
-            ticking = false;
-          });
-          ticking = true;
-        }
-      }, { passive: true });
-    }
-
-    /* ── Nebula / dust scroll zoom (from index11) ── */
-    if (!prefersReducedMotion) {
+      const orbTerra = document.querySelector('.orb--terra');
+      const orbBlue = document.querySelector('.orb--blue');
+      const orbGreen = document.querySelector('.orb--green');
       const nebula = document.querySelector('.nebula');
       const dust = document.querySelector('.dust-layer');
-      let nebulaTicking = false;
+
+      let parallaxTicking = false;
       window.addEventListener('scroll', () => {
-        if (!nebulaTicking) {
+        if (!parallaxTicking) {
           requestAnimationFrame(() => {
-            const t = window.pageYOffset / (document.body.scrollHeight - window.innerHeight);
-            const scale = 1 + t * 0.15;
-            const opacity = 0.7 + t * 0.3;
-            nebula.style.transform = `scale(${scale})`;
-            nebula.style.opacity = Math.min(opacity, 1);
-            dust.style.opacity = 0.8 + t * 0.2;
-            nebulaTicking = false;
+            const sy = window.scrollY;
+            /* Universe parallax */
+            if (bgLayer) bgLayer.style.transform = `translateY(${sy * 0.05}px)`;
+            if (midLayer) midLayer.style.transform = `translateY(${sy * 0.12}px)`;
+            if (fgLayer) fgLayer.style.transform = `translateY(${sy * 0.2}px)`;
+            /* Light parallax */
+            if (orbTerra) orbTerra.style.transform = `translateY(${sy * 0.04}px)`;
+            if (orbBlue) orbBlue.style.transform = `translateY(${sy * 0.1}px)`;
+            if (orbGreen) orbGreen.style.transform = `translateY(${sy * 0.16}px)`;
+            /* Nebula zoom */
+            if (nebula) {
+              const t = sy / (document.body.scrollHeight - window.innerHeight);
+              nebula.style.transform = `scale(${1 + t * 0.15})`;
+              nebula.style.opacity = Math.min(0.7 + t * 0.3, 1);
+            }
+            if (dust) {
+              const t = sy / (document.body.scrollHeight - window.innerHeight);
+              dust.style.opacity = 0.8 + t * 0.2;
+            }
+            parallaxTicking = false;
           });
-          nebulaTicking = true;
+          parallaxTicking = true;
         }
       }, { passive: true });
     }
+
+    /* ── Hero Tagline Word Reveal ── */
+    (function () {
+      const tagline = document.getElementById('tagline');
+      if (!tagline) return;
+      const text = tagline.textContent.trim();
+      const words = text.split(/\s+/);
+      tagline.innerHTML = words.map(w => `<span class="word">${w}</span>`).join(' ');
+      if (prefersReducedMotion) {
+        tagline.querySelectorAll('.word').forEach(w => w.classList.add('visible'));
+        return;
+      }
+      const wordEls = tagline.querySelectorAll('.word');
+      setTimeout(() => {
+        wordEls.forEach((w, i) => {
+          setTimeout(() => w.classList.add('visible'), i * 80);
+        });
+      }, 600);
+    })();
 
     /* ── Active nav link highlight on scroll ── */
     const sections = document.querySelectorAll('section[id]');
@@ -1243,7 +1504,6 @@
         }
       });
     }, { rootMargin: '-40% 0px -55% 0px' });
-
     sections.forEach(section => activeObserver.observe(section));
   </script>
 
