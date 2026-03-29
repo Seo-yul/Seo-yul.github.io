@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="light" data-lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,11 +10,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Poppins:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Poppins:wght@400;500;600;700&display=swap" /></noscript>
-  <!-- Prevent flash of wrong theme -->
+  <!-- Prevent flash of wrong theme/lang -->
   <script>
     (function(){
       var t = localStorage.getItem('theme');
+      var l = localStorage.getItem('lang');
       if (t === 'universe') document.documentElement.setAttribute('data-theme','universe');
+      if (l === 'ko') { document.documentElement.setAttribute('data-lang','ko'); document.documentElement.setAttribute('lang','ko'); }
     })();
   </script>
   <style>
@@ -303,6 +305,29 @@
       transform: scale(1.08);
       border-color: var(--accent);
     }
+
+    /* ── Language Toggle ── */
+    .lang-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      background: var(--accent-light);
+      cursor: pointer;
+      font-family: var(--font-heading);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.5px;
+      transition: background 0.3s, border-color 0.3s, transform 0.3s, color 0.4s;
+    }
+    .lang-toggle:hover {
+      transform: scale(1.08);
+      border-color: var(--accent);
+    }
     .theme-toggle__icon {
       position: absolute;
       transition: opacity 0.4s, transform 0.4s;
@@ -525,7 +550,7 @@
     .hero__tagline {
       font-size: 1.15rem;
       color: var(--text-muted);
-      max-width: 520px;
+      max-width: 380px;
       margin: 0 auto 32px;
       line-height: 1.8;
       transition: color 0.4s;
@@ -923,13 +948,16 @@
     <div class="nav__inner">
       <a href="#hero" class="nav__logo" aria-label="Home">SY<span class="nav__logo-dot">.</span></a>
       <ul class="nav__links" id="nav-links" role="list">
-        <li><a href="#about" class="nav__link">About</a></li>
-        <li><a href="#tech" class="nav__link">Tech Stack</a></li>
-        <li><a href="#projects" class="nav__link">Projects</a></li>
-        <li><a href="#activities" class="nav__link">Activities</a></li>
-        <li><a href="#certifications" class="nav__link">Certifications</a></li>
+        <li><a href="#about" class="nav__link" data-i18n="nav.about">About</a></li>
+        <li><a href="#tech" class="nav__link" data-i18n="nav.tech">Tech Stack</a></li>
+        <li><a href="#projects" class="nav__link" data-i18n="nav.projects">Projects</a></li>
+        <li><a href="#activities" class="nav__link" data-i18n="nav.activities">Activities</a></li>
+        <li><a href="#certifications" class="nav__link" data-i18n="nav.certs">Certifications</a></li>
       </ul>
       <div class="nav__right">
+        <button class="lang-toggle" id="lang-toggle" aria-label="Switch language">
+          <span class="lang-toggle__label">EN</span>
+        </button>
         <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
           <span class="theme-toggle__icon theme-toggle__sun">&#x2600;&#xFE0F;</span>
           <span class="theme-toggle__icon theme-toggle__universe">&#x2B50;</span>
@@ -948,8 +976,8 @@
         <img src="assets/profile.jpeg" alt="Seoyul Yoon" class="hero__avatar" width="160" height="160" loading="eager" />
         <div class="hero__avatar-ring" aria-hidden="true"></div>
       </div>
-      <h1 class="hero__name">Seoyul Yoon</h1>
-      <p class="hero__role">Cloud Application Engineer <span class="hero__at">@</span> SK AX</p>
+      <h1 class="hero__name" data-i18n="hero.name">Seoyul Yoon</h1>
+      <p class="hero__role"><span data-i18n="hero.role">Cloud Application Engineer</span> <span class="hero__at">@</span> SK AX</p>
       <p class="hero__tagline" id="tagline">A cloud-native engineer who learns from the community and proves it in production.</p>
       <div class="hero__socials">
         <a href="https://github.com/Seo-yul" target="_blank" rel="noopener noreferrer" class="hero__social" aria-label="GitHub">
@@ -967,30 +995,30 @@
 
   <!-- About -->
   <section class="section" id="about" aria-label="About">
-    <p class="section__label">Who I Am</p>
-    <h2 class="section__title">About</h2>
+    <p class="section__label" data-i18n="about.label">Who I Am</p>
+    <h2 class="section__title" data-i18n="about.title">About</h2>
     <div class="card about-card rise-in">
-      <p>Experienced Cloud Application Engineer specializing in the Kubernetes ecosystem, infrastructure automation, and observability. I architect and build platforms that let development teams ship faster and operate with confidence.</p>
-      <p>Active contributor to the cloud-native community in Korea, helping bridge the gap between cutting-edge technology and practical enterprise adoption. I believe the best infrastructure is the kind nobody has to think about.</p>
-      <p>Recently, I've been deeply interested in enterprise AX (AI Transformation), focusing on running AI workloads effectively on cloud-native infrastructure and taking a leading role in driving AI adoption across organizations.</p>
+      <p data-i18n="about.p1">Experienced Cloud Application Engineer specializing in the Kubernetes ecosystem, infrastructure automation, and observability. I architect and build platforms that let development teams ship faster and operate with confidence.</p>
+      <p data-i18n="about.p2">Active contributor to the cloud-native community in Korea, helping bridge the gap between cutting-edge technology and practical enterprise adoption. I believe the best infrastructure is the kind nobody has to think about.</p>
+      <p data-i18n="about.p3">Recently, I've been deeply interested in enterprise AX (AI Transformation), focusing on running AI workloads effectively on cloud-native infrastructure and taking a leading role in driving AI adoption across organizations.</p>
     </div>
   </section>
 
   <div class="section-divider rise-in" aria-hidden="true"><span></span><span></span><span></span></div>
 
   <div class="section section-quote rise-in">
-    <p class="section-quote__text">I don't just modernize systems — I build the culture around it.</p>
+    <p class="section-quote__text" data-i18n="quote.main">I don't just modernize systems — I build the culture around it.</p>
   </div>
 
   <div class="section-divider rise-in" aria-hidden="true"><span></span><span></span><span></span></div>
 
   <!-- Tech Stack -->
   <section class="section" id="tech" aria-label="Tech Stack">
-    <p class="section__label">Tools &amp; Technologies</p>
-    <h2 class="section__title">Tech Stack</h2>
+    <p class="section__label" data-i18n="tech.label">Tools &amp; Technologies</p>
+    <h2 class="section__title" data-i18n="tech.title">Tech Stack</h2>
     <div class="tech-grid">
       <div class="card rise-in from-left">
-        <p class="tech-card__category">Languages &amp; Frameworks</p>
+        <p class="tech-card__category" data-i18n="tech.cat1">Languages &amp; Frameworks</p>
         <div class="tech-card__items">
           <span class="tech-tag">Go</span>
           <span class="tech-tag">Operator SDK</span>
@@ -1001,7 +1029,7 @@
         </div>
       </div>
       <div class="card rise-in">
-        <p class="tech-card__category">Container &amp; Orchestration</p>
+        <p class="tech-card__category" data-i18n="tech.cat2">Container &amp; Orchestration</p>
         <div class="tech-card__items">
           <span class="tech-tag">Kubernetes</span>
           <span class="tech-tag">Podman</span>
@@ -1009,7 +1037,7 @@
         </div>
       </div>
       <div class="card rise-in from-left">
-        <p class="tech-card__category">Observability</p>
+        <p class="tech-card__category" data-i18n="tech.cat3">Observability</p>
         <div class="tech-card__items">
           <span class="tech-tag">Fluent Bit</span>
           <span class="tech-tag">OpenTelemetry</span>
@@ -1019,14 +1047,14 @@
         </div>
       </div>
       <div class="card rise-in">
-        <p class="tech-card__category">Infrastructure as Code</p>
+        <p class="tech-card__category" data-i18n="tech.cat4">Infrastructure as Code</p>
         <div class="tech-card__items">
           <span class="tech-tag">Terraform</span>
           <span class="tech-tag">Ansible</span>
         </div>
       </div>
       <div class="card rise-in from-left">
-        <p class="tech-card__category">CI / CD</p>
+        <p class="tech-card__category" data-i18n="tech.cat5">CI / CD</p>
         <div class="tech-card__items">
           <span class="tech-tag">GitHub Actions</span>
         </div>
@@ -1036,13 +1064,13 @@
 
   <!-- Projects -->
   <section class="section" id="projects" aria-label="Projects">
-    <p class="section__label">Work</p>
-    <h2 class="section__title">Projects</h2>
+    <p class="section__label" data-i18n="projects.label">Work</p>
+    <h2 class="section__title" data-i18n="projects.title">Projects</h2>
     <div class="projects-grid">
       <div class="card project-card rise-in from-left">
         <h3 class="project-card__title">AXMP AI Agent Studio</h3>
-        <p class="project-card__period">2025.05 — Present</p>
-        <p class="project-card__desc">Engineered MCP Server Builder enabling OpenAPI-to-MCP specification conversion. Streamlined AI agent development workflow for enterprise teams.</p>
+        <p class="project-card__period" data-i18n="project1.period">2025.05 — Present</p>
+        <p class="project-card__desc" data-i18n="project1.desc">Engineered MCP Server Builder enabling OpenAPI-to-MCP specification conversion. Streamlined AI agent development workflow for enterprise teams.</p>
         <div class="project-card__tags">
           <span class="project-tag">FastAPI</span>
           <span class="project-tag">Go Operator</span>
@@ -1053,14 +1081,14 @@
         <div class="project-card__metrics">
           <div class="metric">
             <span class="metric__value">OpenAPI &rarr; MCP &rarr; AI Agent</span>
-            <span class="metric__label">AI Transformation</span>
+            <span class="metric__label" data-i18n="project1.metric.label">AI Transformation</span>
           </div>
         </div>
       </div>
       <div class="card project-card rise-in">
         <h3 class="project-card__title">Modernization Platform APIM</h3>
-        <p class="project-card__period">2021.01 — 2025.04</p>
-        <p class="project-card__desc">Architected and implemented Kubernetes-native API gateway management platform. Centralized API lifecycle management across multi-cluster environments.</p>
+        <p class="project-card__period" data-i18n="project2.period">2021.01 — 2025.04</p>
+        <p class="project-card__desc" data-i18n="project2.desc">Architected and implemented Kubernetes-native API gateway management platform. Centralized API lifecycle management across multi-cluster environments.</p>
         <div class="project-card__tags">
           <span class="project-tag">Kubernetes</span>
           <span class="project-tag">API Gateway</span>
@@ -1069,11 +1097,11 @@
         <div class="project-card__metrics">
           <div class="metric">
             <span class="metric__value">3d &rarr; 1d</span>
-            <span class="metric__label">Delivery Time</span>
+            <span class="metric__label" data-i18n="project2.m1.label">Delivery Time</span>
           </div>
           <div class="metric">
             <span class="metric__value">60%</span>
-            <span class="metric__label">Build time reduced</span>
+            <span class="metric__label" data-i18n="project2.m2.label">Build time reduced</span>
           </div>
         </div>
       </div>
@@ -1082,30 +1110,30 @@
 
   <!-- Activities -->
   <section class="section" id="activities" aria-label="Activities">
-    <p class="section__label">Community</p>
-    <h2 class="section__title">Activities</h2>
+    <p class="section__label" data-i18n="activities.label">Community</p>
+    <h2 class="section__title" data-i18n="activities.title">Activities</h2>
     <div class="activities-grid">
       <div class="card activity-card rise-in from-left">
-        <h3 class="activity-card__heading">Leadership</h3>
+        <h3 class="activity-card__heading" data-i18n="act.leadership">Leadership</h3>
         <ul class="activity-list" role="list">
-          <li>CNCK (Cloud Native Community Korea) — Organizer &amp; Head of Community Ops · 2026–Present</li>
-          <li>Kubernetes Organization Member — Top 17 All-Time PR in Korea · 2022–2025</li>
-          <li>NAVER Cloud Platform Tech Ambassador · 2023–2026.02</li>
-          <li>GopherCon Korea 2023/2024 Organizer</li>
-          <li>KCD Korea 2023 Organizer <img src="certi/KCD-Korea-2023-Organizer.png" alt="KCD Korea 2023 Organizer badge" class="activity-badge" loading="lazy" /></li>
+          <li data-i18n="act.l1">CNCK (Cloud Native Community Korea) — Organizer &amp; Head of Community Ops · 2026–Present</li>
+          <li data-i18n="act.l2">Kubernetes Organization Member — Top 17 All-Time PR in Korea · 2022–2025</li>
+          <li data-i18n="act.l3">NAVER Cloud Platform Tech Ambassador · 2023–2026.02</li>
+          <li data-i18n="act.l4">GopherCon Korea 2023/2024 Organizer</li>
+          <li><span data-i18n="act.l5">KCD Korea 2023 Organizer</span> <img src="certi/KCD-Korea-2023-Organizer.png" alt="KCD Korea 2023 Organizer badge" class="activity-badge" loading="lazy" /></li>
         </ul>
       </div>
       <div class="card activity-card rise-in">
-        <h3 class="activity-card__heading">Speaking</h3>
+        <h3 class="activity-card__heading" data-i18n="act.speaking">Speaking</h3>
         <ul class="activity-list" role="list">
-          <li>Datadog User Group Korea · 2025.02</li>
-          <li>AWS Korea User Group · 2022.06</li>
+          <li data-i18n="act.s1">Datadog User Group Korea · 2025.02</li>
+          <li data-i18n="act.s2">AWS Korea User Group · 2022.06</li>
         </ul>
       </div>
       <div class="card activity-card rise-in from-left">
-        <h3 class="activity-card__heading">Award</h3>
+        <h3 class="activity-card__heading" data-i18n="act.award">Award</h3>
         <ul class="activity-list" role="list">
-          <li>Open Source Contribution Academy — Excellence Award · 2022</li>
+          <li data-i18n="act.a1">Open Source Contribution Academy — Excellence Award · 2022</li>
         </ul>
       </div>
     </div>
@@ -1113,8 +1141,8 @@
 
   <!-- Certifications -->
   <section class="section" id="certifications" aria-label="Certifications">
-    <p class="section__label">Credentials</p>
-    <h2 class="section__title">Certifications</h2>
+    <p class="section__label" data-i18n="certs.label">Credentials</p>
+    <h2 class="section__title" data-i18n="certs.title">Certifications</h2>
     <div class="certs-grid">
       <div class="card cert-card rise-in from-left">
         <img src="certi/kubestronaut-horizontal-color.svg" alt="Kubestronaut banner" class="cert-card__banner" loading="lazy" />
@@ -1156,7 +1184,7 @@
 
   <!-- Footer -->
   <footer class="footer" role="contentinfo">
-    <blockquote class="footer__quote">
+    <blockquote class="footer__quote" data-i18n="footer.quote">
       "AI runs on infrastructure, but transformation runs on people. Cloud-native community taught me that the best technology is built together."
     </blockquote>
     <div class="footer__socials">
@@ -1170,12 +1198,152 @@
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,7 12,13 2,7"/></svg>
       </a>
     </div>
-    <p class="footer__copy">&copy; 2026 Seoyul Yoon</p>
+    <p class="footer__copy" data-i18n="footer.copy">&copy; 2026 Seoyul Yoon</p>
   </footer>
 
   <script>
     /* ── Reduced Motion Check ── */
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* ════════════════════════════════════════════
+       i18n — Translations
+       ════════════════════════════════════════════ */
+    const translations = {
+      en: {
+        'nav.about': 'About',
+        'nav.tech': 'Tech Stack',
+        'nav.projects': 'Projects',
+        'nav.activities': 'Activities',
+        'nav.certs': 'Certifications',
+        'hero.name': 'Seoyul Yoon',
+        'hero.role': 'Cloud Application Engineer',
+        'hero.tagline': 'A cloud-native engineer who learns from the community and proves it in production.',
+        'about.label': 'Who I Am',
+        'about.title': 'About',
+        'about.p1': 'Experienced Cloud Application Engineer specializing in the Kubernetes ecosystem, infrastructure automation, and observability. I architect and build platforms that let development teams ship faster and operate with confidence.',
+        'about.p2': 'Active contributor to the cloud-native community in Korea, helping bridge the gap between cutting-edge technology and practical enterprise adoption. I believe the best infrastructure is the kind nobody has to think about.',
+        'about.p3': 'Recently, I\'ve been deeply interested in enterprise AX (AI Transformation), focusing on running AI workloads effectively on cloud-native infrastructure and taking a leading role in driving AI adoption across organizations.',
+        'quote.main': 'I don\'t just modernize systems \u2014 I build the culture around it.',
+        'tech.label': 'Tools & Technologies',
+        'tech.title': 'Tech Stack',
+        'tech.cat1': 'Languages & Frameworks',
+        'tech.cat2': 'Container & Orchestration',
+        'tech.cat3': 'Observability',
+        'tech.cat4': 'Infrastructure as Code',
+        'tech.cat5': 'CI / CD',
+        'projects.label': 'Work',
+        'projects.title': 'Projects',
+        'project1.period': '2025.05 \u2014 Present',
+        'project1.desc': 'Engineered MCP Server Builder enabling OpenAPI-to-MCP specification conversion. Streamlined AI agent development workflow for enterprise teams.',
+        'project1.metric.label': 'AI Transformation',
+        'project2.period': '2021.01 \u2014 2025.04',
+        'project2.desc': 'Architected and implemented Kubernetes-native API gateway management platform. Centralized API lifecycle management across multi-cluster environments.',
+        'project2.m1.label': 'Delivery Time',
+        'project2.m2.label': 'Build time reduced',
+        'activities.label': 'Community',
+        'activities.title': 'Activities',
+        'act.leadership': 'Leadership',
+        'act.speaking': 'Speaking',
+        'act.award': 'Award',
+        'act.l1': 'CNCK (Cloud Native Community Korea) \u2014 Organizer & Head of Community Ops \u00b7 2026\u2013Present',
+        'act.l2': 'Kubernetes Organization Member \u2014 Top 17 All-Time PR in Korea \u00b7 2022\u20132025',
+        'act.l3': 'NAVER Cloud Platform Tech Ambassador \u00b7 2023\u20132026.02',
+        'act.l4': 'GopherCon Korea 2023/2024 Organizer',
+        'act.l5': 'KCD Korea 2023 Organizer',
+        'act.s1': 'Datadog User Group Korea \u00b7 2025.02',
+        'act.s2': 'AWS Korea User Group \u00b7 2022.06',
+        'act.a1': 'Open Source Contribution Academy \u2014 Excellence Award \u00b7 2022',
+        'certs.label': 'Credentials',
+        'certs.title': 'Certifications',
+        'footer.quote': '\u201cAI runs on infrastructure, but transformation runs on people. Cloud-native community taught me that the best technology is built together.\u201d',
+        'footer.copy': '\u00a9 2026 Seoyul Yoon'
+      },
+      ko: {
+        'nav.about': '\uc18c\uac1c',
+        'nav.tech': '\uae30\uc220 \uc2a4\ud0dd',
+        'nav.projects': '\ud504\ub85c\uc81d\ud2b8',
+        'nav.activities': '\ud65c\ub3d9',
+        'nav.certs': '\uc790\uaca9\uc99d',
+        'hero.name': '\uc724\uc11c\uc728',
+        'hero.role': 'Cloud Application Engineer',
+        'hero.tagline': '\ucee4\ubba4\ub2c8\ud2f0\uc5d0\uc11c \ubc30\uc6b0\uace0 \uc2e4\uc81c \uc11c\ube44\uc2a4\ub85c \uc99d\uba85\ud558\ub294 \ud074\ub77c\uc6b0\ub4dc \ub124\uc774\ud2f0\ube0c \uc5d4\uc9c0\ub2c8\uc5b4.',
+        'about.label': '\uc18c\uac1c',
+        'about.title': '\uc18c\uac1c',
+        'about.p1': 'Kubernetes \uc0dd\ud0dc\uacc4, \uc778\ud504\ub77c \uc790\ub3d9\ud654, \uc635\uc800\ubc84\ube4c\ub9ac\ud2f0\ub97c \uc804\ubb38\uc73c\ub85c \ud558\ub294 \ud074\ub77c\uc6b0\ub4dc \uc560\ud50c\ub9ac\ucf00\uc774\uc158 \uc5d4\uc9c0\ub2c8\uc5b4\uc785\ub2c8\ub2e4. \uac1c\ubc1c\ud300\uc774 \ube60\ub974\uac8c \ubc30\ud3ec\ud558\uace0 \uc548\uc815\uc801\uc73c\ub85c \uc6b4\uc601\ud560 \uc218 \uc788\ub294 \ud50c\ub7ab\ud3fc\uc744 \uc124\uacc4\ud558\uace0 \uad6c\ucd95\ud569\ub2c8\ub2e4.',
+        'about.p2': '\ud074\ub77c\uc6b0\ub4dc \ub124\uc774\ud2f0\ube0c \ucee4\ubba4\ub2c8\ud2f0 \ucf54\ub9ac\uc544\uc5d0\uc11c \ud65c\ub3d9\ud558\uba70, \ucd5c\uc2e0 \uae30\uc220\uacfc \uc2e4\ubb34 \uc5d4\ud130\ud504\ub77c\uc774\uc988 \ub3c4\uc785 \uac04\uc758 \uaca9\ucc28\ub97c \ud574\uc18c\ud558\ub294 \ub370 \uae30\uc5ec\ud558\uace0 \uc788\uc2b5\ub2c8\ub2e4. \ucd5c\uace0\uc758 \uc778\ud504\ub77c\ub294 \uc544\ubb34\ub3c4 \uc2e0\uacbd \uc4f8 \ud544\uc694 \uc5c6\ub294 \uc778\ud504\ub77c\ub77c\uace0 \ubbff\uc2b5\ub2c8\ub2e4.',
+        'about.p3': '\ucd5c\uadfc\uc5d0\ub294 \uae30\uc5c5 AX(AI Transformation)\uc5d0 \uae4a\uc740 \uad00\uc2ec\uc744 \uac00\uc9c0\uace0, \ud074\ub77c\uc6b0\ub4dc \ub124\uc774\ud2f0\ube0c \uc778\ud504\ub77c\uc5d0\uc11c AI \uc6cc\ud06c\ub85c\ub4dc\ub97c \ud6a8\uacfc\uc801\uc73c\ub85c \uc6b4\uc601\ud558\ub294 \uac83\uacfc \uc870\uc9c1 \ub0b4 AI \ub3c4\uc785\uc744 \uc8fc\ub3c4\ud558\ub294 \uc5ed\ud560\uc5d0 \uc9d1\uc911\ud558\uace0 \uc788\uc2b5\ub2c8\ub2e4.',
+        'quote.main': '\uc2dc\uc2a4\ud15c\ub9cc \ud604\ub300\ud654\ud558\ub294 \uac83\uc774 \uc544\ub2c8\ub77c, \uadf8 \uc8fc\ubcc0\uc758 \ubb38\ud654\uae4c\uc9c0 \ub9cc\ub4ed\ub2c8\ub2e4.',
+        'tech.label': '\ub3c4\uad6c & \uae30\uc220',
+        'tech.title': '\uae30\uc220 \uc2a4\ud0dd',
+        'tech.cat1': '\uc5b8\uc5b4 & \ud504\ub808\uc784\uc6cc\ud06c',
+        'tech.cat2': '\ucee8\ud14c\uc774\ub108 & \uc624\ucf00\uc2a4\ud2b8\ub808\uc774\uc158',
+        'tech.cat3': '\uc635\uc800\ubc84\ube4c\ub9ac\ud2f0',
+        'tech.cat4': '\ucf54\ub4dc\ud615 \uc778\ud504\ub77c',
+        'tech.cat5': 'CI / CD',
+        'projects.label': '\ud504\ub85c\uc81d\ud2b8',
+        'projects.title': '\ud504\ub85c\uc81d\ud2b8',
+        'project1.period': '2025.05 \u2014 \ud604\uc7ac',
+        'project1.desc': 'OpenAPI-to-MCP \uc2a4\ud399 \ubcc0\ud658\uc744 \uc9c0\uc6d0\ud558\ub294 MCP Server Builder\ub97c \uc124\uacc4 \ubc0f \uad6c\ud604\ud588\uc2b5\ub2c8\ub2e4. \uc5d4\ud130\ud504\ub77c\uc774\uc988 \ud300\uc758 AI \uc5d0\uc774\uc804\ud2b8 \uac1c\ubc1c \uc6cc\ud06c\ud50c\ub85c\ub97c \ud6a8\uc728\ud654\ud588\uc2b5\ub2c8\ub2e4.',
+        'project1.metric.label': 'AI \ud2b8\ub79c\uc2a4\ud3ec\uba54\uc774\uc158',
+        'project2.period': '2021.01 \u2014 2025.04',
+        'project2.desc': 'Kubernetes \ub124\uc774\ud2f0\ube0c API \uac8c\uc774\ud2b8\uc6e8\uc774 \uad00\ub9ac \ud50c\ub7ab\ud3fc\uc744 \uc124\uacc4\ud558\uace0 \uad6c\ud604\ud588\uc2b5\ub2c8\ub2e4. \uba40\ud2f0 \ud074\ub7ec\uc2a4\ud130 \ud658\uacbd\uc5d0\uc11c API \ub77c\uc774\ud504\uc0ac\uc774\ud074\uc744 \uc911\uc559 \uc9d1\uc911\uc2dd\uc73c\ub85c \uad00\ub9ac\ud569\ub2c8\ub2e4.',
+        'project2.m1.label': '\ubc30\ud3ec \uc2dc\uac04',
+        'project2.m2.label': '\ube4c\ub4dc \uc2dc\uac04 \ub2e8\ucd95',
+        'activities.label': '\ucee4\ubba4\ub2c8\ud2f0',
+        'activities.title': '\ud65c\ub3d9',
+        'act.leadership': '\ub9ac\ub354\uc2ed',
+        'act.speaking': '\ubc1c\ud45c',
+        'act.award': '\uc218\uc0c1',
+        'act.l1': 'CNCK (Cloud Native Community Korea) \u2014 \uc624\uac70\ub098\uc774\uc800 & \ucee4\ubba4\ub2c8\ud2f0 \uc6b4\uc601 \ucd1d\uad04 \u00b7 2026\u2013\ud604\uc7ac',
+        'act.l2': 'Kubernetes Organization Member \u2014 \ud55c\uad6d \ub0b4 \uc5ed\ub300 PR \uae30\uc5ec \uc0c1\uc704 17\uc704 \u00b7 2022\u20132025',
+        'act.l3': 'NAVER Cloud Platform \ud14c\ud06c \uc568\ubc84\uc11c\ub354 \u00b7 2023\u20132026.02',
+        'act.l4': 'GopherCon Korea 2023/2024 \uc624\uac70\ub098\uc774\uc800',
+        'act.l5': 'KCD Korea 2023 \uc624\uac70\ub098\uc774\uc800',
+        'act.s1': 'Datadog User Group Korea \u00b7 2025.02',
+        'act.s2': 'AWS Korea User Group \u00b7 2022.06',
+        'act.a1': '\uc624\ud508\uc18c\uc2a4 \ucee8\ud2b8\ub9ac\ubdf0\uc158 \uc544\uce74\ub370\ubbf8 \u2014 \uc6b0\uc218\uc0c1 \u00b7 2022',
+        'certs.label': '\uc790\uaca9',
+        'certs.title': '\uc790\uaca9\uc99d',
+        'footer.quote': '\u201cAI\ub294 \uc778\ud504\ub77c \uc704\uc5d0\uc11c \ub3cc\uc544\uac00\uc9c0\ub9cc, \ud2b8\ub79c\uc2a4\ud3ec\uba54\uc774\uc158\uc740 \uc0ac\ub78c\uc774 \uc774\ub055\ub2c8\ub2e4. \ud074\ub77c\uc6b0\ub4dc \ub124\uc774\ud2f0\ube0c \ucee4\ubba4\ub2c8\ud2f0\uc5d0\uc11c \ucd5c\uace0\uc758 \uae30\uc220\uc740 \ud568\uaed8 \ub9cc\ub4e4\uc5b4\uac00\ub294 \uac83\uc784\uc744 \ubc30\uc6e0\uc2b5\ub2c8\ub2e4.\u201d',
+        'footer.copy': '\u00a9 2026 \uc724\uc11c\uc728'
+      }
+    };
+
+    let currentLang = document.documentElement.getAttribute('data-lang') || 'en';
+
+    function setLang(lang) {
+      currentLang = lang;
+      document.documentElement.setAttribute('data-lang', lang);
+      document.documentElement.setAttribute('lang', lang);
+      localStorage.setItem('lang', lang);
+
+      document.querySelectorAll('[data-i18n]').forEach(function(el) {
+        var key = el.getAttribute('data-i18n');
+        if (translations[lang] && translations[lang][key]) {
+          el.textContent = translations[lang][key];
+        }
+      });
+
+      /* tagline word re-render (no stagger on toggle) */
+      var tagline = document.getElementById('tagline');
+      if (tagline && translations[lang]['hero.tagline']) {
+        var words = translations[lang]['hero.tagline'].split(/\s+/);
+        tagline.innerHTML = words.map(function(w) {
+          return '<span class="word visible">' + w + '</span>';
+        }).join(' ');
+      }
+
+      /* toggle button label */
+      var label = document.querySelector('.lang-toggle__label');
+      if (label) label.textContent = lang.toUpperCase();
+    }
+
+    document.getElementById('lang-toggle').addEventListener('click', function() {
+      setLang(currentLang === 'en' ? 'ko' : 'en');
+    });
+
+    /* Apply saved lang on load (text swap) */
+    if (currentLang === 'ko') setLang('ko');
 
     /* ── Theme State ── */
     let currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
