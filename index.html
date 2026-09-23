@@ -12,11 +12,20 @@
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Poppins:wght@400;500;600;700&display=swap" /></noscript>
   <!-- Prevent flash of wrong theme/lang -->
   <script>
+    /* Korean webfonts are loaded only when the Korean view is used */
+    function loadKoFonts() {
+      if (document.getElementById('ko-fonts')) return;
+      var link = document.createElement('link');
+      link.id = 'ko-fonts';
+      link.rel = 'stylesheet';
+      link.href = 'https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400..700&family=Noto+Serif+KR:wght@400&display=swap';
+      document.head.appendChild(link);
+    }
     (function(){
       var t = localStorage.getItem('theme');
       var l = localStorage.getItem('lang');
       if (t === 'universe') document.documentElement.setAttribute('data-theme','universe');
-      if (l === 'ko') { document.documentElement.setAttribute('data-lang','ko'); document.documentElement.setAttribute('lang','ko'); }
+      if (l === 'ko') { document.documentElement.setAttribute('data-lang','ko'); document.documentElement.setAttribute('lang','ko'); loadKoFonts(); }
     })();
   </script>
   <style>
@@ -890,6 +899,19 @@
       transition: color 0.4s;
     }
 
+    /* ── Korean Typography ── */
+    html:lang(ko) {
+      --font-heading: 'Poppins', 'Noto Sans KR', sans-serif;
+      --font-body: 'Lora', 'Noto Serif KR', serif;
+      word-break: keep-all;
+      overflow-wrap: break-word;
+    }
+    html:lang(ko) .section-quote__text,
+    html:lang(ko) .footer__quote { font-style: normal; }
+    html:lang(ko) .section__label,
+    html:lang(ko) .tech-card__category,
+    html:lang(ko) .activity-card__heading { letter-spacing: normal; }
+
     /* ── Reduced Motion ── */
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
@@ -1116,9 +1138,9 @@
       <div class="card activity-card rise-in from-left">
         <h3 class="activity-card__heading" data-i18n="act.leadership">Leadership</h3>
         <ul class="activity-list" role="list">
-          <li data-i18n="act.l1">AAIF (Agentic AI Foundation) Seoul Chapter Organizer · 2026–Present</li>
-          <li data-i18n="act.l2">Kubernetes Organization Member — Top 17 All-Time PR in Korea · 2022–2025</li>
-          <li data-i18n="act.l3">NAVER Cloud Platform Tech Ambassador · 2023–2026.02</li>
+          <li data-i18n="act.l1">AAIF (Agentic AI Foundation) Seoul Chapter Organizer · 2026–&#8288;Present</li>
+          <li data-i18n="act.l2">Kubernetes Organization Member — Top 17 All-Time PR in Korea · 2022–&#8288;2025</li>
+          <li data-i18n="act.l3">NAVER Cloud Platform Tech Ambassador · 2023–&#8288;2026.02</li>
           <li data-i18n="act.l4">GopherCon Korea 2023/2024 Organizer</li>
           <li><span data-i18n="act.l5">KCD Korea 2023 Organizer</span> <img src="certi/KCD-Korea-2023-Organizer.png" alt="KCD Korea 2023 Organizer badge" class="activity-badge" loading="lazy" /></li>
         </ul>
@@ -1246,9 +1268,9 @@
         'act.leadership': 'Leadership',
         'act.speaking': 'Speaking',
         'act.award': 'Award',
-        'act.l1': 'AAIF (Agentic AI Foundation) Seoul Chapter Organizer \u00b7 2026\u2013Present',
-        'act.l2': 'Kubernetes Organization Member \u2014 Top 17 All-Time PR in Korea \u00b7 2022\u20132025',
-        'act.l3': 'NAVER Cloud Platform Tech Ambassador \u00b7 2023\u20132026.02',
+        'act.l1': 'AAIF (Agentic AI Foundation) Seoul Chapter Organizer \u00b7 2026\u2013\u2060Present',
+        'act.l2': 'Kubernetes Organization Member \u2014 Top 17 All-Time PR in Korea \u00b7 2022\u2013\u20602025',
+        'act.l3': 'NAVER Cloud Platform Tech Ambassador \u00b7 2023\u2013\u20602026.02',
         'act.l4': 'GopherCon Korea 2023/2024 Organizer',
         'act.l5': 'KCD Korea 2023 Organizer',
         'act.s1': 'MCP Dev Summit Seoul \u2014 From Legacy To Agentic AI \u00b7 2026.08',
@@ -1296,9 +1318,9 @@
         'act.leadership': '\ub9ac\ub354\uc2ed',
         'act.speaking': '\ubc1c\ud45c',
         'act.award': '\uc218\uc0c1',
-        'act.l1': 'AAIF (Agentic AI Foundation) \uc11c\uc6b8 \ucc55\ud130 \uc624\uac70\ub098\uc774\uc800 \u00b7 2026\u2013\ud604\uc7ac',
-        'act.l2': 'Kubernetes Organization Member \u2014 \ud55c\uad6d \ub0b4 \uc5ed\ub300 PR \uae30\uc5ec \uc0c1\uc704 17\uc704 \u00b7 2022\u20132025',
-        'act.l3': 'NAVER Cloud Platform \ud14c\ud06c \uc570\ubc84\uc11c\ub354 \u00b7 2023\u20132026.02',
+        'act.l1': 'AAIF (Agentic AI Foundation) \uc11c\uc6b8 \ucc55\ud130 \uc624\uac70\ub098\uc774\uc800 \u00b7 2026\u2013\u2060\ud604\uc7ac',
+        'act.l2': 'Kubernetes Organization Member \u2014 \ud55c\uad6d \ub0b4 \uc5ed\ub300 PR \uae30\uc5ec \uc0c1\uc704 17\uc704 \u00b7 2022\u2013\u20602025',
+        'act.l3': 'NAVER Cloud Platform \ud14c\ud06c \uc570\ubc84\uc11c\ub354 \u00b7 2023\u2013\u20602026.02',
         'act.l4': 'GopherCon Korea 2023/2024 \uc624\uac70\ub098\uc774\uc800',
         'act.l5': 'KCD Korea 2023 \uc624\uac70\ub098\uc774\uc800',
         'act.s1': 'MCP Dev Summit Seoul \u2014 From Legacy To Agentic AI \u00b7 2026.08',
@@ -1319,6 +1341,7 @@
       document.documentElement.setAttribute('data-lang', lang);
       document.documentElement.setAttribute('lang', lang);
       localStorage.setItem('lang', lang);
+      if (lang === 'ko') loadKoFonts();
 
       document.querySelectorAll('[data-i18n]').forEach(function(el) {
         var key = el.getAttribute('data-i18n');
