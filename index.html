@@ -33,11 +33,12 @@
       if (theme === 'universe') d.setAttribute('data-theme', 'universe');
       if (lang === 'ko') { d.setAttribute('data-lang', 'ko'); d.setAttribute('lang', 'ko'); Site.loadKoFonts(); }
       var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (Site.decideIntro({ seen: seen, hash: location.hash, reduced: reduced })) {
-        d.classList.add('intro-pending');
-        /* Failsafe: reveal the page after 4s even if the scripts never run */
-        setTimeout(function () { d.classList.remove('intro-pending'); }, 4000);
-      }
+      if (Site.decideIntro({ seen: seen, hash: location.hash, reduced: reduced })) d.classList.add('intro-pending');
+      /* Failsafe: if the scripts have not taken over after 4s, drop the intro and show every panel unfolded */
+      setTimeout(function () {
+        d.classList.remove('intro-pending');
+        if (!(Site.fold && Site.fold.ready)) d.classList.remove('js');
+      }, 4000);
     })();
   </script>
   <link rel="stylesheet" href="css/tokens.css" />

@@ -78,6 +78,7 @@
         var f = e.target && e.target.closest ? e.target.closest('.letter > .fold') : null;
         if (f) openInstant(f);
       });
+      Site.fold.ready = true;             /* tells the failsafe in index.html that folding is handled */
     },
     start: start,
     open: open,
