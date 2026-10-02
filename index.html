@@ -707,6 +707,31 @@
       margin-bottom: 20px;
       transition: color 0.4s;
     }
+    .project-card__highlights {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .project-card__highlights li {
+      padding-left: 18px;
+      position: relative;
+      color: var(--text-dim);
+      line-height: 1.6;
+      transition: color 0.4s;
+    }
+    .project-card__highlights li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 10px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      transition: background-color 0.4s;
+    }
     .project-card__tags {
       display: flex;
       flex-wrap: wrap;
@@ -1093,6 +1118,12 @@
         <h3 class="project-card__title">AXGENTICWire Core Agent Studio</h3>
         <p class="project-card__period" data-i18n="project1.period">2025.05 — Present</p>
         <p class="project-card__desc" data-i18n="project1.desc">Engineered MCP Server Builder enabling OpenAPI-to-MCP specification conversion. Streamlined AI agent development workflow for enterprise teams.</p>
+        <ul class="project-card__highlights" role="list">
+          <li data-i18n="project1.h1">Cut MCP server development per service from ~1 day to under 10 minutes with OpenAPI-based generation</li>
+          <li data-i18n="project1.h2">Automated daily system inspections through the final judgment step with an AI agent, cutting ~2 hours to under 10 minutes</li>
+          <li data-i18n="project1.h3">Designed OAuth authorization for MCP clients to block out-of-scope actions</li>
+          <li data-i18n="project1.h4">Expanded adoption to large-enterprise groupware and drove global business expansion</li>
+        </ul>
         <div class="project-card__tags">
           <span class="project-tag">FastAPI</span>
           <span class="project-tag">Go Operator</span>
@@ -1111,6 +1142,12 @@
         <h3 class="project-card__title">Modernization Platform APIM</h3>
         <p class="project-card__period" data-i18n="project2.period">2021.01 — 2025.04</p>
         <p class="project-card__desc" data-i18n="project2.desc">Architected and implemented Kubernetes-native API gateway management platform. Centralized API lifecycle management across multi-cluster environments.</p>
+        <ul class="project-card__highlights" role="list">
+          <li data-i18n="project2.h1">Improved event processing performance by 66%+ and cut latency from 500ms to 200ms by migrating Java to Go</li>
+          <li data-i18n="project2.h2">Resolved 3s+ latency and OOM by redesigning rate limiting from MariaDB to Redis</li>
+          <li data-i18n="project2.h3">Validated platform reliability at 2,000 RPS sustained for 8 hours with a custom load-testing tool</li>
+          <li data-i18n="project2.h4">Reduced AWS EKS cloud costs by 10%+ with ARM-based architecture and autoscaling</li>
+        </ul>
         <div class="project-card__tags">
           <span class="project-tag">Kubernetes</span>
           <span class="project-tag">API Gateway</span>
@@ -1124,6 +1161,10 @@
           <div class="metric">
             <span class="metric__value">60%</span>
             <span class="metric__label" data-i18n="project2.m2.label">Build time reduced</span>
+          </div>
+          <div class="metric">
+            <span class="metric__value">500 &rarr; 200ms</span>
+            <span class="metric__label" data-i18n="project2.m3.label">Event latency</span>
           </div>
         </div>
       </div>
@@ -1156,6 +1197,7 @@
       <div class="card activity-card rise-in from-left">
         <h3 class="activity-card__heading" data-i18n="act.award">Award</h3>
         <ul class="activity-list" role="list">
+          <li data-i18n="act.a2">SK Inc. C&amp;C — SKMS Practice Award · 2025</li>
           <li data-i18n="act.a1">Open Source Contribution Academy — Excellence Award · 2022</li>
         </ul>
       </div>
@@ -1259,10 +1301,19 @@
         'project1.period': '2025.05 \u2014 Present',
         'project1.desc': 'Engineered MCP Server Builder enabling OpenAPI-to-MCP specification conversion. Streamlined AI agent development workflow for enterprise teams.',
         'project1.metric.label': 'AI Transformation',
+        'project1.h1': 'Cut MCP server development per service from ~1 day to under 10 minutes with OpenAPI-based generation',
+        'project1.h2': 'Automated daily system inspections through the final judgment step with an AI agent, cutting ~2 hours to under 10 minutes',
+        'project1.h3': 'Designed OAuth authorization for MCP clients to block out-of-scope actions',
+        'project1.h4': 'Expanded adoption to large-enterprise groupware and drove global business expansion',
         'project2.period': '2021.01 \u2014 2025.04',
         'project2.desc': 'Architected and implemented Kubernetes-native API gateway management platform. Centralized API lifecycle management across multi-cluster environments.',
         'project2.m1.label': 'Delivery Time',
         'project2.m2.label': 'Build time reduced',
+        'project2.m3.label': 'Event latency',
+        'project2.h1': 'Improved event processing performance by 66%+ and cut latency from 500ms to 200ms by migrating Java to Go',
+        'project2.h2': 'Resolved 3s+ latency and OOM by redesigning rate limiting from MariaDB to Redis',
+        'project2.h3': 'Validated platform reliability at 2,000 RPS sustained for 8 hours with a custom load-testing tool',
+        'project2.h4': 'Reduced AWS EKS cloud costs by 10%+ with ARM-based architecture and autoscaling',
         'activities.label': 'Community',
         'activities.title': 'Activities',
         'act.leadership': 'Leadership',
@@ -1277,6 +1328,7 @@
         'act.s2': 'Datadog User Group Korea \u00b7 2025.02',
         'act.s3': 'AWS Korea User Group \u00b7 2022.06',
         'act.a1': 'Open Source Contribution Academy \u2014 Excellence Award \u00b7 2022',
+        'act.a2': 'SK Inc. C&C \u2014 SKMS Practice Award \u00b7 2025',
         'certs.label': 'Credentials',
         'certs.title': 'Certifications',
         'footer.quote': '\u201cAI runs on infrastructure, but transformation runs on people. Open-source communities taught me that the best technology is built together.\u201d',
@@ -1309,10 +1361,19 @@
         'project1.period': '2025.05 \u2014 \ud604\uc7ac',
         'project1.desc': 'OpenAPI-to-MCP \uc2a4\ud399 \ubcc0\ud658\uc744 \uc9c0\uc6d0\ud558\ub294 MCP Server Builder\ub97c \uc124\uacc4 \ubc0f \uad6c\ud604\ud588\uc2b5\ub2c8\ub2e4. \uc5d4\ud130\ud504\ub77c\uc774\uc988 \ud300\uc758 AI \uc5d0\uc774\uc804\ud2b8 \uac1c\ubc1c \uc6cc\ud06c\ud50c\ub85c\ub97c \ud6a8\uc728\ud654\ud588\uc2b5\ub2c8\ub2e4.',
         'project1.metric.label': 'AI \ud2b8\ub79c\uc2a4\ud3ec\uba54\uc774\uc158',
+        'project1.h1': 'OpenAPI \uae30\ubc18 \uc790\ub3d9 \uc0dd\uc131\uc73c\ub85c \uc11c\ube44\uc2a4\ub2f9 MCP \uc11c\ubc84 \uac1c\ubc1c \uc2dc\uac04 \ub2e8\ucd95 (\uc57d 1\uc77c \u2192 10\ubd84 \uc774\ub0b4)',
+        'project1.h2': '\uc77c\uc77c \uc2dc\uc2a4\ud15c \uc810\uac80\uc744 \ud310\ub2e8 \ub2e8\uacc4\uae4c\uc9c0 AI Agent\ub85c \uc790\ub3d9\ud654 (\uc57d 2\uc2dc\uac04 \u2192 10\ubd84 \uc774\ub0b4)',
+        'project1.h3': 'MCP \ud074\ub77c\uc774\uc5b8\ud2b8\uc6a9 OAuth \uc778\uac00 \uc124\uacc4\ub85c \uad8c\ud55c \ubc94\uc704\ub97c \ubc97\uc5b4\ub09c \uc624\uc791\ub3d9 \ucc28\ub2e8',
+        'project1.h4': '\ub300\uae30\uc5c5 \uadf8\ub8f9\uc6e8\uc5b4 \ud655\uc0b0\uacfc \uae00\ub85c\ubc8c \uc0ac\uc5c5 \ucd94\uc9c4',
         'project2.period': '2021.01 \u2014 2025.04',
         'project2.desc': 'Kubernetes \ub124\uc774\ud2f0\ube0c API \uac8c\uc774\ud2b8\uc6e8\uc774 \uad00\ub9ac \ud50c\ub7ab\ud3fc\uc744 \uc124\uacc4\ud558\uace0 \uad6c\ud604\ud588\uc2b5\ub2c8\ub2e4. \uba40\ud2f0 \ud074\ub7ec\uc2a4\ud130 \ud658\uacbd\uc5d0\uc11c API \ub77c\uc774\ud504\uc0ac\uc774\ud074\uc744 \uc911\uc559 \uc9d1\uc911\uc2dd\uc73c\ub85c \uad00\ub9ac\ud569\ub2c8\ub2e4.',
         'project2.m1.label': '\ubc30\ud3ec \uc2dc\uac04',
         'project2.m2.label': '\ube4c\ub4dc \uc2dc\uac04 \ub2e8\ucd95',
+        'project2.m3.label': '\uc774\ubca4\ud2b8 \ucc98\ub9ac \uc9c0\uc5f0',
+        'project2.h1': '\uc774\ubca4\ud2b8 \ub9ac\uc2dc\ubc84 Java \u2192 Go \uc804\ud658\uc73c\ub85c \ucc98\ub9ac \uc131\ub2a5 66% \uc774\uc0c1 \ud5a5\uc0c1, \uc9c0\uc5f0 500ms \u2192 200ms',
+        'project2.h2': '\uc720\ub7c9\uc81c\uc5b4\ub97c MariaDB \u2192 Redis\ub85c \uc7ac\uc124\uacc4\ud574 3\ucd08 \uc774\uc0c1 \uc9c0\uc5f0\uacfc OOM \ud574\uacb0',
+        'project2.h3': '\uc790\uccb4 \ubd80\ud558 \ud14c\uc2a4\ud2b8 \ub3c4\uad6c\ub85c 2,000 RPS 8\uc2dc\uac04 \uc5f0\uc18d \uc548\uc815\uc131 \uac80\uc99d',
+        'project2.h4': 'ARM \uae30\ubc18 \uc544\ud0a4\ud14d\ucc98\uc640 \uc624\ud1a0\uc2a4\ucf00\uc77c\ub9c1\uc73c\ub85c AWS EKS \ube44\uc6a9 10% \uc774\uc0c1 \uc808\uac10',
         'activities.label': '\ucee4\ubba4\ub2c8\ud2f0',
         'activities.title': '\ud65c\ub3d9',
         'act.leadership': '\ub9ac\ub354\uc2ed',
@@ -1327,6 +1388,7 @@
         'act.s2': 'Datadog User Group Korea \u00b7 2025.02',
         'act.s3': 'AWS Korea User Group \u00b7 2022.06',
         'act.a1': '\uc624\ud508\uc18c\uc2a4 \ucee8\ud2b8\ub9ac\ubdf0\uc158 \uc544\uce74\ub370\ubbf8 \u2014 \uc6b0\uc218\uc0c1 \u00b7 2022',
+        'act.a2': 'SK(\uc8fc) C&C SKMS \uc2e4\ucc9c\uc0c1 \u00b7 2025',
         'certs.label': '\uc790\uaca9',
         'certs.title': '\uc790\uaca9\uc99d',
         'footer.quote': '\u201cAI\ub294 \uc778\ud504\ub77c \uc704\uc5d0\uc11c \ub3cc\uc544\uac00\uc9c0\ub9cc, \ud2b8\ub79c\uc2a4\ud3ec\uba54\uc774\uc158\uc740 \uc0ac\ub78c\uc774 \uc774\ub055\ub2c8\ub2e4. \uc624\ud508\uc18c\uc2a4 \ucee4\ubba4\ub2c8\ud2f0\uc5d0\uc11c \ucd5c\uace0\uc758 \uae30\uc220\uc740 \ud568\uaed8 \ub9cc\ub4e4\uc5b4\uac04\ub2e4\ub294 \uac83\uc744 \ubc30\uc6e0\uc2b5\ub2c8\ub2e4.\u201d',
