@@ -358,3 +358,79 @@ html.js .fold:not(.is-open) .sheet__content { opacity: 0; }
   html.js .fold:not(.is-open) .sheet { transform: none; }
   html.js .fold:not(.is-open) .sheet__content { opacity: 1; }
 }
+
+/* ── Index tabs: stuck to the right edge of the paper, following the scroll ── */
+.tabs { position: sticky; top: 140px; z-index: 20; height: 0; }
+.tabs__list {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  list-style: none;
+}
+.tab {
+  display: block;
+  width: 44px;
+  padding: 14px 0 14px 13px;
+  border-radius: 0 8px 8px 0;
+  background: var(--tab-c);
+  color: #fff;
+  font: 600 0.7rem var(--font-heading);
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  writing-mode: vertical-rl;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.08);
+  transform: translateX(-4px);
+  transition: transform 0.2s var(--ease-out), background-color 0.6s;
+}
+.tab--1 { --tab-c: var(--tab-1); }
+.tab--2 { --tab-c: var(--tab-2); }
+.tab--3 { --tab-c: var(--tab-3); }
+.tab--4 { --tab-c: var(--tab-4); }
+.tab--5 { --tab-c: var(--tab-5); }
+.tab:hover, .tab[aria-current="true"] { transform: translateX(2px); }
+.tab[aria-current="true"] { font-weight: 700; box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.18); }
+html:lang(ko) .tab { letter-spacing: 0.02em; }
+
+/* 640-1023px: smaller tabs, with right padding to make room for them */
+@media (max-width: 1023px) {
+  .desk { padding-left: 20px; padding-right: 56px; }
+  .tab { width: 34px; padding: 10px 0 10px 9px; font-size: 0.62rem; }
+}
+
+/* Below 640px: bottom tab bar */
+@media (max-width: 639px) {
+  .desk { padding-left: 12px; padding-right: 12px; }
+  .tabs {
+    position: fixed;
+    top: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+    height: auto;
+    padding-bottom: env(safe-area-inset-bottom);
+    background: var(--paper);
+    box-shadow: 0 -4px 14px rgba(0, 0, 0, 0.08);
+  }
+  .tabs__list { position: static; flex-direction: row; gap: 0; }
+  .tabs__list li { flex: 1 1 0; min-width: 0; }
+  .tab {
+    width: auto;
+    padding: 12px 2px 11px;
+    border-top: 3px solid var(--tab-c);
+    border-radius: 0;
+    background: transparent;
+    color: var(--ink-dim);
+    font-size: 0.66rem;
+    letter-spacing: 0.02em;
+    text-align: center;
+    writing-mode: horizontal-tb;
+    box-shadow: none;
+    transform: none;
+  }
+  .tab:hover { transform: none; }
+  .tab[aria-current="true"] { background: var(--tab-c); color: #fff; transform: none; box-shadow: none; }
+}
