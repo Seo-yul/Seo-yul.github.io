@@ -8,1760 +8,278 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☁️</text></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Poppins:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Poppins:wght@400;500;600;700&display=swap" /></noscript>
-  <!-- Prevent flash of wrong theme/lang -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Poppins:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Poppins:wght@400;500;600;700&display=swap" /></noscript>
   <script>
-    /* Korean webfonts are loaded only when the Korean view is used */
-    function loadKoFonts() {
+    /* Decide theme, language and intro before first paint to avoid a flash */
+    window.Site = window.Site || {};
+    Site.decideIntro = function (o) { return !o.seen && !o.hash && !o.reduced; };
+    Site.loadKoFonts = function () {
       if (document.getElementById('ko-fonts')) return;
       var link = document.createElement('link');
       link.id = 'ko-fonts';
       link.rel = 'stylesheet';
-      link.href = 'https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400..700&family=Noto+Serif+KR:wght@400&display=swap';
+      link.href = 'https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Noto+Sans+KR:wght@400..700&family=Noto+Serif+KR:wght@400&display=swap';
       document.head.appendChild(link);
-    }
-    (function(){
-      var t = localStorage.getItem('theme');
-      var l = localStorage.getItem('lang');
-      if (t === 'universe') document.documentElement.setAttribute('data-theme','universe');
-      if (l === 'ko') { document.documentElement.setAttribute('data-lang','ko'); document.documentElement.setAttribute('lang','ko'); loadKoFonts(); }
+    };
+    (function () {
+      var d = document.documentElement, theme = null, lang = null, seen = true;
+      d.classList.add('js');
+      try {
+        theme = localStorage.getItem('theme');
+        lang = localStorage.getItem('lang');
+        seen = sessionStorage.getItem('introSeen') === '1';
+      } catch (e) { /* storage unavailable: open without the intro */ }
+      if (theme === 'universe') d.setAttribute('data-theme', 'universe');
+      if (lang === 'ko') { d.setAttribute('data-lang', 'ko'); d.setAttribute('lang', 'ko'); Site.loadKoFonts(); }
+      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (Site.decideIntro({ seen: seen, hash: location.hash, reduced: reduced })) {
+        d.classList.add('intro-pending');
+        /* Failsafe: reveal the page after 4s even if the scripts never run */
+        setTimeout(function () { d.classList.remove('intro-pending'); }, 4000);
+      }
     })();
   </script>
-  <style>
-    /* ── Reset ── */
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-    /* ── Light Theme (default) ── */
-    :root {
-      --bg: #F4F3EE;
-      --text: #141413;
-      --text-dim: #5c5b56;
-      --text-muted: #8a8880;
-      --accent: #C15F3C;
-      --accent-hover: #d97757;
-      --accent-sub: #C15F3C;
-      --accent-light: rgba(193,95,60,0.08);
-      --card-bg: #FFFFFF;
-      --card-bg-alt: #f0efe8;
-      --card-border: rgba(193,95,60,0.12);
-      --card-shadow: rgba(20,20,19,0.06);
-      --card-glow: rgba(193,95,60,0.06);
-      --nav-bg: rgba(244,243,238,0.85);
-      --nav-border: #e8e6dc;
-      --nav-mobile-bg: rgba(244,243,238,0.97);
-      --ring-color: rgba(193,95,60,0.25);
-      --social-bg: rgba(193,95,60,0.08);
-      --social-border: rgba(193,95,60,0.12);
-      --social-hover-bg: rgba(193,95,60,0.15);
-      --tag-bg: #f0efe8;
-      --tag-border: rgba(193,95,60,0.1);
-      --project-tag-bg: rgba(193,95,60,0.08);
-      --project-tag-border: rgba(193,95,60,0.12);
-      --project-tag-color: #C15F3C;
-      --cert-item-bg: #f0efe8;
-      --cert-item-border: rgba(193,95,60,0.12);
-      --aws-bg: rgba(120,140,93,0.08);
-      --aws-border: rgba(120,140,93,0.18);
-      --aws-color: #788c5d;
-      --footer-border: #e8e6dc;
-      --about-border-left: 3px solid #C15F3C;
-      --project-border-top: 3px solid #C15F3C;
-      --divider-color: #b0aea5;
-      --font-heading: 'Poppins', sans-serif;
-      --font-body: 'Lora', serif;
-      --ease-out: cubic-bezier(0.23,1,0.32,1);
-    }
-
-    /* ── Universe Theme ── */
-    [data-theme="universe"] {
-      --bg: #060614;
-      --text: #E0E8F8;
-      --text-dim: #8090b8;
-      --text-muted: rgba(224,232,248,0.5);
-      --accent: #3B82F6;
-      --accent-hover: #60A5FA;
-      --accent-sub: #60A5FA;
-      --accent-light: rgba(59,130,246,0.1);
-      --card-bg: rgba(10,18,40,0.85);
-      --card-bg-alt: rgba(59,130,246,0.06);
-      --card-border: rgba(59,130,246,0.2);
-      --card-shadow: rgba(0,0,0,0.5);
-      --card-glow: rgba(59,130,246,0.1);
-      --nav-bg: rgba(6,6,20,0.85);
-      --nav-border: rgba(59,130,246,0.1);
-      --nav-mobile-bg: rgba(6,6,20,0.95);
-      --ring-color: rgba(59,130,246,0.25);
-      --social-bg: rgba(59,130,246,0.1);
-      --social-border: rgba(59,130,246,0.2);
-      --social-hover-bg: rgba(59,130,246,0.2);
-      --tag-bg: rgba(59,130,246,0.08);
-      --tag-border: rgba(59,130,246,0.15);
-      --project-tag-bg: rgba(96,165,250,0.1);
-      --project-tag-border: rgba(96,165,250,0.2);
-      --project-tag-color: #60A5FA;
-      --cert-item-bg: rgba(59,130,246,0.06);
-      --cert-item-border: rgba(59,130,246,0.12);
-      --aws-bg: rgba(96,165,250,0.08);
-      --aws-border: rgba(96,165,250,0.15);
-      --aws-color: #60A5FA;
-      --footer-border: rgba(59,130,246,0.1);
-      --about-border-left: none;
-      --project-border-top: none;
-      --divider-color: rgba(59,130,246,0.3);
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: var(--font-body);
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.75;
-      overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
-      transition: background-color 0.6s ease, color 0.4s ease;
-    }
-
-    h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: 700; }
-
-    a { color: var(--accent); text-decoration: none; transition: color 0.3s; }
-    a:hover { color: var(--accent-hover); }
-
-    img { max-width: 100%; display: block; }
-
-    /* ── Background Toggle ── */
-    .bg-universe { display: none !important; }
-    [data-theme="universe"] .bg-universe { display: block !important; }
-    [data-theme="universe"] .bg-light { display: none !important; }
-
-    /* ── Universe Backgrounds ── */
-    #star-canvas {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    .nebula {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      will-change: transform;
-      z-index: 1;
-      pointer-events: none;
-      background:
-        radial-gradient(ellipse 800px 600px at 20% 30%, #0a1628 0%, transparent 70%),
-        radial-gradient(ellipse 600px 900px at 80% 50%, #0d2847 0%, transparent 65%),
-        radial-gradient(ellipse 900px 500px at 50% 80%, #081e3e 0%, transparent 60%),
-        radial-gradient(ellipse 400px 400px at 60% 20%, rgba(59,130,246,0.08) 0%, transparent 70%),
-        radial-gradient(ellipse 500px 300px at 30% 70%, rgba(13,40,71,0.4) 0%, transparent 60%);
-      opacity: 0.7;
-      animation: nebulaFloat 60s ease-in-out infinite alternate;
-    }
-
-    @keyframes nebulaFloat {
-      0%   { transform: translate(0, 0) scale(1); }
-      25%  { transform: translate(-40px, -30px) scale(1.02); }
-      50%  { transform: translate(20px, -60px) scale(0.98); }
-      75%  { transform: translate(-30px, 20px) scale(1.01); }
-      100% { transform: translate(30px, -20px) scale(1); }
-    }
-
-    .dust-layer {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: 2;
-      pointer-events: none;
-      background-image:
-        radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.3) 0%, transparent 100%),
-        radial-gradient(1px 1px at 30% 50%, rgba(150,190,255,0.25) 0%, transparent 100%),
-        radial-gradient(1.5px 1.5px at 60% 15%, rgba(255,255,255,0.2) 0%, transparent 100%),
-        radial-gradient(1px 1px at 80% 70%, rgba(130,170,255,0.3) 0%, transparent 100%),
-        radial-gradient(1px 1px at 45% 85%, rgba(255,255,255,0.15) 0%, transparent 100%);
-      animation: dustDrift 40s linear infinite;
-    }
-
-    @keyframes dustDrift {
-      0%   { transform: translate(0, 0); }
-      100% { transform: translate(-50px, -80px); }
-    }
-
-    .shooting-star {
-      position: fixed;
-      z-index: 3;
-      pointer-events: none;
-      width: 150px;
-      height: 2px;
-      background: linear-gradient(90deg, rgba(255,255,255,0.9), rgba(59,130,246,0.6), transparent);
-      border-radius: 50%;
-      opacity: 0;
-      --angle: -35deg;
-    }
-    .shooting-star:nth-child(2) { top: 12%; right: -150px; transform: rotate(-35deg); animation: shootingStar 4s 1s ease-in infinite; }
-    .shooting-star:nth-child(3) { top: 35%; right: -150px; --angle: -25deg; transform: rotate(-25deg); animation: shootingStar 5.5s 3.5s ease-in infinite; width: 200px; }
-    .shooting-star:nth-child(4) { top: 55%; right: -150px; --angle: -40deg; transform: rotate(-40deg); animation: shootingStar 4.5s 7s ease-in infinite; width: 120px; }
-    .shooting-star:nth-child(5) { top: 8%; right: -150px; --angle: -20deg; transform: rotate(-20deg); animation: shootingStar 6s 5s ease-in infinite; width: 180px; }
-    .shooting-star:nth-child(6) { top: 75%; right: -150px; --angle: -30deg; transform: rotate(-30deg); animation: shootingStar 3.8s 9s ease-in infinite; width: 100px; }
-
-    @keyframes shootingStar {
-      0%   { opacity: 0; transform: rotate(var(--angle)) translateX(0); }
-      5%   { opacity: 1; }
-      70%  { opacity: 1; }
-      100% { opacity: 0; transform: rotate(var(--angle)) translateX(calc(-100vw - 300px)); }
-    }
-
-    .parallax-bg, .parallax-mid, .parallax-fg {
-      position: fixed;
-      pointer-events: none;
-      z-index: 1;
-      border-radius: 50%;
-      filter: blur(40px);
-      opacity: 0.15;
-    }
-    .parallax-bg { width: 600px; height: 600px; background: var(--accent); top: -200px; right: -200px; }
-    .parallax-mid { width: 400px; height: 400px; background: var(--accent-sub); bottom: 20%; left: -100px; }
-    .parallax-fg { width: 300px; height: 300px; background: var(--accent); top: 60%; right: 10%; opacity: 0.1; }
-
-    /* ── Light Backgrounds ── */
-    #particle-canvas {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    .orb {
-      position: fixed;
-      pointer-events: none;
-      z-index: 0;
-      border-radius: 50%;
-      filter: blur(80px);
-      will-change: transform;
-    }
-    .orb--terra { width: 700px; height: 500px; background: radial-gradient(ellipse at center, rgba(193,95,60,0.07), transparent 70%); top: -100px; right: -200px; }
-    .orb--blue  { width: 500px; height: 600px; background: radial-gradient(ellipse at center, rgba(106,155,204,0.06), transparent 70%); bottom: 10%; left: -150px; }
-    .orb--green { width: 400px; height: 400px; background: radial-gradient(ellipse at center, rgba(120,140,93,0.05), transparent 70%); top: 55%; right: 5%; }
-
-    .deco-arc {
-      position: fixed;
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.08;
-    }
-    .deco-arc--1 { top: 15%; left: -60px; width: 300px; height: 300px; border: 2px solid var(--accent); border-radius: 50%; clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%); }
-    .deco-arc--2 { bottom: 20%; right: -40px; width: 200px; height: 200px; border: 1.5px solid #6a9bcc; border-radius: 50%; clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%); }
-
-    #grain-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-      opacity: 0.25;
-      width: 100%; height: 100%;
-    }
-
-    /* ── Navigation ── */
-    .nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 1000;
-      background: var(--nav-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--nav-border);
-      transition: box-shadow 0.3s, background-color 0.4s, border-color 0.4s;
-    }
-    .nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
-    [data-theme="universe"] .nav.scrolled { box-shadow: 0 4px 30px rgba(0,0,0,0.4); }
-    .nav__inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 24px;
-      height: 64px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .nav__logo {
-      font-family: var(--font-heading);
-      font-size: 1.65rem;
-      font-weight: 700;
-      color: var(--text);
-    }
-    .nav__logo-dot { color: var(--accent); }
-
-    /* ── Theme Toggle ── */
-    .theme-toggle {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 40px;
-      border: 1px solid var(--card-border);
-      border-radius: 10px;
-      background: var(--accent-light);
-      cursor: pointer;
-      transition: background 0.3s, border-color 0.3s, transform 0.3s;
-      position: relative;
-      overflow: hidden;
-      flex-shrink: 0;
-    }
-    .theme-toggle:hover {
-      transform: scale(1.08);
-      border-color: var(--accent);
-    }
-
-    /* ── Language Toggle ── */
-    .lang-toggle {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 40px;
-      border: 1px solid var(--card-border);
-      border-radius: 10px;
-      background: var(--accent-light);
-      cursor: pointer;
-      font-family: var(--font-heading);
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: var(--accent);
-      letter-spacing: 0.5px;
-      transition: background 0.3s, border-color 0.3s, transform 0.3s, color 0.4s;
-    }
-    .lang-toggle:hover {
-      transform: scale(1.08);
-      border-color: var(--accent);
-    }
-    .theme-toggle__icon {
-      position: absolute;
-      transition: opacity 0.4s, transform 0.4s;
-      font-size: 20px;
-      line-height: 1;
-    }
-    /* Light mode: show sun, hide universe */
-    .theme-toggle__sun { opacity: 1; transform: rotate(0deg) scale(1); }
-    .theme-toggle__universe { opacity: 0; transform: rotate(-90deg) scale(0.5); }
-    /* Universe mode: show universe, hide sun */
-    [data-theme="universe"] .theme-toggle__sun { opacity: 0; transform: rotate(90deg) scale(0.5); }
-    [data-theme="universe"] .theme-toggle__universe { opacity: 1; transform: rotate(0deg) scale(1); }
-
-    .nav__right {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-    .nav__hamburger {
-      display: none;
-      background: none;
-      border: none;
-      cursor: pointer;
-      flex-direction: column;
-      gap: 5px;
-      padding: 4px;
-    }
-    .nav__hamburger span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--text);
-      border-radius: 2px;
-      transition: transform 0.3s, opacity 0.3s, background 0.3s;
-    }
-    .nav__hamburger.open span { background: var(--accent); }
-    .nav__hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-    .nav__hamburger.open span:nth-child(2) { opacity: 0; }
-    .nav__hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-    .nav__links {
-      list-style: none;
-      display: flex;
-      gap: 32px;
-    }
-    .nav__link {
-      color: var(--text-dim);
-      font-family: var(--font-heading);
-      font-size: 1rem;
-      font-weight: 500;
-      transition: color 0.3s;
-    }
-    .nav__link:hover, .nav__link.active { color: var(--accent); }
-
-    @media (max-width: 768px) {
-      .nav__hamburger { display: flex; }
-      .nav__links {
-        position: absolute;
-        top: 64px; left: 0; right: 0;
-        flex-direction: column;
-        background: var(--nav-mobile-bg);
-        backdrop-filter: blur(16px);
-        padding: 20px 24px;
-        gap: 16px;
-        transform: translateY(-10px);
-        opacity: 0;
-        pointer-events: none;
-        transition: transform 0.3s, opacity 0.3s, background-color 0.4s;
-        border-bottom: 1px solid var(--nav-border);
-      }
-      .nav__links.open {
-        transform: translateY(0);
-        opacity: 1;
-        pointer-events: auto;
-      }
-    }
-
-    /* ── Section Base ── */
-    .section {
-      position: relative;
-      z-index: 10;
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 100px 24px;
-    }
-    .section__label {
-      font-family: var(--font-heading);
-      font-size: 0.85rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 2.5px;
-      color: var(--accent);
-      margin-bottom: 8px;
-      transition: color 0.4s;
-    }
-    .section__title {
-      font-size: clamp(2rem, 4.5vw, 2.8rem);
-      margin-bottom: 48px;
-      color: var(--text);
-      transition: color 0.4s;
-    }
-
-    /* ── Section Divider ── */
-    .section-divider {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      padding: 8px 0;
-      position: relative;
-      z-index: 10;
-    }
-    .section-divider span {
-      width: 3px;
-      height: 16px;
-      background: var(--divider-color);
-      border-radius: 2px;
-      transform: rotate(15deg);
-      opacity: 0.4;
-      transition: background-color 0.4s;
-    }
-
-    /* ── Card System ── */
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 32px;
-      position: relative;
-      overflow: hidden;
-      transition: transform 0.4s var(--ease-out),
-                  box-shadow 0.4s var(--ease-out),
-                  background-color 0.4s ease,
-                  border-color 0.4s ease;
-    }
-    .card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: 16px;
-      background: radial-gradient(
-        500px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-        var(--card-glow),
-        transparent 40%
-      );
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.4s;
-    }
-    .card:hover::before { opacity: 1; }
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 40px var(--card-shadow), 0 0 0 1px var(--card-glow);
-    }
-
-    /* ── Scroll-in Animation ── */
-    .rise-in {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
-    }
-    .rise-in.from-left {
-      transform: translateX(-30px) translateY(10px);
-    }
-    .rise-in.visible {
-      opacity: 1;
-      transform: translateY(0) translateX(0);
-    }
-
-    /* ── Hero ── */
-    .hero {
-      position: relative;
-      z-index: 10;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 120px 24px 80px;
-    }
-    .hero__avatar-wrap {
-      position: relative;
-      width: 160px;
-      height: 160px;
-      margin: 0 auto 32px;
-    }
-    .hero__avatar {
-      width: 160px;
-      height: 160px;
-      border-radius: 50%;
-      border: 3px solid var(--accent);
-      object-fit: cover;
-      transform: scale(1.2);
-      position: relative;
-      z-index: 1;
-      transition: border-color 0.4s;
-    }
-    .hero__avatar-ring {
-      position: absolute;
-      inset: -10px;
-      border-radius: 50%;
-      border: 2px dashed var(--ring-color);
-      animation: ring-rotate 60s linear infinite;
-      transition: border-color 0.4s;
-    }
-    @keyframes ring-rotate {
-      to { transform: rotate(360deg); }
-    }
-    .hero__name {
-      font-size: clamp(2.8rem, 7vw, 4.2rem);
-      letter-spacing: -0.5px;
-      margin-bottom: 8px;
-      transition: color 0.4s;
-    }
-    .hero__role {
-      font-size: 1.3rem;
-      color: var(--text-dim);
-      margin-bottom: 16px;
-      transition: color 0.4s;
-    }
-    .hero__at { color: var(--accent); }
-    .hero__tagline {
-      font-size: 1.15rem;
-      color: var(--text-muted);
-      max-width: 380px;
-      margin: 0 auto 32px;
-      line-height: 1.8;
-      transition: color 0.4s;
-    }
-    .hero__tagline .word {
-      display: inline-block;
-      opacity: 0;
-      transform: translateY(8px);
-      transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
-    }
-    .hero__tagline .word.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    .hero__socials {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-    }
-    .hero__social {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
-      background: var(--social-bg);
-      border: 1px solid var(--social-border);
-      color: var(--text-dim);
-      transition: transform 0.3s, background 0.3s, border-color 0.3s, color 0.3s;
-    }
-    .hero__social:hover {
-      transform: translateY(-3px) scale(1.05);
-      background: var(--social-hover-bg);
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-
-    /* ── About ── */
-    .about-card {
-      padding: 32px 36px;
-      border-left: var(--about-border-left);
-      transition: border-color 0.4s;
-    }
-    .about-card p {
-      color: var(--text-dim);
-      font-size: 1.1rem;
-      line-height: 1.95;
-      transition: color 0.4s;
-    }
-    .about-card p + p { margin-top: 16px; }
-
-    /* ── Quote ── */
-    .section-quote {
-      text-align: center;
-      max-width: 720px;
-      margin: 0 auto 0;
-      padding: 0 24px;
-    }
-    .section-quote__text {
-      font-size: 1.2rem;
-      font-style: italic;
-      line-height: 1.8;
-      color: var(--text-muted);
-      position: relative;
-      transition: color 0.4s;
-    }
-    .section-quote__text::before {
-      content: '\201C';
-      font-size: 3.5rem;
-      color: var(--accent);
-      opacity: 0.35;
-      position: absolute;
-      top: -24px;
-      left: -28px;
-      font-style: normal;
-      font-family: Georgia, serif;
-      transition: color 0.4s;
-    }
-
-    /* ── Tech Stack ── */
-    .tech-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 24px;
-    }
-    .tech-card__category {
-      font-family: var(--font-heading);
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--accent-sub);
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
-      margin-bottom: 14px;
-      transition: color 0.4s;
-    }
-    .tech-card__items {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .tech-tag {
-      display: inline-block;
-      padding: 6px 14px;
-      border-radius: 8px;
-      font-family: var(--font-heading);
-      font-size: 0.95rem;
-      font-weight: 500;
-      background: var(--tag-bg);
-      border: 1px solid var(--tag-border);
-      color: var(--text-dim);
-      transition: color 0.3s, border-color 0.3s, background-color 0.4s;
-    }
-    .tech-tag:hover {
-      color: var(--accent);
-      border-color: var(--accent);
-    }
-
-    /* ── Projects ── */
-    .projects-grid {
-      display: grid;
-      gap: 32px;
-    }
-    .project-card {
-      padding: 36px;
-      border-top: var(--project-border-top);
-    }
-    .project-card__title {
-      font-size: 1.5rem;
-      margin-bottom: 4px;
-      color: var(--text);
-      transition: color 0.4s;
-    }
-    .project-card__period {
-      font-family: var(--font-heading);
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-bottom: 12px;
-      letter-spacing: 0.02em;
-      transition: color 0.4s;
-    }
-    .project-card__desc {
-      color: var(--text-dim);
-      line-height: 1.8;
-      margin-bottom: 20px;
-      transition: color 0.4s;
-    }
-    .project-card__highlights {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-bottom: 20px;
-    }
-    .project-card__highlights li {
-      padding-left: 18px;
-      position: relative;
-      color: var(--text-dim);
-      line-height: 1.6;
-      transition: color 0.4s;
-    }
-    .project-card__highlights li::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 10px;
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--accent);
-      transition: background-color 0.4s;
-    }
-    .project-card__tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 20px;
-    }
-    .project-tag {
-      padding: 4px 12px;
-      border-radius: 6px;
-      font-family: var(--font-heading);
-      font-size: 0.9rem;
-      font-weight: 500;
-      background: var(--project-tag-bg);
-      border: 1px solid var(--project-tag-border);
-      color: var(--project-tag-color);
-      transition: background-color 0.4s, border-color 0.4s, color 0.4s;
-    }
-    .project-card__metrics {
-      display: flex;
-      gap: 32px;
-      flex-wrap: wrap;
-    }
-    .metric { text-align: center; }
-    .metric__value {
-      font-family: var(--font-heading);
-      font-size: 1.65rem;
-      font-weight: 700;
-      color: var(--accent);
-      display: block;
-      transition: color 0.4s;
-    }
-    .metric__label {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      transition: color 0.4s;
-    }
-
-    /* ── Activities ── */
-    .activities-grid {
-      display: grid;
-      gap: 24px;
-    }
-    .activity-card { padding: 28px 32px; }
-    .activity-card__heading {
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--accent-sub);
-      margin-bottom: 16px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      transition: color 0.4s;
-    }
-    .activity-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .activity-list li {
-      padding-left: 20px;
-      position: relative;
-      color: var(--text-dim);
-      font-size: 1.05rem;
-      line-height: 1.6;
-      transition: color 0.4s;
-    }
-    .activity-list li::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 10px;
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--accent);
-      transition: background-color 0.4s;
-    }
-    .activity-badge {
-      display: inline-block;
-      width: 24px;
-      height: 24px;
-      vertical-align: middle;
-      margin-left: 6px;
-    }
-
-    /* ── Certifications ── */
-    .certs-grid {
-      display: grid;
-      gap: 32px;
-    }
-    .cert-card { padding: 36px; }
-    .cert-card__banner {
-      display: block;
-      max-width: 260px;
-      margin-bottom: 24px;
-    }
-    .cert-card__heading {
-      font-size: 1.3rem;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 20px;
-      transition: color 0.4s;
-    }
-    .cert-card__items {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-    }
-    .cert-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: var(--cert-item-bg);
-      border: 1px solid var(--cert-item-border);
-      border-radius: 10px;
-      padding: 10px 18px;
-      transition: border-color 0.3s, background-color 0.4s;
-    }
-    .cert-item:hover { border-color: var(--accent); }
-    .cert-item__icon { width: 36px; height: 36px; flex-shrink: 0; }
-    .cert-item__name {
-      font-family: var(--font-heading);
-      font-size: 1rem;
-      font-weight: 600;
-    }
-    .aws-certs {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 8px;
-    }
-    .aws-tag {
-      padding: 8px 18px;
-      border-radius: 8px;
-      font-family: var(--font-heading);
-      font-size: 1rem;
-      font-weight: 600;
-      background: var(--aws-bg);
-      border: 1px solid var(--aws-border);
-      color: var(--aws-color);
-      transition: border-color 0.3s, background-color 0.4s, color 0.4s;
-    }
-    .aws-tag:hover { border-color: var(--aws-color); }
-
-    /* ── Footer ── */
-    .footer {
-      position: relative;
-      z-index: 10;
-      text-align: center;
-      padding: 80px 24px 48px;
-      border-top: 1px solid var(--footer-border);
-      transition: border-color 0.4s;
-    }
-    .footer__quote {
-      max-width: 640px;
-      margin: 0 auto 32px;
-      font-size: 1.15rem;
-      font-style: italic;
-      color: var(--text-muted);
-      line-height: 1.8;
-      transition: color 0.4s;
-    }
-    .footer__socials {
-      display: flex;
-      justify-content: center;
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-    .footer__social {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 40px;
-      border-radius: 10px;
-      background: var(--social-bg);
-      border: 1px solid var(--social-border);
-      color: var(--text-dim);
-      transition: transform 0.3s, background 0.3s, color 0.3s, border-color 0.4s;
-    }
-    .footer__social:hover {
-      transform: translateY(-2px);
-      background: var(--social-hover-bg);
-      color: var(--accent);
-    }
-    .footer__copy {
-      font-family: var(--font-heading);
-      font-size: 0.95rem;
-      color: var(--text-muted);
-      transition: color 0.4s;
-    }
-
-    /* ── Korean Typography ── */
-    html:lang(ko) {
-      --font-heading: 'Poppins', 'Noto Sans KR', sans-serif;
-      --font-body: 'Lora', 'Noto Serif KR', serif;
-      word-break: keep-all;
-      overflow-wrap: break-word;
-    }
-    html:lang(ko) .section-quote__text,
-    html:lang(ko) .footer__quote { font-style: normal; }
-    html:lang(ko) .section__label,
-    html:lang(ko) .tech-card__category,
-    html:lang(ko) .activity-card__heading { letter-spacing: normal; }
-
-    /* ── Reduced Motion ── */
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-      }
-      html { scroll-behavior: auto; }
-      .rise-in { opacity: 1; transform: none; }
-      .hero__tagline .word { opacity: 1; transform: none; }
-      .nebula { animation: none; }
-      .dust-layer { animation: none; }
-      .shooting-star { display: none !important; }
-    }
-
-    /* ── Responsive ── */
-    @media (max-width: 600px) {
-      .section { padding: 72px 16px; }
-      .card { padding: 24px 20px; }
-      .project-card { padding: 28px 20px; }
-      .cert-card { padding: 28px 20px; }
-      .project-card__metrics { gap: 20px; }
-      .hero { padding: 100px 16px 60px; }
-    }
-  </style>
+  <link rel="stylesheet" href="css/tokens.css" />
 </head>
 <body>
-
-  <!-- ═══ Universe Backgrounds ═══ -->
   <canvas id="star-canvas" class="bg-universe" aria-hidden="true"></canvas>
   <div class="nebula bg-universe" aria-hidden="true"></div>
   <div class="dust-layer bg-universe" aria-hidden="true"></div>
-  <div class="shooting-star bg-universe" aria-hidden="true"></div>
-  <div class="shooting-star bg-universe" aria-hidden="true"></div>
-  <div class="shooting-star bg-universe" aria-hidden="true"></div>
-  <div class="shooting-star bg-universe" aria-hidden="true"></div>
-  <div class="shooting-star bg-universe" aria-hidden="true"></div>
-  <div class="parallax-bg bg-universe" aria-hidden="true"></div>
-  <div class="parallax-mid bg-universe" aria-hidden="true"></div>
-  <div class="parallax-fg bg-universe" aria-hidden="true"></div>
-
-  <!-- ═══ Light Backgrounds ═══ -->
-  <canvas id="particle-canvas" class="bg-light" aria-hidden="true"></canvas>
-  <div class="orb orb--terra bg-light" aria-hidden="true"></div>
-  <div class="orb orb--blue bg-light" aria-hidden="true"></div>
-  <div class="orb orb--green bg-light" aria-hidden="true"></div>
-  <div class="deco-arc deco-arc--1 bg-light" aria-hidden="true"></div>
-  <div class="deco-arc deco-arc--2 bg-light" aria-hidden="true"></div>
-  <svg style="position:absolute;width:0;height:0" aria-hidden="true">
-    <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+  <div class="shooting-stars bg-universe" aria-hidden="true">
+    <span class="shooting-star"></span><span class="shooting-star"></span><span class="shooting-star"></span><span class="shooting-star"></span><span class="shooting-star"></span>
+  </div>
+  <svg class="svg-defs" aria-hidden="true" focusable="false">
+    <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" /><feColorMatrix type="saturate" values="0" /></filter>
   </svg>
-  <div id="grain-overlay" class="bg-light" aria-hidden="true" style="filter:url(#grain)"></div>
+  <div id="grain-overlay" class="bg-light" aria-hidden="true"></div>
 
-  <!-- Navigation -->
-  <nav class="nav" id="nav" aria-label="Main navigation">
-    <div class="nav__inner">
-      <a href="#hero" class="nav__logo" aria-label="Home">SY<span class="nav__logo-dot">.</span></a>
-      <ul class="nav__links" id="nav-links" role="list">
-        <li><a href="#about" class="nav__link" data-i18n="nav.about">About</a></li>
-        <li><a href="#tech" class="nav__link" data-i18n="nav.tech">Tech Stack</a></li>
-        <li><a href="#projects" class="nav__link" data-i18n="nav.projects">Projects</a></li>
-        <li><a href="#activities" class="nav__link" data-i18n="nav.activities">Activities</a></li>
-        <li><a href="#certifications" class="nav__link" data-i18n="nav.certs">Certifications</a></li>
-      </ul>
-      <div class="nav__right">
-        <button class="lang-toggle" id="lang-toggle" aria-label="Switch language">
-          <span class="lang-toggle__label">EN</span>
-        </button>
-        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
-          <span class="theme-toggle__icon theme-toggle__sun">&#x2600;&#xFE0F;</span>
-          <span class="theme-toggle__icon theme-toggle__universe">&#x2B50;</span>
-        </button>
-        <button class="nav__hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
-          <span></span><span></span><span></span>
-        </button>
-      </div>
-    </div>
-  </nav>
-
-  <!-- Hero -->
-  <section class="hero" id="hero" aria-label="Introduction">
-    <div class="hero__content">
-      <div class="hero__avatar-wrap">
-        <img src="assets/profile.jpeg" alt="Seoyul Yoon" class="hero__avatar" width="160" height="160" loading="eager" />
-        <div class="hero__avatar-ring" aria-hidden="true"></div>
-      </div>
-      <h1 class="hero__name" data-i18n="hero.name">Seoyul Yoon</h1>
-      <p class="hero__role"><span data-i18n="hero.role">AI Platform Engineer</span> <span class="hero__at">@</span> SK AX</p>
-      <p class="hero__tagline" id="tagline">A platform engineer who learns from the community and proves it in production.</p>
-      <div class="hero__socials">
-        <a href="https://github.com/Seo-yul" target="_blank" rel="noopener noreferrer" class="hero__social" aria-label="GitHub">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12Z"/></svg>
-        </a>
-        <a href="https://www.linkedin.com/in/yoon-seoyul/" target="_blank" rel="noopener noreferrer" class="hero__social" aria-label="LinkedIn">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-        </a>
-        <a href="mailto:seoyul@devops.ai.kr" class="hero__social" aria-label="Email">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,7 12,13 2,7"/></svg>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- About -->
-  <section class="section" id="about" aria-label="About">
-    <p class="section__label" data-i18n="about.label">Who I Am</p>
-    <h2 class="section__title" data-i18n="about.title">About</h2>
-    <div class="card about-card rise-in">
-      <p data-i18n="about.p1">AI Platform Engineer with deep roots in the Kubernetes ecosystem, infrastructure automation, and observability. I design and build platforms for developing, deploying, and operating AI agents and workloads reliably in production.</p>
-      <p data-i18n="about.p2">These days I'm active in the open-source agentic AI community, helping bridge the gap between cutting-edge technology and practical enterprise adoption. I believe the best infrastructure is the kind nobody has to think about.</p>
-      <p data-i18n="about.p3">At work, I drive enterprise AX (AI Transformation): running AI workloads effectively on cloud-native infrastructure and leading AI adoption across organizations.</p>
-    </div>
-  </section>
-
-  <div class="section-divider rise-in" aria-hidden="true"><span></span><span></span><span></span></div>
-
-  <div class="section section-quote rise-in">
-    <p class="section-quote__text" data-i18n="quote.main">I don't just modernize systems — I build the culture around it.</p>
+  <div class="controls">
+    <button class="lang-toggle" id="lang-toggle" type="button" data-i18n-aria="ui.lang" aria-label="Switch language"><span class="lang-toggle__label">EN</span></button>
+    <button class="theme-toggle" id="theme-toggle" type="button" data-i18n-aria="ui.theme" aria-label="Toggle theme">
+      <span class="theme-toggle__icon theme-toggle__sun" aria-hidden="true">&#x2600;&#xFE0F;</span>
+      <span class="theme-toggle__icon theme-toggle__universe" aria-hidden="true">&#x2B50;</span>
+    </button>
   </div>
 
-  <div class="section-divider rise-in" aria-hidden="true"><span></span><span></span><span></span></div>
+  <div id="intro" class="intro" hidden>
+    <div class="intro__stage" aria-hidden="true">
+      <div class="intro__trail"></div>
+      <div class="intro__env intro__env--back"><div class="env-back"></div></div>
+      <div class="intro__env intro__env--flap"><div class="env-flap"></div></div>
+      <div class="intro__paper-wrap">
+        <div class="intro__paper">
+          <div class="intro__panel intro__panel--top"><i class="l-title"></i><i></i><i class="l-70"></i></div>
+          <div class="intro__panel intro__panel--mid"><i class="l-accent"></i><i></i><i class="l-80"></i><i class="l-60"></i></div>
+          <div class="intro__panel intro__panel--bottom"><i class="l-accent"></i><i></i><i class="l-75"></i></div>
+        </div>
+      </div>
+      <div class="intro__env intro__env--front"><div class="env-front"></div></div>
+      <div class="intro__env intro__env--seal"><div class="env-seal"></div></div>
+    </div>
+    <button type="button" class="intro__skip" data-i18n="intro.skip">Skip</button>
+  </div>
 
-  <!-- Tech Stack -->
-  <section class="section" id="tech" aria-label="Tech Stack">
-    <p class="section__label" data-i18n="tech.label">Tools &amp; Technologies</p>
-    <h2 class="section__title" data-i18n="tech.title">Tech Stack</h2>
-    <div class="tech-grid">
-      <div class="card rise-in from-left">
-        <p class="tech-card__category" data-i18n="tech.cat1">Languages &amp; Frameworks</p>
-        <div class="tech-card__items">
-          <span class="tech-tag">Go</span>
-          <span class="tech-tag">Operator SDK</span>
-          <span class="tech-tag">Python</span>
-          <span class="tech-tag">FastAPI</span>
-          <span class="tech-tag">LangGraph</span>
-          <span class="tech-tag">Java</span>
+  <main class="desk">
+    <article class="letter">
+      <nav class="tabs" data-i18n-aria="tabs.label" aria-label="Sections">
+        <ul class="tabs__list" role="list">
+          <li><a class="tab tab--1" href="#about" data-i18n="tab.about">About</a></li>
+          <li><a class="tab tab--2" href="#tech" data-i18n="tab.tech">Tech</a></li>
+          <li><a class="tab tab--3" href="#projects" data-i18n="tab.projects">Projects</a></li>
+          <li><a class="tab tab--4" href="#activities" data-i18n="tab.activities">Activities</a></li>
+          <li><a class="tab tab--5" href="#certifications" data-i18n="tab.certs">Certs</a></li>
+        </ul>
+      </nav>
+
+      <section class="fold is-open" id="hero" aria-labelledby="hero-name">
+        <div class="sheet">
+          <div class="sheet__content hero">
+            <figure class="polaroid">
+              <img class="polaroid__photo" src="assets/profile.jpeg" alt="Seoyul Yoon" width="160" height="160" />
+              <figcaption class="polaroid__cap" data-i18n="polaroid.cap">Seoyul</figcaption>
+            </figure>
+            <div class="hero__text">
+              <h1 class="hero__name" id="hero-name" tabindex="-1" data-i18n="hero.name">Seoyul Yoon</h1>
+              <p class="hero__role"><span data-i18n="hero.role">AI Platform Engineer</span> @ SK AX</p>
+              <p class="hero__tagline" data-i18n="hero.tagline">A platform engineer who learns from the community and proves it in production.</p>
+              <div class="socials">
+                <a class="social" href="https://github.com/Seo-yul" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12Z"/></svg>
+                </a>
+                <a class="social" href="https://www.linkedin.com/in/yoon-seoyul/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                </a>
+                <a class="social" href="mailto:seoyul@devops.ai.kr" aria-label="Email">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,7 12,13 2,7"/></svg>
+                </a>
+              </div>
+            </div>
+            <div class="postmark" aria-hidden="true">
+              <span class="postmark__text postmark__text--light">SEOUL<br />· 2026 ·<br />KOREA</span>
+              <span class="postmark__text postmark__text--space">SEOUL<br />✦ 2026 ✦<br />ORBIT</span>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="card rise-in">
-        <p class="tech-card__category" data-i18n="tech.cat2">Container &amp; Orchestration</p>
-        <div class="tech-card__items">
-          <span class="tech-tag">Kubernetes</span>
-          <span class="tech-tag">Podman</span>
-          <span class="tech-tag">Helm</span>
+      </section>
+
+      <section class="fold" id="about" aria-labelledby="about-title">
+        <div class="sheet">
+          <div class="sheet__content">
+            <aside class="postit"><p data-i18n="quote.main">I don't just modernize systems — I build the culture around it.</p></aside>
+            <h2 class="panel-label" id="about-title" data-i18n="about.title">About</h2>
+            <p class="prose" data-i18n="about.p1">AI Platform Engineer with deep roots in the Kubernetes ecosystem, infrastructure automation, and observability. I design and build platforms for developing, deploying, and operating AI agents and workloads reliably in production.</p>
+            <p class="prose" data-i18n="about.p2">These days I'm active in the open-source agentic AI community, helping bridge the gap between cutting-edge technology and practical enterprise adoption. I believe the best infrastructure is the kind nobody has to think about.</p>
+            <p class="prose" data-i18n="about.p3">At work, I drive enterprise AX (AI Transformation): running AI workloads effectively on cloud-native infrastructure and leading AI adoption across organizations.</p>
+          </div>
         </div>
-      </div>
-      <div class="card rise-in from-left">
-        <p class="tech-card__category" data-i18n="tech.cat3">Observability</p>
-        <div class="tech-card__items">
-          <span class="tech-tag">Fluent Bit</span>
-          <span class="tech-tag">OpenTelemetry</span>
-          <span class="tech-tag">Prometheus</span>
-          <span class="tech-tag">Grafana</span>
-          <span class="tech-tag">Datadog</span>
+      </section>
+
+      <section class="fold" id="tech" aria-labelledby="tech-title">
+        <div class="sheet">
+          <div class="sheet__content">
+            <h2 class="panel-label" id="tech-title" data-i18n="tech.title">Tech Stack</h2>
+            <dl class="tech">
+              <div class="tech__row"><dt data-i18n="tech.cat1">Languages &amp; Frameworks</dt><dd><span class="chip">Go</span><span class="chip">Operator SDK</span><span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">LangGraph</span><span class="chip">Java</span></dd></div>
+              <div class="tech__row"><dt data-i18n="tech.cat2">Container &amp; Orchestration</dt><dd><span class="chip">Kubernetes</span><span class="chip">Podman</span><span class="chip">Helm</span></dd></div>
+              <div class="tech__row"><dt data-i18n="tech.cat3">Observability</dt><dd><span class="chip">Fluent Bit</span><span class="chip">OpenTelemetry</span><span class="chip">Prometheus</span><span class="chip">Grafana</span><span class="chip">Datadog</span></dd></div>
+              <div class="tech__row"><dt data-i18n="tech.cat4">Infrastructure as Code</dt><dd><span class="chip">Terraform</span><span class="chip">Ansible</span></dd></div>
+              <div class="tech__row"><dt data-i18n="tech.cat5">CI / CD</dt><dd><span class="chip">GitHub Actions</span></dd></div>
+            </dl>
+          </div>
         </div>
-      </div>
-      <div class="card rise-in">
-        <p class="tech-card__category" data-i18n="tech.cat4">Infrastructure as Code</p>
-        <div class="tech-card__items">
-          <span class="tech-tag">Terraform</span>
-          <span class="tech-tag">Ansible</span>
+      </section>
+
+      <section class="fold" id="projects" aria-labelledby="projects-title">
+        <div class="sheet">
+          <div class="sheet__content">
+            <h2 class="panel-label" id="projects-title" data-i18n="projects.title">Projects</h2>
+            <article class="project">
+              <h3 class="project__title">AXGENTICWire Core Agent Studio</h3>
+              <p class="project__period" data-i18n="project1.period">2025.05 — Present</p>
+              <p class="prose" data-i18n="project1.desc">Engineered MCP Server Builder enabling OpenAPI-to-MCP specification conversion. Streamlined AI agent development workflow for enterprise teams.</p>
+              <ul class="highlights" role="list">
+                <li data-i18n="project1.h1">Cut MCP server development per service from ~1 day to under 10 minutes with OpenAPI-based generation</li>
+                <li data-i18n="project1.h2">Automated daily system inspections through the final judgment step with an AI agent, cutting ~2 hours to under 10 minutes</li>
+                <li data-i18n="project1.h3">Designed OAuth authorization for MCP clients to block out-of-scope actions</li>
+                <li data-i18n="project1.h4">Expanded adoption to large-enterprise groupware and drove global business expansion</li>
+              </ul>
+              <ul class="project__tags" role="list"><li class="chip">FastAPI</li><li class="chip">Go Operator</li><li class="chip">MCP</li><li class="chip">AI Agent</li><li class="chip">Kubernetes</li></ul>
+              <div class="inks">
+                <div class="ink"><b class="ink__value">OpenAPI → MCP → AI Agent</b><small class="ink__label" data-i18n="project1.metric.label">AI Transformation</small></div>
+              </div>
+            </article>
+          </div>
         </div>
-      </div>
-      <div class="card rise-in from-left">
-        <p class="tech-card__category" data-i18n="tech.cat5">CI / CD</p>
-        <div class="tech-card__items">
-          <span class="tech-tag">GitHub Actions</span>
+      </section>
+
+      <section class="fold" id="project-apim" aria-labelledby="apim-title">
+        <div class="sheet">
+          <div class="sheet__content">
+            <article class="project">
+              <h3 class="project__title" id="apim-title">Modernization Platform APIM</h3>
+              <p class="project__period" data-i18n="project2.period">2021.01 — 2025.04</p>
+              <p class="prose" data-i18n="project2.desc">Architected and implemented Kubernetes-native API gateway management platform. Centralized API lifecycle management across multi-cluster environments.</p>
+              <ul class="highlights" role="list">
+                <li data-i18n="project2.h1">Improved event processing performance by 66%+ and cut latency from 500ms to 200ms by migrating Java to Go</li>
+                <li data-i18n="project2.h2">Resolved 3s+ latency and OOM by redesigning rate limiting from MariaDB to Redis</li>
+                <li data-i18n="project2.h3">Validated platform reliability at 2,000 RPS sustained for 8 hours with a custom load-testing tool</li>
+                <li data-i18n="project2.h4">Reduced AWS EKS cloud costs by 10%+ with ARM-based architecture and autoscaling</li>
+              </ul>
+              <ul class="project__tags" role="list"><li class="chip">Kubernetes</li><li class="chip">API Gateway</li><li class="chip">Platform Engineering</li></ul>
+              <div class="inks">
+                <div class="ink"><b class="ink__value">3d → 1d</b><small class="ink__label" data-i18n="project2.m1.label">Delivery Time</small></div>
+                <div class="ink"><b class="ink__value">60%</b><small class="ink__label" data-i18n="project2.m2.label">Build time reduced</small></div>
+                <div class="ink"><b class="ink__value">500 → 200ms</b><small class="ink__label" data-i18n="project2.m3.label">Event latency</small></div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="fold" id="activities" aria-labelledby="activities-title">
+        <div class="sheet">
+          <div class="sheet__content">
+            <h2 class="panel-label" id="activities-title" data-i18n="activities.title">Activities</h2>
+            <ul class="nametags" role="list">
+              <li><button class="obj nametag nametag--speaker" type="button" aria-haspopup="dialog" data-kicker="obj.mcp.kicker" data-title="obj.mcp.title" data-meta="obj.mcp.meta" data-desc="obj.mcp.desc"><span class="nametag__role" data-i18n="obj.mcp.kicker">SPEAKER</span><span class="nametag__name" data-i18n="obj.mcp.title">MCP Dev Summit Seoul</span><span class="nametag__date" data-i18n="obj.mcp.meta">Aug 2026</span></button></li>
+              <li><button class="obj nametag nametag--organizer" type="button" aria-haspopup="dialog" data-kicker="obj.aaif.kicker" data-title="obj.aaif.title" data-meta="obj.aaif.meta" data-desc="obj.aaif.desc"><span class="nametag__role" data-i18n="obj.aaif.kicker">ORGANIZER</span><span class="nametag__name" data-i18n="obj.aaif.title">AAIF Seoul Chapter</span><span class="nametag__date" data-i18n="obj.aaif.meta">2026–Present</span></button></li>
+              <li><button class="obj nametag nametag--member" type="button" aria-haspopup="dialog" data-kicker="obj.k8s.kicker" data-title="obj.k8s.title" data-meta="obj.k8s.meta" data-desc="obj.k8s.desc"><span class="nametag__role" data-i18n="obj.k8s.kicker">MEMBER</span><span class="nametag__name" data-i18n="obj.k8s.title">Kubernetes Organization</span><span class="nametag__date" data-i18n="obj.k8s.meta">Sep 2022–Jul 2025</span></button></li>
+              <li><button class="obj nametag nametag--ambassador" type="button" aria-haspopup="dialog" data-kicker="obj.ncp.kicker" data-title="obj.ncp.title" data-meta="obj.ncp.meta" data-desc="obj.ncp.desc"><span class="nametag__role" data-i18n="obj.ncp.kicker">AMBASSADOR</span><span class="nametag__name" data-i18n="obj.ncp.title">NAVER Cloud Platform Tech Ambassador</span><span class="nametag__date" data-i18n="obj.ncp.meta">Jun 2023–Feb 2026</span></button></li>
+              <li><button class="obj nametag nametag--organizer" type="button" aria-haspopup="dialog" data-kicker="obj.gophercon.kicker" data-title="obj.gophercon.title" data-meta="obj.gophercon.meta" data-desc="obj.gophercon.desc"><span class="nametag__role" data-i18n="obj.gophercon.kicker">ORGANIZER</span><span class="nametag__name" data-i18n="obj.gophercon.title">GopherCon Korea</span><span class="nametag__date" data-i18n="obj.gophercon.meta">2023, 2024</span></button></li>
+              <li><button class="obj nametag nametag--organizer" type="button" aria-haspopup="dialog" data-kicker="obj.kcd.kicker" data-title="obj.kcd.title" data-meta="obj.kcd.meta" data-desc="obj.kcd.desc" data-img="certi/KCD-Korea-2023-Organizer-72.png" data-img-alt="KCD Korea 2023 Organizer badge"><span class="nametag__role" data-i18n="obj.kcd.kicker">ORGANIZER</span><span class="nametag__name" data-i18n="obj.kcd.title">KCD Korea 2023</span><span class="nametag__date" data-i18n="obj.kcd.meta">2023</span></button></li>
+              <li><button class="obj nametag nametag--speaker" type="button" aria-haspopup="dialog" data-kicker="obj.datadog.kicker" data-title="obj.datadog.title" data-meta="obj.datadog.meta" data-desc="obj.datadog.desc"><span class="nametag__role" data-i18n="obj.datadog.kicker">SPEAKER</span><span class="nametag__name" data-i18n="obj.datadog.title">Datadog User Group Korea</span><span class="nametag__date" data-i18n="obj.datadog.meta">Feb 2025</span></button></li>
+              <li><button class="obj nametag nametag--speaker" type="button" aria-haspopup="dialog" data-kicker="obj.awskrug.kicker" data-title="obj.awskrug.title" data-meta="obj.awskrug.meta" data-desc="obj.awskrug.desc"><span class="nametag__role" data-i18n="obj.awskrug.kicker">SPEAKER</span><span class="nametag__name" data-i18n="obj.awskrug.title">AWS Korea User Group</span><span class="nametag__date" data-i18n="obj.awskrug.meta">Jun 2022</span></button></li>
+            </ul>
+            <h3 class="panel-label panel-label--sub" data-i18n="act.award">Award</h3>
+            <ul class="seals" role="list">
+              <li><button class="obj seal" type="button" aria-haspopup="dialog" data-kicker="obj.kind.award" data-title="obj.skms.title" data-meta="obj.skms.meta" data-desc="obj.skms.desc"><span class="seal__disc" aria-hidden="true">2025</span><span class="seal__name" data-i18n="obj.skms.title">SKMS Practice Award</span></button></li>
+              <li><button class="obj seal" type="button" aria-haspopup="dialog" data-kicker="obj.kind.award" data-title="obj.osca.title" data-meta="obj.osca.meta" data-desc="obj.osca.desc"><span class="seal__disc" aria-hidden="true">2022</span><span class="seal__name" data-i18n="obj.osca.title">Excellence Award</span></button></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="fold" id="certifications" aria-labelledby="certs-title">
+        <div class="sheet">
+          <div class="sheet__content">
+            <h2 class="panel-label" id="certs-title" data-i18n="certs.title">Certifications</h2>
+            <ul class="stamps" role="list">
+              <li><button class="obj stamp stamp--big" type="button" aria-haspopup="dialog" data-kicker="obj.kind.cert" data-title="obj.kubestronaut.title" data-meta="obj.kubestronaut.meta" data-desc="obj.kubestronaut.desc"><span class="stamp__in" style="--stamp:#326CE5"><img class="stamp__badge" src="certi/kubestronaut-stacked-white.svg" alt="" width="46" height="46" /><b class="stamp__code">Kubestronaut</b><small class="stamp__issuer">CNCF</small></span></button></li>
+              <li><button class="obj stamp" type="button" aria-haspopup="dialog" data-kicker="obj.kind.cert" data-title="obj.cks.title" data-meta="obj.cks.meta"><span class="stamp__in" style="--stamp:#2557B5"><img class="stamp__badge" src="certi/cks-white.svg" alt="" width="34" height="34" /><b class="stamp__code">CKS</b><small class="stamp__issuer">Kubernetes</small></span></button></li>
+              <li><button class="obj stamp" type="button" aria-haspopup="dialog" data-kicker="obj.kind.cert" data-title="obj.kcsa.title" data-meta="obj.kcsa.meta"><span class="stamp__in" style="--stamp:#2F5FC4"><img class="stamp__badge" src="certi/kcsa-white.svg" alt="" width="34" height="34" /><b class="stamp__code">KCSA</b><small class="stamp__issuer">Kubernetes</small></span></button></li>
+              <li><button class="obj stamp" type="button" aria-haspopup="dialog" data-kicker="obj.kind.cert" data-title="obj.kcna.title" data-meta="obj.kcna.meta"><span class="stamp__in" style="--stamp:#2B66D1"><img class="stamp__badge" src="certi/kcna-white.svg" alt="" width="34" height="34" /><b class="stamp__code">KCNA</b><small class="stamp__issuer">Kubernetes</small></span></button></li>
+              <li><button class="obj stamp" type="button" aria-haspopup="dialog" data-kicker="obj.kind.cert" data-title="obj.ckad.title" data-meta="obj.ckad.meta"><span class="stamp__in" style="--stamp:#1E4FA8"><img class="stamp__badge" src="certi/ckad-white.svg" alt="" width="34" height="34" /><b class="stamp__code">CKAD</b><small class="stamp__issuer">Kubernetes</small></span></button></li>
+              <li><button class="obj stamp" type="button" aria-haspopup="dialog" data-kicker="obj.kind.cert" data-title="obj.cka.title" data-meta="obj.cka.meta"><span class="stamp__in" style="--stamp:#2557B5"><img class="stamp__badge" src="certi/cka-white.svg" alt="" width="34" height="34" /><b class="stamp__code">CKA</b><small class="stamp__issuer">Kubernetes</small></span></button></li>
+              <li><button class="obj stamp" type="button" aria-haspopup="dialog" data-kicker="obj.kind.cert" data-title="obj.dea.title" data-meta="obj.dea.meta"><span class="stamp__in" style="--stamp:#A94F2F"><b class="stamp__code">DEA</b><small class="stamp__issuer">AWS</small></span></button></li>
+              <li><button class="obj stamp" type="button" aria-haspopup="dialog" data-kicker="obj.kind.cert" data-title="obj.soa.title" data-meta="obj.soa.meta"><span class="stamp__in" style="--stamp:#9A4728"><b class="stamp__code">SOA</b><small class="stamp__issuer">AWS</small></span></button></li>
+              <li><button class="obj stamp" type="button" aria-haspopup="dialog" data-kicker="obj.kind.cert" data-title="obj.dva.title" data-meta="obj.dva.meta"><span class="stamp__in" style="--stamp:#8C4526"><b class="stamp__code">DVA</b><small class="stamp__issuer">AWS</small></span></button></li>
+              <li><button class="obj stamp" type="button" aria-haspopup="dialog" data-kicker="obj.kind.cert" data-title="obj.saa.title" data-meta="obj.saa.meta"><span class="stamp__in" style="--stamp:#7E3E22"><b class="stamp__code">SAA</b><small class="stamp__issuer">AWS</small></span></button></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="fold" id="closing" aria-labelledby="closing-sign">
+        <div class="sheet">
+          <div class="sheet__content closing">
+            <p class="closing__quote" data-i18n="footer.quote">“AI runs on infrastructure, but transformation runs on people. Open-source communities taught me that the best technology is built together.”</p>
+            <p class="closing__sign" id="closing-sign" data-i18n="closing.sign">Sincerely, Seoyul</p>
+            <p class="closing__ps"><span data-i18n="closing.ps">P.S. Always happy to chat —</span> <a href="mailto:seoyul@devops.ai.kr">seoyul@devops.ai.kr</a></p>
+            <div class="socials socials--small">
+              <a class="social" href="https://github.com/Seo-yul" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12Z"/></svg>
+              </a>
+              <a class="social" href="https://www.linkedin.com/in/yoon-seoyul/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+              </a>
+            </div>
+            <button type="button" class="replay" id="replay"><span aria-hidden="true">✉</span> <span data-i18n="closing.replay">Open the letter again</span></button>
+          </div>
+        </div>
+      </section>
+    </article>
+    <p class="copyright" data-i18n="footer.copy">© 2026 Seoyul Yoon</p>
+  </main>
+
+  <dialog id="obj-dialog" class="obj-dialog" aria-labelledby="obj-dialog-title">
+    <div class="obj-dim"></div>
+    <div class="obj-lift">
+      <div class="obj-flip">
+        <div class="obj-face obj-face--front" aria-hidden="true"></div>
+        <div class="obj-face obj-face--back">
+          <button type="button" class="obj-close" data-i18n-aria="ui.close" aria-label="Close">&times;</button>
+          <p class="obj-kicker"></p>
+          <h3 class="obj-title" id="obj-dialog-title"></h3>
+          <p class="obj-meta"></p>
+          <img class="obj-img" alt="" hidden />
+          <p class="obj-desc"></p>
         </div>
       </div>
     </div>
-  </section>
+  </dialog>
 
-  <!-- Projects -->
-  <section class="section" id="projects" aria-label="Projects">
-    <p class="section__label" data-i18n="projects.label">Work</p>
-    <h2 class="section__title" data-i18n="projects.title">Projects</h2>
-    <div class="projects-grid">
-      <div class="card project-card rise-in from-left">
-        <h3 class="project-card__title">AXGENTICWire Core Agent Studio</h3>
-        <p class="project-card__period" data-i18n="project1.period">2025.05 — Present</p>
-        <p class="project-card__desc" data-i18n="project1.desc">Engineered MCP Server Builder enabling OpenAPI-to-MCP specification conversion. Streamlined AI agent development workflow for enterprise teams.</p>
-        <ul class="project-card__highlights" role="list">
-          <li data-i18n="project1.h1">Cut MCP server development per service from ~1 day to under 10 minutes with OpenAPI-based generation</li>
-          <li data-i18n="project1.h2">Automated daily system inspections through the final judgment step with an AI agent, cutting ~2 hours to under 10 minutes</li>
-          <li data-i18n="project1.h3">Designed OAuth authorization for MCP clients to block out-of-scope actions</li>
-          <li data-i18n="project1.h4">Expanded adoption to large-enterprise groupware and drove global business expansion</li>
-        </ul>
-        <div class="project-card__tags">
-          <span class="project-tag">FastAPI</span>
-          <span class="project-tag">Go Operator</span>
-          <span class="project-tag">MCP</span>
-          <span class="project-tag">AI Agent</span>
-          <span class="project-tag">Kubernetes</span>
-        </div>
-        <div class="project-card__metrics">
-          <div class="metric">
-            <span class="metric__value">OpenAPI &rarr; MCP &rarr; AI Agent</span>
-            <span class="metric__label" data-i18n="project1.metric.label">AI Transformation</span>
-          </div>
-        </div>
-      </div>
-      <div class="card project-card rise-in">
-        <h3 class="project-card__title">Modernization Platform APIM</h3>
-        <p class="project-card__period" data-i18n="project2.period">2021.01 — 2025.04</p>
-        <p class="project-card__desc" data-i18n="project2.desc">Architected and implemented Kubernetes-native API gateway management platform. Centralized API lifecycle management across multi-cluster environments.</p>
-        <ul class="project-card__highlights" role="list">
-          <li data-i18n="project2.h1">Improved event processing performance by 66%+ and cut latency from 500ms to 200ms by migrating Java to Go</li>
-          <li data-i18n="project2.h2">Resolved 3s+ latency and OOM by redesigning rate limiting from MariaDB to Redis</li>
-          <li data-i18n="project2.h3">Validated platform reliability at 2,000 RPS sustained for 8 hours with a custom load-testing tool</li>
-          <li data-i18n="project2.h4">Reduced AWS EKS cloud costs by 10%+ with ARM-based architecture and autoscaling</li>
-        </ul>
-        <div class="project-card__tags">
-          <span class="project-tag">Kubernetes</span>
-          <span class="project-tag">API Gateway</span>
-          <span class="project-tag">Platform Engineering</span>
-        </div>
-        <div class="project-card__metrics">
-          <div class="metric">
-            <span class="metric__value">3d &rarr; 1d</span>
-            <span class="metric__label" data-i18n="project2.m1.label">Delivery Time</span>
-          </div>
-          <div class="metric">
-            <span class="metric__value">60%</span>
-            <span class="metric__label" data-i18n="project2.m2.label">Build time reduced</span>
-          </div>
-          <div class="metric">
-            <span class="metric__value">500 &rarr; 200ms</span>
-            <span class="metric__label" data-i18n="project2.m3.label">Event latency</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Activities -->
-  <section class="section" id="activities" aria-label="Activities">
-    <p class="section__label" data-i18n="activities.label">Community</p>
-    <h2 class="section__title" data-i18n="activities.title">Activities</h2>
-    <div class="activities-grid">
-      <div class="card activity-card rise-in from-left">
-        <h3 class="activity-card__heading" data-i18n="act.leadership">Leadership</h3>
-        <ul class="activity-list" role="list">
-          <li data-i18n="act.l1">AAIF (Agentic AI Foundation) Seoul Chapter Organizer · 2026–&#8288;Present</li>
-          <li data-i18n="act.l2">Kubernetes Organization Member — Top 17 All-Time PR in Korea · 2022–&#8288;2025</li>
-          <li data-i18n="act.l3">NAVER Cloud Platform Tech Ambassador · 2023–&#8288;2026.02</li>
-          <li data-i18n="act.l4">GopherCon Korea 2023/2024 Organizer</li>
-          <li><span data-i18n="act.l5">KCD Korea 2023 Organizer</span> <img src="certi/KCD-Korea-2023-Organizer-72.png" alt="KCD Korea 2023 Organizer badge" class="activity-badge" loading="lazy" /></li>
-        </ul>
-      </div>
-      <div class="card activity-card rise-in">
-        <h3 class="activity-card__heading" data-i18n="act.speaking">Speaking</h3>
-        <ul class="activity-list" role="list">
-          <li data-i18n="act.s1">MCP Dev Summit Seoul — From Legacy To Agentic AI · 2026.08</li>
-          <li data-i18n="act.s2">Datadog User Group Korea · 2025.02</li>
-          <li data-i18n="act.s3">AWS Korea User Group · 2022.06</li>
-        </ul>
-      </div>
-      <div class="card activity-card rise-in from-left">
-        <h3 class="activity-card__heading" data-i18n="act.award">Award</h3>
-        <ul class="activity-list" role="list">
-          <li data-i18n="act.a2">SK Inc. C&amp;C — SKMS Practice Award · 2025</li>
-          <li data-i18n="act.a1">Open Source Contribution Academy — Excellence Award · 2022</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- Certifications -->
-  <section class="section" id="certifications" aria-label="Certifications">
-    <p class="section__label" data-i18n="certs.label">Credentials</p>
-    <h2 class="section__title" data-i18n="certs.title">Certifications</h2>
-    <div class="certs-grid">
-      <div class="card cert-card rise-in from-left">
-        <img src="certi/kubestronaut-horizontal-color.svg" alt="Kubestronaut banner" class="cert-card__banner" loading="lazy" />
-        <h3 class="cert-card__heading">Kubernetes</h3>
-        <div class="cert-card__items">
-          <div class="cert-item">
-            <img src="certi/cks-color.svg" alt="CKS certification" class="cert-item__icon" loading="lazy" />
-            <span class="cert-item__name">CKS</span>
-          </div>
-          <div class="cert-item">
-            <img src="certi/kcsa-color.svg" alt="KCSA certification" class="cert-item__icon" loading="lazy" />
-            <span class="cert-item__name">KCSA</span>
-          </div>
-          <div class="cert-item">
-            <img src="certi/kcna-color.svg" alt="KCNA certification" class="cert-item__icon" loading="lazy" />
-            <span class="cert-item__name">KCNA</span>
-          </div>
-          <div class="cert-item">
-            <img src="certi/ckad-color.svg" alt="CKAD certification" class="cert-item__icon" loading="lazy" />
-            <span class="cert-item__name">CKAD</span>
-          </div>
-          <div class="cert-item">
-            <img src="certi/cka-color.svg" alt="CKA certification" class="cert-item__icon" loading="lazy" />
-            <span class="cert-item__name">CKA</span>
-          </div>
-        </div>
-      </div>
-      <div class="card cert-card rise-in">
-        <h3 class="cert-card__heading">AWS</h3>
-        <div class="aws-certs">
-          <span class="aws-tag">DEA</span>
-          <span class="aws-tag">SOA</span>
-          <span class="aws-tag">DVA</span>
-          <span class="aws-tag">SAA</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="footer" role="contentinfo">
-    <blockquote class="footer__quote" data-i18n="footer.quote">
-      "AI runs on infrastructure, but transformation runs on people. Open-source communities taught me that the best technology is built together."
-    </blockquote>
-    <div class="footer__socials">
-      <a href="https://github.com/Seo-yul" target="_blank" rel="noopener noreferrer" class="footer__social" aria-label="GitHub">
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12Z"/></svg>
-      </a>
-      <a href="https://www.linkedin.com/in/yoon-seoyul/" target="_blank" rel="noopener noreferrer" class="footer__social" aria-label="LinkedIn">
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-      </a>
-      <a href="mailto:seoyul@devops.ai.kr" class="footer__social" aria-label="Email">
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,7 12,13 2,7"/></svg>
-      </a>
-    </div>
-    <p class="footer__copy" data-i18n="footer.copy">&copy; 2026 Seoyul Yoon</p>
-  </footer>
-
-  <script>
-    /* ── Reduced Motion Check ── */
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    /* ════════════════════════════════════════════
-       i18n — Translations
-       ════════════════════════════════════════════ */
-    const translations = {
-      en: {
-        'nav.about': 'About',
-        'nav.tech': 'Tech Stack',
-        'nav.projects': 'Projects',
-        'nav.activities': 'Activities',
-        'nav.certs': 'Certifications',
-        'hero.name': 'Seoyul Yoon',
-        'hero.role': 'AI Platform Engineer',
-        'hero.tagline': 'A platform engineer who learns from the community and proves it in production.',
-        'about.label': 'Who I Am',
-        'about.title': 'About',
-        'about.p1': 'AI Platform Engineer with deep roots in the Kubernetes ecosystem, infrastructure automation, and observability. I design and build platforms for developing, deploying, and operating AI agents and workloads reliably in production.',
-        'about.p2': 'These days I\'m active in the open-source agentic AI community, helping bridge the gap between cutting-edge technology and practical enterprise adoption. I believe the best infrastructure is the kind nobody has to think about.',
-        'about.p3': 'At work, I drive enterprise AX (AI Transformation): running AI workloads effectively on cloud-native infrastructure and leading AI adoption across organizations.',
-        'quote.main': 'I don\'t just modernize systems \u2014 I build the culture around it.',
-        'tech.label': 'Tools & Technologies',
-        'tech.title': 'Tech Stack',
-        'tech.cat1': 'Languages & Frameworks',
-        'tech.cat2': 'Container & Orchestration',
-        'tech.cat3': 'Observability',
-        'tech.cat4': 'Infrastructure as Code',
-        'tech.cat5': 'CI / CD',
-        'projects.label': 'Work',
-        'projects.title': 'Projects',
-        'project1.period': '2025.05 \u2014 Present',
-        'project1.desc': 'Engineered MCP Server Builder enabling OpenAPI-to-MCP specification conversion. Streamlined AI agent development workflow for enterprise teams.',
-        'project1.metric.label': 'AI Transformation',
-        'project1.h1': 'Cut MCP server development per service from ~1 day to under 10 minutes with OpenAPI-based generation',
-        'project1.h2': 'Automated daily system inspections through the final judgment step with an AI agent, cutting ~2 hours to under 10 minutes',
-        'project1.h3': 'Designed OAuth authorization for MCP clients to block out-of-scope actions',
-        'project1.h4': 'Expanded adoption to large-enterprise groupware and drove global business expansion',
-        'project2.period': '2021.01 \u2014 2025.04',
-        'project2.desc': 'Architected and implemented Kubernetes-native API gateway management platform. Centralized API lifecycle management across multi-cluster environments.',
-        'project2.m1.label': 'Delivery Time',
-        'project2.m2.label': 'Build time reduced',
-        'project2.m3.label': 'Event latency',
-        'project2.h1': 'Improved event processing performance by 66%+ and cut latency from 500ms to 200ms by migrating Java to Go',
-        'project2.h2': 'Resolved 3s+ latency and OOM by redesigning rate limiting from MariaDB to Redis',
-        'project2.h3': 'Validated platform reliability at 2,000 RPS sustained for 8 hours with a custom load-testing tool',
-        'project2.h4': 'Reduced AWS EKS cloud costs by 10%+ with ARM-based architecture and autoscaling',
-        'activities.label': 'Community',
-        'activities.title': 'Activities',
-        'act.leadership': 'Leadership',
-        'act.speaking': 'Speaking',
-        'act.award': 'Award',
-        'act.l1': 'AAIF (Agentic AI Foundation) Seoul Chapter Organizer \u00b7 2026\u2013\u2060Present',
-        'act.l2': 'Kubernetes Organization Member \u2014 Top 17 All-Time PR in Korea \u00b7 2022\u2013\u20602025',
-        'act.l3': 'NAVER Cloud Platform Tech Ambassador \u00b7 2023\u2013\u20602026.02',
-        'act.l4': 'GopherCon Korea 2023/2024 Organizer',
-        'act.l5': 'KCD Korea 2023 Organizer',
-        'act.s1': 'MCP Dev Summit Seoul \u2014 From Legacy To Agentic AI \u00b7 2026.08',
-        'act.s2': 'Datadog User Group Korea \u00b7 2025.02',
-        'act.s3': 'AWS Korea User Group \u00b7 2022.06',
-        'act.a1': 'Open Source Contribution Academy \u2014 Excellence Award \u00b7 2022',
-        'act.a2': 'SK Inc. C&C \u2014 SKMS Practice Award \u00b7 2025',
-        'certs.label': 'Credentials',
-        'certs.title': 'Certifications',
-        'footer.quote': '\u201cAI runs on infrastructure, but transformation runs on people. Open-source communities taught me that the best technology is built together.\u201d',
-        'footer.copy': '\u00a9 2026 Seoyul Yoon'
-      },
-      ko: {
-        'nav.about': '\uc18c\uac1c',
-        'nav.tech': '\uae30\uc220 \uc2a4\ud0dd',
-        'nav.projects': '\ud504\ub85c\uc81d\ud2b8',
-        'nav.activities': '\ud65c\ub3d9',
-        'nav.certs': '\uc790\uaca9\uc99d',
-        'hero.name': '\uc724\uc11c\uc728',
-        'hero.role': 'AI Platform Engineer',
-        'hero.tagline': '\ucee4\ubba4\ub2c8\ud2f0\uc5d0\uc11c \ubc30\uc6b0\uace0 \uc2e4\uc81c \uc11c\ube44\uc2a4\ub85c \uc99d\uba85\ud558\ub294 \ud50c\ub7ab\ud3fc \uc5d4\uc9c0\ub2c8\uc5b4.',
-        'about.label': '\uc18c\uac1c',
-        'about.title': '\uc18c\uac1c',
-        'about.p1': 'Kubernetes \uc0dd\ud0dc\uacc4, \uc778\ud504\ub77c \uc790\ub3d9\ud654, \uc635\uc800\ubc84\ube4c\ub9ac\ud2f0\ub97c \uae30\ubc18\uc73c\ub85c \ud558\ub294 AI \ud50c\ub7ab\ud3fc \uc5d4\uc9c0\ub2c8\uc5b4\uc785\ub2c8\ub2e4. AI \uc5d0\uc774\uc804\ud2b8\uc640 \uc6cc\ud06c\ub85c\ub4dc\ub97c \uc548\uc815\uc801\uc73c\ub85c \uac1c\ubc1c\u00b7\ubc30\ud3ec\u00b7\uc6b4\uc601\ud560 \uc218 \uc788\ub294 \ud50c\ub7ab\ud3fc\uc744 \uc124\uacc4\ud558\uace0 \uad6c\ucd95\ud569\ub2c8\ub2e4.',
-        'about.p2': '\uc694\uc998\uc740 \uc5d0\uc774\uc804\ud2f1 AI \ubd84\uc57c\uc758 \uc624\ud508\uc18c\uc2a4 \ucee4\ubba4\ub2c8\ud2f0\uc5d0\uc11c \ud65c\ub3d9\ud558\uba70, \ucd5c\uc2e0 \uae30\uc220\uacfc \uc2e4\uc81c \uae30\uc5c5 \ub3c4\uc785 \uc0ac\uc774\uc758 \uac04\uadf9\uc744 \uc881\ud788\ub294 \ub370 \uae30\uc5ec\ud558\uace0 \uc788\uc2b5\ub2c8\ub2e4. \ucd5c\uace0\uc758 \uc778\ud504\ub77c\ub294 \uc544\ubb34\ub3c4 \uc2e0\uacbd \uc4f8 \ud544\uc694 \uc5c6\ub294 \uc778\ud504\ub77c\ub77c\uace0 \ubbff\uc2b5\ub2c8\ub2e4.',
-        'about.p3': '\uc5c5\ubb34\uc5d0\uc11c\ub294 \uae30\uc5c5\uc758 AX(AI Transformation)\ub97c \uc218\ud589\ud558\uba70, \ud074\ub77c\uc6b0\ub4dc \ub124\uc774\ud2f0\ube0c \uc778\ud504\ub77c\uc5d0\uc11c AI \uc6cc\ud06c\ub85c\ub4dc\ub97c \ud6a8\uacfc\uc801\uc73c\ub85c \uc6b4\uc601\ud558\uace0 \uc870\uc9c1 \ub0b4 AI \ub3c4\uc785\uc744 \uc774\ub04c\uace0 \uc788\uc2b5\ub2c8\ub2e4.',
-        'quote.main': '\uc2dc\uc2a4\ud15c\ub9cc \ud604\ub300\ud654\ud558\ub294 \uac83\uc774 \uc544\ub2c8\ub77c, \uadf8 \uc8fc\ubcc0\uc758 \ubb38\ud654\uae4c\uc9c0 \ub9cc\ub4ed\ub2c8\ub2e4.',
-        'tech.label': '\ub3c4\uad6c & \uae30\uc220',
-        'tech.title': '\uae30\uc220 \uc2a4\ud0dd',
-        'tech.cat1': '\uc5b8\uc5b4 & \ud504\ub808\uc784\uc6cc\ud06c',
-        'tech.cat2': '\ucee8\ud14c\uc774\ub108 & \uc624\ucf00\uc2a4\ud2b8\ub808\uc774\uc158',
-        'tech.cat3': '\uc635\uc800\ubc84\ube4c\ub9ac\ud2f0',
-        'tech.cat4': '\ucf54\ub4dc\ud615 \uc778\ud504\ub77c',
-        'tech.cat5': 'CI / CD',
-        'projects.label': '\ud504\ub85c\uc81d\ud2b8',
-        'projects.title': '\ud504\ub85c\uc81d\ud2b8',
-        'project1.period': '2025.05 \u2014 \ud604\uc7ac',
-        'project1.desc': 'OpenAPI-to-MCP \uc2a4\ud399 \ubcc0\ud658\uc744 \uc9c0\uc6d0\ud558\ub294 MCP Server Builder\ub97c \uc124\uacc4 \ubc0f \uad6c\ud604\ud588\uc2b5\ub2c8\ub2e4. \uc5d4\ud130\ud504\ub77c\uc774\uc988 \ud300\uc758 AI \uc5d0\uc774\uc804\ud2b8 \uac1c\ubc1c \uc6cc\ud06c\ud50c\ub85c\ub97c \ud6a8\uc728\ud654\ud588\uc2b5\ub2c8\ub2e4.',
-        'project1.metric.label': 'AI \ud2b8\ub79c\uc2a4\ud3ec\uba54\uc774\uc158',
-        'project1.h1': 'OpenAPI \uae30\ubc18 \uc790\ub3d9 \uc0dd\uc131\uc73c\ub85c \uc11c\ube44\uc2a4\ub2f9 MCP \uc11c\ubc84 \uac1c\ubc1c \uc2dc\uac04 \ub2e8\ucd95 (\uc57d 1\uc77c \u2192 10\ubd84 \uc774\ub0b4)',
-        'project1.h2': '\uc77c\uc77c \uc2dc\uc2a4\ud15c \uc810\uac80\uc744 \ud310\ub2e8 \ub2e8\uacc4\uae4c\uc9c0 AI Agent\ub85c \uc790\ub3d9\ud654 (\uc57d 2\uc2dc\uac04 \u2192 10\ubd84 \uc774\ub0b4)',
-        'project1.h3': 'MCP \ud074\ub77c\uc774\uc5b8\ud2b8\uc6a9 OAuth \uc778\uac00 \uc124\uacc4\ub85c \uad8c\ud55c \ubc94\uc704\ub97c \ubc97\uc5b4\ub09c \uc624\uc791\ub3d9 \ucc28\ub2e8',
-        'project1.h4': '\ub300\uae30\uc5c5 \uadf8\ub8f9\uc6e8\uc5b4 \ud655\uc0b0\uacfc \uae00\ub85c\ubc8c \uc0ac\uc5c5 \ucd94\uc9c4',
-        'project2.period': '2021.01 \u2014 2025.04',
-        'project2.desc': 'Kubernetes \ub124\uc774\ud2f0\ube0c API \uac8c\uc774\ud2b8\uc6e8\uc774 \uad00\ub9ac \ud50c\ub7ab\ud3fc\uc744 \uc124\uacc4\ud558\uace0 \uad6c\ud604\ud588\uc2b5\ub2c8\ub2e4. \uba40\ud2f0 \ud074\ub7ec\uc2a4\ud130 \ud658\uacbd\uc5d0\uc11c API \ub77c\uc774\ud504\uc0ac\uc774\ud074\uc744 \uc911\uc559 \uc9d1\uc911\uc2dd\uc73c\ub85c \uad00\ub9ac\ud569\ub2c8\ub2e4.',
-        'project2.m1.label': '\ubc30\ud3ec \uc2dc\uac04',
-        'project2.m2.label': '\ube4c\ub4dc \uc2dc\uac04 \ub2e8\ucd95',
-        'project2.m3.label': '\uc774\ubca4\ud2b8 \ucc98\ub9ac \uc9c0\uc5f0',
-        'project2.h1': '\uc774\ubca4\ud2b8 \ub9ac\uc2dc\ubc84 Java \u2192 Go \uc804\ud658\uc73c\ub85c \ucc98\ub9ac \uc131\ub2a5 66% \uc774\uc0c1 \ud5a5\uc0c1, \uc9c0\uc5f0 500ms \u2192 200ms',
-        'project2.h2': '\uc720\ub7c9\uc81c\uc5b4\ub97c MariaDB \u2192 Redis\ub85c \uc7ac\uc124\uacc4\ud574 3\ucd08 \uc774\uc0c1 \uc9c0\uc5f0\uacfc OOM \ud574\uacb0',
-        'project2.h3': '\uc790\uccb4 \ubd80\ud558 \ud14c\uc2a4\ud2b8 \ub3c4\uad6c\ub85c 2,000 RPS 8\uc2dc\uac04 \uc5f0\uc18d \uc548\uc815\uc131 \uac80\uc99d',
-        'project2.h4': 'ARM \uae30\ubc18 \uc544\ud0a4\ud14d\ucc98\uc640 \uc624\ud1a0\uc2a4\ucf00\uc77c\ub9c1\uc73c\ub85c AWS EKS \ube44\uc6a9 10% \uc774\uc0c1 \uc808\uac10',
-        'activities.label': '\ucee4\ubba4\ub2c8\ud2f0',
-        'activities.title': '\ud65c\ub3d9',
-        'act.leadership': '\ub9ac\ub354\uc2ed',
-        'act.speaking': '\ubc1c\ud45c',
-        'act.award': '\uc218\uc0c1',
-        'act.l1': 'AAIF (Agentic AI Foundation) \uc11c\uc6b8 \ucc55\ud130 \uc624\uac70\ub098\uc774\uc800 \u00b7 2026\u2013\u2060\ud604\uc7ac',
-        'act.l2': 'Kubernetes Organization Member \u2014 \ud55c\uad6d \ub0b4 \uc5ed\ub300 PR \uae30\uc5ec \uc0c1\uc704 17\uc704 \u00b7 2022\u2013\u20602025',
-        'act.l3': 'NAVER Cloud Platform \ud14c\ud06c \uc570\ubc84\uc11c\ub354 \u00b7 2023\u2013\u20602026.02',
-        'act.l4': 'GopherCon Korea 2023/2024 \uc624\uac70\ub098\uc774\uc800',
-        'act.l5': 'KCD Korea 2023 \uc624\uac70\ub098\uc774\uc800',
-        'act.s1': 'MCP Dev Summit Seoul \u2014 From Legacy To Agentic AI \u00b7 2026.08',
-        'act.s2': 'Datadog User Group Korea \u00b7 2025.02',
-        'act.s3': 'AWS Korea User Group \u00b7 2022.06',
-        'act.a1': '\uc624\ud508\uc18c\uc2a4 \ucee8\ud2b8\ub9ac\ubdf0\uc158 \uc544\uce74\ub370\ubbf8 \u2014 \uc6b0\uc218\uc0c1 \u00b7 2022',
-        'act.a2': 'SK(\uc8fc) C&C SKMS \uc2e4\ucc9c\uc0c1 \u00b7 2025',
-        'certs.label': '\uc790\uaca9',
-        'certs.title': '\uc790\uaca9\uc99d',
-        'footer.quote': '\u201cAI\ub294 \uc778\ud504\ub77c \uc704\uc5d0\uc11c \ub3cc\uc544\uac00\uc9c0\ub9cc, \ud2b8\ub79c\uc2a4\ud3ec\uba54\uc774\uc158\uc740 \uc0ac\ub78c\uc774 \uc774\ub055\ub2c8\ub2e4. \uc624\ud508\uc18c\uc2a4 \ucee4\ubba4\ub2c8\ud2f0\uc5d0\uc11c \ucd5c\uace0\uc758 \uae30\uc220\uc740 \ud568\uaed8 \ub9cc\ub4e4\uc5b4\uac04\ub2e4\ub294 \uac83\uc744 \ubc30\uc6e0\uc2b5\ub2c8\ub2e4.\u201d',
-        'footer.copy': '\u00a9 2026 \uc724\uc11c\uc728'
-      }
-    };
-
-    let currentLang = document.documentElement.getAttribute('data-lang') || 'en';
-
-    function setLang(lang) {
-      currentLang = lang;
-      document.documentElement.setAttribute('data-lang', lang);
-      document.documentElement.setAttribute('lang', lang);
-      localStorage.setItem('lang', lang);
-      if (lang === 'ko') loadKoFonts();
-
-      document.querySelectorAll('[data-i18n]').forEach(function(el) {
-        var key = el.getAttribute('data-i18n');
-        if (translations[lang] && translations[lang][key]) {
-          el.textContent = translations[lang][key];
-        }
-      });
-
-      /* tagline word re-render (no stagger on toggle) */
-      var tagline = document.getElementById('tagline');
-      if (tagline && translations[lang]['hero.tagline']) {
-        var words = translations[lang]['hero.tagline'].split(/\s+/);
-        tagline.innerHTML = words.map(function(w) {
-          return '<span class="word visible">' + w + '</span>';
-        }).join(' ');
-      }
-
-      /* toggle button label */
-      var label = document.querySelector('.lang-toggle__label');
-      if (label) label.textContent = lang.toUpperCase();
-    }
-
-    document.getElementById('lang-toggle').addEventListener('click', function() {
-      setLang(currentLang === 'en' ? 'ko' : 'en');
-    });
-
-    /* Apply saved lang on load (text swap) */
-    if (currentLang === 'ko') setLang('ko');
-
-    /* ── Theme State ── */
-    let currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
-    let starAnimId = null;
-    let particleAnimId = null;
-
-    /* ════════════════════════════════════════════
-       Star Field Canvas (Universe Theme)
-       ════════════════════════════════════════════ */
-    const starCanvas = document.getElementById('star-canvas');
-    const starCtx = starCanvas.getContext('2d');
-    let starW, starH, stars = [], starScrollY = 0, warpActive = false, warpProgress = 0;
-    const STAR_COUNT = 500;
-    const STAR_LAYERS = 3;
-
-    function starResize() {
-      starW = starCanvas.width = window.innerWidth;
-      starH = starCanvas.height = window.innerHeight;
-    }
-
-    function createStars() {
-      stars = [];
-      for (let i = 0; i < STAR_COUNT; i++) {
-        const layer = Math.floor(Math.random() * STAR_LAYERS);
-        stars.push({
-          x: Math.random() * starW,
-          y: Math.random() * starH,
-          r: Math.random() * 1.5 + 0.3 + layer * 0.3,
-          layer, speed: 0.02 + layer * 0.015,
-          twinkle: Math.random() * Math.PI * 2,
-          twinkleSpeed: 0.01 + Math.random() * 0.03,
-          baseAlpha: 0.4 + Math.random() * 0.6
-        });
-      }
-    }
-
-    function drawStars() {
-      starCtx.clearRect(0, 0, starW, starH);
-      const warpFactor = warpActive ? Math.min(warpProgress, 1) : 0;
-
-      for (const s of stars) {
-        s.twinkle += s.twinkleSpeed;
-        const alpha = s.baseAlpha * (0.6 + 0.4 * Math.sin(s.twinkle));
-        const parallax = starScrollY * s.speed;
-        const y = ((s.y + parallax) % starH + starH) % starH;
-
-        starCtx.beginPath();
-        if (warpFactor > 0 && warpProgress < 2) {
-          const stretch = warpFactor * 15 * (s.layer + 1);
-          starCtx.moveTo(s.x, y - stretch);
-          starCtx.lineTo(s.x + s.r * 0.5, y);
-          starCtx.lineTo(s.x, y + s.r);
-          starCtx.lineTo(s.x - s.r * 0.5, y);
-          starCtx.closePath();
-          starCtx.fillStyle = `rgba(150, 190, 255, ${alpha})`;
-        } else {
-          starCtx.arc(s.x, y, s.r, 0, Math.PI * 2);
-          starCtx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
-        }
-        starCtx.fill();
-
-        if (s.r > 1.2) {
-          starCtx.beginPath();
-          starCtx.arc(s.x, y, s.r * 3, 0, Math.PI * 2);
-          starCtx.fillStyle = `rgba(59, 130, 246, ${alpha * 0.08})`;
-          starCtx.fill();
-        }
-      }
-
-      if (warpActive) {
-        warpProgress += 0.02;
-        if (warpProgress > 2.5) warpActive = false;
-      }
-
-      if (currentTheme === 'universe' && !prefersReducedMotion) {
-        if (warpActive) {
-          starAnimId = requestAnimationFrame(drawStars);
-        } else {
-          starAnimId = setTimeout(drawStars, 100);
-        }
-      }
-    }
-
-    function startStars() {
-      starResize(); createStars();
-      warpActive = true; warpProgress = 0;
-      if (prefersReducedMotion) { warpActive = false; drawStars(); }
-      else drawStars();
-    }
-
-    function stopStars() {
-      if (starAnimId) { cancelAnimationFrame(starAnimId); clearTimeout(starAnimId); starAnimId = null; }
-      starCtx.clearRect(0, 0, starW, starH);
-    }
-
-    /* ════════════════════════════════════════════
-       Warm Particle Canvas (Light Theme)
-       ════════════════════════════════════════════ */
-    const particleCanvas = document.getElementById('particle-canvas');
-    const particleCtx = particleCanvas.getContext('2d');
-    let pW, pH, particles = [];
-    const PARTICLE_COUNT = 40;
-
-    function particleResize() {
-      pW = particleCanvas.width = window.innerWidth;
-      pH = particleCanvas.height = window.innerHeight;
-    }
-
-    function createParticles() {
-      particles = [];
-      for (let i = 0; i < PARTICLE_COUNT; i++) {
-        particles.push({
-          x: Math.random() * pW,
-          y: Math.random() * pH,
-          r: Math.random() * 2.5 + 1.5,
-          speedY: -(Math.random() * 0.3 + 0.1),
-          speedX: (Math.random() - 0.5) * 0.15,
-          phase: Math.random() * Math.PI * 2,
-          phaseSpeed: 0.008 + Math.random() * 0.015,
-          baseAlpha: 0.08 + Math.random() * 0.12,
-          color: Math.random() > 0.6 ? [193,95,60]
-            : Math.random() > 0.5 ? [217,119,87] : [176,174,165]
-        });
-      }
-    }
-
-    function drawParticles() {
-      particleCtx.clearRect(0, 0, pW, pH);
-      for (const p of particles) {
-        p.phase += p.phaseSpeed;
-        p.y += p.speedY;
-        p.x += p.speedX;
-        if (p.y < -10) { p.y = pH + 10; p.x = Math.random() * pW; }
-        if (p.x < -10) p.x = pW + 10;
-        if (p.x > pW + 10) p.x = -10;
-
-        const alpha = p.baseAlpha * (0.5 + 0.5 * Math.sin(p.phase));
-        const [r, g, b] = p.color;
-        particleCtx.beginPath();
-        particleCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        particleCtx.fillStyle = `rgba(${r},${g},${b},${alpha})`;
-        particleCtx.fill();
-        if (p.r > 2.5) {
-          particleCtx.beginPath();
-          particleCtx.arc(p.x, p.y, p.r * 3, 0, Math.PI * 2);
-          particleCtx.fillStyle = `rgba(${r},${g},${b},${alpha * 0.15})`;
-          particleCtx.fill();
-        }
-      }
-      if (currentTheme === 'light' && !prefersReducedMotion) {
-        particleAnimId = setTimeout(drawParticles, 33);
-      }
-    }
-
-    function startParticles() {
-      particleResize(); createParticles();
-      if (prefersReducedMotion) drawParticles();
-      else drawParticles();
-    }
-
-    function stopParticles() {
-      if (particleAnimId) { clearTimeout(particleAnimId); particleAnimId = null; }
-      particleCtx.clearRect(0, 0, pW, pH);
-    }
-
-    /* ════════════════════════════════════════════
-       Theme Toggle
-       ════════════════════════════════════════════ */
-    function setTheme(theme) {
-      currentTheme = theme;
-      document.documentElement.setAttribute('data-theme', theme);
-      localStorage.setItem('theme', theme);
-
-      if (theme === 'universe') {
-        stopParticles();
-        startStars();
-      } else {
-        stopStars();
-        startParticles();
-      }
-    }
-
-    document.getElementById('theme-toggle').addEventListener('click', () => {
-      setTheme(currentTheme === 'light' ? 'universe' : 'light');
-    });
-
-    /* Initialize correct canvas */
-    window.addEventListener('resize', () => {
-      if (currentTheme === 'universe') { starResize(); createStars(); }
-      else { particleResize(); createParticles(); }
-    });
-
-    window.addEventListener('scroll', () => {
-      starScrollY = window.pageYOffset;
-    }, { passive: true });
-
-    if (currentTheme === 'universe') startStars();
-    else startParticles();
-
-    /* ── Nav scroll + hamburger ── */
-    const nav = document.getElementById('nav');
-    const hamburger = document.getElementById('hamburger');
-    const navLinks = document.getElementById('nav-links');
-
-    window.addEventListener('scroll', () => {
-      nav.classList.toggle('scrolled', window.scrollY > 40);
-    }, { passive: true });
-
-    hamburger.addEventListener('click', () => {
-      const open = hamburger.classList.toggle('open');
-      navLinks.classList.toggle('open');
-      hamburger.setAttribute('aria-expanded', open);
-    });
-
-    navLinks.querySelectorAll('.nav__link').forEach(link => {
-      link.addEventListener('click', () => {
-        hamburger.classList.remove('open');
-        navLinks.classList.remove('open');
-        hamburger.setAttribute('aria-expanded', 'false');
-      });
-    });
-
-    /* ── Card Hover Glow ── */
-    if (!prefersReducedMotion) {
-      document.querySelectorAll('.card').forEach(card => {
-        card.addEventListener('mousemove', (e) => {
-          if (card._glowFrame) return;
-          card._glowFrame = requestAnimationFrame(() => {
-            const rect = card.getBoundingClientRect();
-            card.style.setProperty('--mouse-x', `${((e.clientX - rect.left) / rect.width) * 100}%`);
-            card.style.setProperty('--mouse-y', `${((e.clientY - rect.top) / rect.height) * 100}%`);
-            card._glowFrame = null;
-          });
-        });
-      });
-    }
-
-    /* ── Scroll-triggered rise-in ── */
-    if (!prefersReducedMotion) {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const siblings = Array.from(entry.target.parentElement.children)
-              .filter(c => c.classList.contains('rise-in'));
-            const delay = siblings.indexOf(entry.target) * 120;
-            setTimeout(() => entry.target.classList.add('visible'), delay);
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.15 });
-      document.querySelectorAll('.rise-in').forEach(el => observer.observe(el));
-    } else {
-      document.querySelectorAll('.rise-in').forEach(el => el.classList.add('visible'));
-    }
-
-    /* ── Parallax (both themes) ── */
-    if (!prefersReducedMotion) {
-      const bgLayer = document.querySelector('.parallax-bg');
-      const midLayer = document.querySelector('.parallax-mid');
-      const fgLayer = document.querySelector('.parallax-fg');
-      const orbTerra = document.querySelector('.orb--terra');
-      const orbBlue = document.querySelector('.orb--blue');
-      const orbGreen = document.querySelector('.orb--green');
-      const nebula = document.querySelector('.nebula');
-      const dust = document.querySelector('.dust-layer');
-
-      let parallaxTicking = false;
-      window.addEventListener('scroll', () => {
-        if (!parallaxTicking) {
-          requestAnimationFrame(() => {
-            const sy = window.scrollY;
-            /* Universe parallax */
-            if (bgLayer) bgLayer.style.transform = `translateY(${sy * 0.05}px)`;
-            if (midLayer) midLayer.style.transform = `translateY(${sy * 0.12}px)`;
-            if (fgLayer) fgLayer.style.transform = `translateY(${sy * 0.2}px)`;
-            /* Light parallax */
-            if (orbTerra) orbTerra.style.transform = `translateY(${sy * 0.04}px)`;
-            if (orbBlue) orbBlue.style.transform = `translateY(${sy * 0.1}px)`;
-            if (orbGreen) orbGreen.style.transform = `translateY(${sy * 0.16}px)`;
-            /* Nebula zoom */
-            if (nebula) {
-              const t = sy / (document.body.scrollHeight - window.innerHeight);
-              nebula.style.transform = `scale(${1 + t * 0.15})`;
-              nebula.style.opacity = Math.min(0.7 + t * 0.3, 1);
-            }
-            if (dust) {
-              const t = sy / (document.body.scrollHeight - window.innerHeight);
-              dust.style.opacity = 0.8 + t * 0.2;
-            }
-            parallaxTicking = false;
-          });
-          parallaxTicking = true;
-        }
-      }, { passive: true });
-    }
-
-    /* ── Hero Tagline Word Reveal ── */
-    (function () {
-      const tagline = document.getElementById('tagline');
-      if (!tagline) return;
-      const text = tagline.textContent.trim();
-      const words = text.split(/\s+/);
-      tagline.innerHTML = words.map(w => `<span class="word">${w}</span>`).join(' ');
-      if (prefersReducedMotion) {
-        tagline.querySelectorAll('.word').forEach(w => w.classList.add('visible'));
-        return;
-      }
-      const wordEls = tagline.querySelectorAll('.word');
-      setTimeout(() => {
-        wordEls.forEach((w, i) => {
-          setTimeout(() => w.classList.add('visible'), i * 80);
-        });
-      }, 600);
-    })();
-
-    /* ── Active nav link highlight on scroll ── */
-    const sections = document.querySelectorAll('section[id]');
-    const navLinkEls = document.querySelectorAll('.nav__link');
-    const activeObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const id = entry.target.getAttribute('id');
-          navLinkEls.forEach(link => {
-            link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
-          });
-        }
-      });
-    }, { rootMargin: '-40% 0px -55% 0px' });
-    sections.forEach(section => activeObserver.observe(section));
-  </script>
-
+  <script defer src="js/i18n.js"></script>
+  <script defer src="js/main.js"></script>
 </body>
 </html>

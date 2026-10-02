@@ -1,0 +1,100 @@
+/* Color and font tokens for both themes, plus base styles */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #F4F3EE;
+  --on-bg: #141413;
+  --on-bg-dim: #5C5B56;
+  --paper: #FFFFFF;
+  --paper-alt: #FBFAF6;
+  --paper-shadow: 0 14px 30px rgba(20, 20, 19, 0.07);
+  --crease: #DCD8CC;
+  --ink: #141413;
+  --ink-dim: #5C5B56;
+  --ink-muted: #767570;
+  --accent: #C15F3C;
+  --accent-text: #A94F2F;
+  --chip-bg: #F3F1EA;
+  --chip-border: #E6E2D6;
+  --postit: #FFF3B0;
+  --postit-ink: #4A4536;
+  --seal-a: #F6D27A;
+  --seal-b: #C9962E;
+  --seal-text: #3D2904;
+  --tab-1: #A94F2F;
+  --tab-2: #8C4526;
+  --tab-3: #5F7148;
+  --tab-4: #4F6B78;
+  --tab-5: #6F5490;
+  --env-back: #E6D9C1;
+  --env-front: #EFE4D1;
+  --env-flap: #E2D3B9;
+  --env-seal: #C15F3C;
+  --font-heading: 'Poppins', sans-serif;
+  --font-body: 'Lora', serif;
+  --font-hand: 'Caveat', cursive;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+[data-theme="universe"] {
+  --bg: #060614;
+  --on-bg: #E0E8F8;
+  --on-bg-dim: #A9B4CC;
+  --paper: #F6F8FD;
+  --paper-alt: #F1F5FE;
+  --paper-shadow: 0 0 0 1px rgba(147, 197, 253, 0.25);
+  --crease: #CDD6EA;
+  --ink: #101426;
+  --ink-dim: #4C5672;
+  --ink-muted: #636D88;
+  --accent: #3B82F6;
+  --accent-text: #2563EB;
+  --chip-bg: #EEF3FC;
+  --chip-border: #D6E0F3;
+  --postit: #FFF1A8;
+  --seal-a: #F4F7FC;
+  --seal-b: #9AA7BD;
+  --seal-text: #2E3650;
+  --tab-1: #2563EB;
+  --tab-2: #1D4ED8;
+  --tab-3: #4338CA;
+  --tab-4: #0F766E;
+  --tab-5: #6D28D9;
+  --env-back: #C4D2EE;
+  --env-front: #DDE6F7;
+  --env-flap: #C9D6F0;
+  --env-seal: #3B82F6;
+}
+
+html { scroll-behavior: smooth; scrollbar-gutter: stable; }
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--on-bg);
+  line-height: 1.75;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.6s ease, color 0.4s ease;
+}
+h1, h2, h3 { font-family: var(--font-heading); font-weight: 700; }
+a { color: var(--accent-text); }
+img { max-width: 100%; display: block; }
+button { font: inherit; }
+.svg-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+html:lang(ko) {
+  --font-heading: 'Poppins', 'Noto Sans KR', sans-serif;
+  --font-body: 'Lora', 'Noto Serif KR', serif;
+  --font-hand: 'Nanum Pen Script', 'Caveat', cursive;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
