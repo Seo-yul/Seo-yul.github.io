@@ -402,6 +402,8 @@ html:lang(ko) .tab { letter-spacing: 0.02em; }
 
 /* Below 640px: bottom tab bar */
 @media (max-width: 639px) {
+  /* keep keyboard focus clear of the bar when the browser scrolls to it */
+  html { scroll-padding-bottom: calc(56px + env(safe-area-inset-bottom)); }
   .desk { padding-left: 12px; padding-right: 12px; }
   .tabs {
     position: fixed;
