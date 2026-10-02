@@ -327,3 +327,34 @@ html:lang(ko) .closing__sign { font-size: 2.7rem; }
   .tech dd { margin-bottom: 12px; }
   .closing__sign { font-size: 2rem; }
 }
+
+/* ── Folding: a panel unfolds once, around its top crease, when it enters the viewport ── */
+@property --shade { syntax: '<number>'; inherits: true; initial-value: 0; }
+.letter { --fold-angle: -92deg; }
+html.js .fold { perspective: 1500px; }
+.sheet {
+  transform-origin: top center;
+  transition: transform 0.8s cubic-bezier(0.2, 0.9, 0.25, 1.04), --shade 0.8s ease, background-color 0.6s, box-shadow 0.6s;
+}
+.sheet::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(rgba(20, 20, 19, 0.3), rgba(20, 20, 19, 0.06));
+  opacity: var(--shade);
+  pointer-events: none;
+}
+html.js .fold:not(.is-open) .sheet { transform: rotateX(var(--fold-angle)); --shade: 1; }
+.sheet__content { transition: opacity 0.45s ease 0.3s; }
+html.js .fold:not(.is-open) .sheet__content { opacity: 0; }
+/* Deep links, tab jumps and reduced motion open panels without animation */
+.fold.is-instant .sheet { transition: background-color 0.6s, box-shadow 0.6s; }
+.fold.is-instant .sheet__content { transition: none; }
+.fold.is-moving .sheet { will-change: transform; }
+@media (max-width: 639px) {
+  .letter { --fold-angle: -70deg; }
+}
+@media print {
+  html.js .fold:not(.is-open) .sheet { transform: none; }
+  html.js .fold:not(.is-open) .sheet__content { opacity: 1; }
+}
