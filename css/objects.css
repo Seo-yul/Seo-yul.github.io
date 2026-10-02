@@ -1,0 +1,121 @@
+/* Objects on the paper: name tags (activities), seals (awards), stamps (certifications). The pick-up dialog is appended below */
+.obj {
+  border: 0;
+  background: none;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+  cursor: pointer;
+  transform: rotate(var(--tilt, 0deg));
+  transition: transform 0.25s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}
+.obj:hover, .obj:focus-visible {
+  transform: translateY(-4px) rotate(0deg);
+  filter: drop-shadow(0 10px 12px rgba(0, 0, 0, 0.12));
+}
+.obj.is-lifted { visibility: hidden; }
+
+/* Name tags */
+.nametags { list-style: none; display: flex; flex-wrap: wrap; gap: 16px; }
+.nametags li:nth-child(odd) .nametag { --tilt: -2.5deg; }
+.nametags li:nth-child(even) .nametag { --tilt: 2deg; }
+.nametag {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 136px;
+  min-height: 128px;
+  padding: 22px 9px 11px;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+  text-align: center;
+  color: #141413;
+}
+.nametag::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  width: 24px;
+  height: 5px;
+  margin-left: -12px;
+  border-radius: 3px;
+  background: #DAD6CB;
+}
+.nametag--speaker { --role: var(--tab-1); }
+.nametag--organizer { --role: var(--tab-4); }
+.nametag--member { --role: var(--tab-3); }
+.nametag--ambassador { --role: var(--tab-5); }
+.nametag__role {
+  display: block;
+  margin-bottom: 8px;
+  padding: 3px 0;
+  border-radius: 3px;
+  background: var(--role);
+  color: #fff;
+  font: 700 0.62rem var(--font-heading);
+  letter-spacing: 0.1em;
+}
+.nametag__name { display: block; font: 600 0.78rem/1.35 var(--font-heading); }
+.nametag__date { display: block; margin-top: auto; padding-top: 6px; font: 500 0.7rem var(--font-heading); color: #767570; }
+html:lang(ko) .nametag__role { letter-spacing: 0.02em; }
+
+/* Seals: gold in light, silver in universe */
+.seals { list-style: none; display: flex; flex-wrap: wrap; gap: 28px; }
+.seal { display: flex; flex-direction: column; align-items: center; width: 116px; text-align: center; }
+.seal__disc {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--seal-a), var(--seal-b));
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.18), inset 0 0 0 4px rgba(255, 255, 255, 0.35);
+  color: var(--seal-text);
+  font: 700 0.74rem var(--font-heading);
+}
+.seal__name { margin-top: 10px; font: 600 0.76rem/1.35 var(--font-heading); color: var(--ink-dim); }
+
+/* Stamps */
+.stamps { list-style: none; display: flex; flex-wrap: wrap; align-items: flex-start; gap: 16px; }
+.stamps li:nth-child(odd) .stamp { --tilt: 2deg; }
+.stamps li:nth-child(even) .stamp { --tilt: -1.5deg; }
+.stamp {
+  display: block;
+  width: 88px;
+  height: 104px;
+  padding: 6px;
+  border: 4px dotted #E8E4D8;
+  background: #FDFCF8;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+}
+.stamp--big { width: 124px; height: 140px; }
+.stamp__in {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  height: 100%;
+  padding: 6px;
+  background: var(--stamp);
+  color: #fff;
+  text-align: left;
+}
+.stamp__badge { width: 34px; height: 34px; }
+.stamp--big .stamp__badge { width: 46px; height: 46px; }
+.stamp__code { display: block; font: 700 0.8rem/1.1 var(--font-heading); }
+.stamp--big .stamp__code { font-size: 0.76rem; }
+.stamp__issuer { display: block; font: 600 0.62rem var(--font-heading); }
+
+@media (max-width: 639px) {
+  .nametags { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  .nametag { width: 100%; min-height: 118px; padding: 20px 6px 9px; }
+  .nametag__role { font-size: 0.56rem; letter-spacing: 0.06em; }
+  .nametag__name { font-size: 0.7rem; }
+  .nametag__date { font-size: 0.64rem; }
+  .seals { gap: 18px; }
+}
