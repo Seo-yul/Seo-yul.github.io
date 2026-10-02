@@ -119,3 +119,92 @@ html:lang(ko) .nametag__role { letter-spacing: 0.02em; }
   .nametag__date { font-size: 0.64rem; }
   .seals { gap: 18px; }
 }
+
+/* ── Pick-up: lift from its place to the center (0.5s), then flip (0.6s) to show the back ── */
+.obj-dialog {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow: hidden;
+  color: var(--ink);
+}
+.obj-dialog::backdrop { background: transparent; }
+.obj-dim {
+  position: absolute;
+  inset: 0;
+  background: rgba(20, 20, 19, 0.38);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.obj-dialog.is-shown .obj-dim { opacity: 1; }
+.obj-lift {
+  position: absolute;
+  perspective: 1200px;
+  transition: left 0.5s cubic-bezier(0.2, 0.9, 0.25, 1), top 0.5s cubic-bezier(0.2, 0.9, 0.25, 1),
+    width 0.5s cubic-bezier(0.2, 0.9, 0.25, 1), height 0.5s cubic-bezier(0.2, 0.9, 0.25, 1);
+}
+/* No overflow on the flipping element or its ancestors: it would flatten the 3D */
+.obj-flip {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.3, 1.1, 0.4, 1);
+}
+.obj-flip.is-flipped { transform: rotateY(180deg); }
+.obj-face { position: absolute; inset: 0; border-radius: 10px; transform: translateZ(1px); }
+.obj-face, .obj-face * { -webkit-backface-visibility: hidden; backface-visibility: hidden; }
+.obj-face--front { display: flex; align-items: center; justify-content: center; }
+.obj-clone { flex: none; transform: scale(var(--s, 1)); transition: transform 0.5s cubic-bezier(0.2, 0.9, 0.25, 1); }
+.obj-face--back {
+  transform: rotateY(180deg) translateZ(1px);
+  overflow-y: auto;
+  padding: 24px 26px;
+  background: #FFFDF8;
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.25);
+  font-family: var(--font-body);
+  color: #141413;
+}
+[data-theme="universe"] .obj-face--back {
+  background: var(--paper);
+  box-shadow: 0 0 0 1px rgba(147, 197, 253, 0.35), 0 24px 60px rgba(0, 0, 0, 0.5);
+}
+.obj-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--chip-bg);
+  color: var(--ink-dim);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.obj-kicker { padding-right: 40px; font: 600 0.7rem var(--font-heading); letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-text); }
+.obj-title { margin: 6px 0 4px; padding-right: 30px; font-size: 1.15rem; line-height: 1.35; color: var(--ink); }
+.obj-meta { margin-bottom: 14px; font: 500 0.8rem var(--font-heading); color: var(--ink-muted); }
+.obj-img { width: 72px; height: 72px; margin-bottom: 12px; }
+.obj-img[hidden] { display: none; }      /* keep the base img { display: block } from overriding [hidden] */
+.obj-desc { font-size: 0.92rem; line-height: 1.65; color: var(--ink-dim); }
+html:lang(ko) .obj-kicker { letter-spacing: 0.04em; }
+/* No motion while measuring or with reduced motion */
+.obj-dialog.is-measuring .obj-lift,
+.obj-dialog.is-measuring .obj-clone,
+.obj-dialog.is-instant .obj-lift,
+.obj-dialog.is-instant .obj-flip,
+.obj-dialog.is-instant .obj-clone,
+.obj-dialog.is-instant .obj-dim { transition: none !important; }
+/* The page behind does not scroll while the dialog is open */
+html.obj-open body { overflow: hidden; }
