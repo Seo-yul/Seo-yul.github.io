@@ -27,10 +27,21 @@
     stage.style.setProperty('--intro-scale', Math.max(0.6, s).toFixed(3));
   }
 
-  function play() {
+  function focusHeroName() {
+    var h = document.getElementById('hero-name');
+    if (h) h.focus({ preventScroll: true });
+  }
+
+  /* fromReplay: started by the replay button. Safari and Firefox do not focus a clicked button,
+     so the caller says so instead of reading document.activeElement */
+  function play(fromReplay) {
     if (state !== 'idle') return;
-    if (reduced) { toTop(); return; }        /* reduced motion: only scroll to the top */
-    focusHero = document.activeElement && document.activeElement.id === 'replay';
+    if (reduced) {                           /* reduced motion: only scroll to the top */
+      toTop();
+      if (fromReplay) focusHeroName();
+      return;
+    }
+    focusHero = !!fromReplay;
     state = 'playing';
     fitStage();
     root.classList.remove('intro-pending', 'intro-leaving');
@@ -69,10 +80,7 @@
     setInert(false);
     toTop();
     try { sessionStorage.setItem('introSeen', '1'); } catch (e) { /* if it cannot be saved, the intro plays again next time */ }
-    if (focusHero) {
-      var h = document.getElementById('hero-name');
-      if (h) h.focus({ preventScroll: true });
-    }
+    if (focusHero) focusHeroName();
     listeners.forEach(function (fn) { fn(); });
   }
 
@@ -83,7 +91,7 @@
       if (skipBtn) skipBtn.addEventListener('click', skip);
       document.addEventListener('keydown', function () { if (state === 'playing') skip(); });
       var replay = document.getElementById('replay');
-      if (replay) replay.addEventListener('click', play);
+      if (replay) replay.addEventListener('click', function () { play(true); });
       if (root.classList.contains('intro-pending')) play();
     },
     play: play,
