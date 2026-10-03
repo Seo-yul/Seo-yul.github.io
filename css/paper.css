@@ -256,21 +256,6 @@
 .closing__sign { margin-top: 28px; font: 600 2.4rem/1.2 var(--font-hand); color: var(--ink); }
 .closing__ps { margin-top: 12px; color: var(--ink-dim); }
 .socials--small { justify-content: center; margin-top: 16px; }
-.replay {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 26px;
-  padding: 8px 18px;
-  border: 1px solid var(--accent);
-  border-radius: 999px;
-  background: transparent;
-  color: var(--accent-text);
-  font: 500 0.85rem var(--font-heading);
-  cursor: pointer;
-  transition: transform 0.2s var(--ease-out), background-color 0.2s;
-}
-.replay:hover { background: var(--chip-bg); transform: translateY(-1px); }
 .copyright { margin-top: 28px; text-align: center; font: 500 0.8rem var(--font-heading); color: var(--on-bg-dim); }
 
 /* Korean: no italics or wide tracking; the Korean hand font has a single weight */
