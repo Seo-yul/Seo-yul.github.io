@@ -1,0 +1,210 @@
+/* Objects on the paper: name tags (activities), seals (awards), stamps (certifications). The pick-up dialog is appended below */
+.obj {
+  border: 0;
+  background: none;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+  cursor: pointer;
+  transform: rotate(var(--tilt, 0deg));
+  transition: transform 0.25s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}
+.obj:hover, .obj:focus-visible {
+  transform: translateY(-4px) rotate(0deg);
+  filter: drop-shadow(0 10px 12px rgba(0, 0, 0, 0.12));
+}
+.obj.is-lifted { visibility: hidden; }
+
+/* Name tags */
+.nametags { list-style: none; display: flex; flex-wrap: wrap; gap: 16px; }
+.nametags li:nth-child(odd) .nametag { --tilt: -2.5deg; }
+.nametags li:nth-child(even) .nametag { --tilt: 2deg; }
+.nametag {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 136px;
+  min-height: 128px;
+  padding: 22px 9px 11px;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+  text-align: center;
+  color: #141413;
+}
+.nametag::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  width: 24px;
+  height: 5px;
+  margin-left: -12px;
+  border-radius: 3px;
+  background: #DAD6CB;
+}
+.nametag--speaker { --role: var(--tab-1); }
+.nametag--organizer { --role: var(--tab-4); }
+.nametag--member { --role: var(--tab-3); }
+.nametag--ambassador { --role: var(--tab-5); }
+.nametag__role {
+  display: block;
+  margin-bottom: 8px;
+  padding: 3px 0;
+  border-radius: 3px;
+  background: var(--role);
+  color: #fff;
+  font: 700 0.62rem var(--font-heading);
+  letter-spacing: 0.1em;
+}
+.nametag__name { display: block; font: 600 0.78rem/1.35 var(--font-heading); }
+.nametag__date { display: block; margin-top: auto; padding-top: 6px; font: 500 0.7rem var(--font-heading); color: #767570; }
+html:lang(ko) .nametag__role { letter-spacing: 0.02em; }
+
+/* Seals: gold in light, silver in universe */
+.seals { list-style: none; display: flex; flex-wrap: wrap; gap: 28px; }
+.seal { display: flex; flex-direction: column; align-items: center; width: 116px; text-align: center; }
+.seal__disc {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--seal-a), var(--seal-b));
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.18), inset 0 0 0 4px rgba(255, 255, 255, 0.35);
+  color: var(--seal-text);
+  font: 700 0.74rem var(--font-heading);
+}
+.seal__name { margin-top: 10px; font: 600 0.76rem/1.35 var(--font-heading); color: var(--ink-dim); }
+
+/* Stamps */
+.stamps { list-style: none; display: flex; flex-wrap: wrap; align-items: flex-start; gap: 16px; }
+.stamps li:nth-child(odd) .stamp { --tilt: 2deg; }
+.stamps li:nth-child(even) .stamp { --tilt: -1.5deg; }
+.stamp {
+  display: block;
+  width: 88px;
+  height: 104px;
+  padding: 6px;
+  border: 4px dotted #E8E4D8;
+  background: #FDFCF8;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+}
+.stamp--big { width: 124px; height: 140px; }
+.stamp__in {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  height: 100%;
+  padding: 6px;
+  background: var(--stamp);
+  color: #fff;
+  text-align: left;
+}
+.stamp__badge { width: 34px; height: 34px; }
+.stamp--big .stamp__badge { width: 46px; height: 46px; }
+.stamp__code { display: block; font: 700 0.8rem/1.1 var(--font-heading); }
+.stamp--big .stamp__code { font-size: 0.76rem; }
+.stamp__issuer { display: block; font: 600 0.62rem var(--font-heading); }
+
+@media (max-width: 639px) {
+  .nametags { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  .nametag { width: 100%; min-height: 118px; padding: 20px 6px 9px; }
+  .nametag__role { font-size: 0.56rem; letter-spacing: 0.06em; }
+  .nametag__name { font-size: 0.7rem; }
+  .nametag__date { font-size: 0.64rem; }
+  .seals { gap: 18px; }
+}
+
+/* ── Pick-up: lift from its place to the center (0.5s), then flip (0.6s) to show the back ── */
+.obj-dialog {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow: hidden;
+  color: var(--ink);
+}
+.obj-dialog::backdrop { background: transparent; }
+.obj-dim {
+  position: absolute;
+  inset: 0;
+  background: rgba(20, 20, 19, 0.38);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.obj-dialog.is-shown .obj-dim { opacity: 1; }
+.obj-lift {
+  position: absolute;
+  perspective: 1200px;
+  transition: left 0.5s cubic-bezier(0.2, 0.9, 0.25, 1), top 0.5s cubic-bezier(0.2, 0.9, 0.25, 1),
+    width 0.5s cubic-bezier(0.2, 0.9, 0.25, 1), height 0.5s cubic-bezier(0.2, 0.9, 0.25, 1);
+}
+/* No overflow on the flipping element or its ancestors: it would flatten the 3D */
+.obj-flip {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.3, 1.1, 0.4, 1);
+}
+.obj-flip.is-flipped { transform: rotateY(180deg); }
+.obj-face { position: absolute; inset: 0; border-radius: 10px; transform: translateZ(1px); }
+.obj-face, .obj-face * { -webkit-backface-visibility: hidden; backface-visibility: hidden; }
+.obj-face--front { display: flex; align-items: center; justify-content: center; }
+.obj-clone { flex: none; transform: scale(var(--s, 1)); transition: transform 0.5s cubic-bezier(0.2, 0.9, 0.25, 1); }
+.obj-face--back {
+  transform: rotateY(180deg) translateZ(1px);
+  overflow-y: auto;
+  padding: 24px 26px;
+  background: #FFFDF8;
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.25);
+  font-family: var(--font-body);
+  color: #141413;
+}
+[data-theme="universe"] .obj-face--back {
+  background: var(--paper);
+  box-shadow: 0 0 0 1px rgba(147, 197, 253, 0.35), 0 24px 60px rgba(0, 0, 0, 0.5);
+}
+.obj-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--chip-bg);
+  color: var(--ink-dim);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.obj-kicker { padding-right: 40px; font: 600 0.7rem var(--font-heading); letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-text); }
+.obj-title { margin: 6px 0 4px; padding-right: 30px; font-size: 1.15rem; line-height: 1.35; color: var(--ink); }
+.obj-meta { margin-bottom: 14px; font: 500 0.8rem var(--font-heading); color: var(--ink-muted); }
+.obj-img { width: 72px; height: 72px; margin-bottom: 12px; }
+.obj-img[hidden] { display: none; }      /* keep the base img { display: block } from overriding [hidden] */
+.obj-desc { font-size: 0.92rem; line-height: 1.65; color: var(--ink-dim); }
+html:lang(ko) .obj-kicker { letter-spacing: 0.04em; }
+/* No motion while measuring or with reduced motion */
+.obj-dialog.is-measuring .obj-lift,
+.obj-dialog.is-measuring .obj-clone,
+.obj-dialog.is-instant .obj-lift,
+.obj-dialog.is-instant .obj-flip,
+.obj-dialog.is-instant .obj-clone,
+.obj-dialog.is-instant .obj-dim { transition: none !important; }
+/* The page behind does not scroll while the dialog is open */
+html.obj-open body { overflow: hidden; }

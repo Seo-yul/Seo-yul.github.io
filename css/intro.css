@@ -1,0 +1,250 @@
+/* Envelope intro (about 3s). The overlay is opaque; the page is still rendered behind it, so LCP is not delayed */
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: hidden;
+  background: var(--bg);
+  transition: opacity 0.35s ease;
+}
+html.intro-pending .intro { display: block; }        /* cover the page before the scripts run */
+.intro::before {                                      /* light: same paper grain as the desk */
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.25;
+  filter: url(#grain);
+  pointer-events: none;
+}
+[data-theme="universe"] .intro::before { display: none; }
+[data-theme="universe"] .intro {   /* universe: starry sky; mixed tile sizes keep it from looking like a grid */
+  background-color: #060614;
+  background-image:
+    radial-gradient(circle at 152px 124px, #fff 0 0.9px, transparent 1.5px),
+    radial-gradient(circle at 67px 157px, #cfe0ff 0 0.9px, transparent 1.5px),
+    radial-gradient(circle at 68px 198px, #fff 0 0.8px, transparent 1.4px),
+    radial-gradient(circle at 179px 101px, #9fbfff 0 0.7px, transparent 1.3px),
+    radial-gradient(circle at 132px 13px, #9fbfff 0 0.7px, transparent 1.3px),
+    radial-gradient(circle at 204px 37px, #fff 0 0.8px, transparent 1.4px),
+    radial-gradient(circle at 97px 177px, #9fbfff 0 0.8px, transparent 1.4px),
+    radial-gradient(circle at 116px 128px, #fff 0 0.7px, transparent 1.3px),
+    radial-gradient(circle at 25px 3px, #fff 0 0.7px, transparent 1.3px),
+    radial-gradient(circle at 50px 255px, #fff 0 0.7px, transparent 1.3px),
+    radial-gradient(circle at 134px 96px, #fff 0 0.9px, transparent 1.5px),
+    radial-gradient(circle at 24px 28px, #fff 0 0.8px, transparent 1.4px),
+    radial-gradient(circle at 18px 105px, #fff 0 1.0px, transparent 1.6px),
+    radial-gradient(circle at 162px 110px, #fff 0 1.2px, transparent 1.8px),
+    radial-gradient(circle at 377px 102px, #cfe0ff 0 1.3px, transparent 1.9px),
+    radial-gradient(circle at 372px 127px, #fff 0 1.3px, transparent 1.9px),
+    radial-gradient(circle at 224px 118px, #fff 0 1.2px, transparent 1.8px),
+    radial-gradient(circle at 348px 185px, #cfe0ff 0 1.3px, transparent 1.9px),
+    radial-gradient(circle at 81px 82px, #9fbfff 0 0.9px, transparent 1.5px),
+    radial-gradient(circle at 83px 258px, #fff 0 0.6px, transparent 1.2px),
+    radial-gradient(ellipse 800px 600px at 20% 30%, #0a1628 0%, transparent 70%),
+    radial-gradient(ellipse 600px 900px at 80% 50%, #0d2847 0%, transparent 65%);
+  background-size: 211px 211px, 211px 211px, 211px 211px, 211px 211px, 211px 211px, 211px 211px, 211px 211px, 307px 307px, 307px 307px, 307px 307px, 307px 307px, 307px 307px, 307px 307px, 307px 307px, 419px 419px, 419px 419px, 419px 419px, 419px 419px, 419px 419px, 419px 419px, 100% 100%, 100% 100%;
+}
+.intro.is-leaving { opacity: 0; }
+html.intro-pending body,
+html.intro-playing body { overflow: hidden; }
+
+.intro__stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 320px;
+  height: 330px;
+  margin: -165px 0 0 -160px;
+  transform: scale(var(--intro-scale, 1));
+  opacity: 0;
+}
+.intro.is-playing .intro__stage,
+.intro.is-done .intro__stage { opacity: 1; }
+
+.intro__skip {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 2;
+  padding: 8px 16px;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--accent-text);
+  font: 500 0.85rem var(--font-heading);
+  cursor: pointer;
+}
+
+/* Envelope: back, flap, front and seal are separate layers. The paper sits above the back and the opened flap, below the front */
+.intro__env,
+.intro__paper-wrap {
+  position: absolute;
+  left: 50%;
+  bottom: 34px;
+  width: 184px;
+  height: 114px;
+  margin-left: -92px;
+}
+.intro__env--back { z-index: 1; }
+.intro__paper-wrap { z-index: 2; perspective: 900px; }
+.intro__env--front { z-index: 3; }
+.intro__env--flap { z-index: 4; perspective: 600px; }
+.intro__env--seal { z-index: 5; }
+.env-back, .env-front { position: absolute; inset: 0; border-radius: 6px; }
+.env-back { background: var(--env-back); box-shadow: 0 10px 18px rgba(20, 20, 19, 0.1); }
+.env-front { background: var(--env-front); clip-path: polygon(0 0, 50% 56%, 100% 0, 100% 100%, 0 100%); }
+[data-theme="universe"] .env-back { box-shadow: 0 0 22px rgba(59, 130, 246, 0.6); }
+.env-flap {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 62%;
+  background: var(--env-flap);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform-origin: top;
+}
+.env-seal {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 26px;
+  height: 26px;
+  margin: -13px 0 0 -13px;
+  border-radius: 50%;
+  background: var(--env-seal);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+/* The tri-folded resume */
+.intro__paper {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  width: 150px;
+  margin-left: -75px;
+  transform-style: preserve-3d;
+}
+.intro__panel { height: 82px; padding: 10px 12px; background: var(--paper); }
+.intro__panel--mid { position: relative; }
+.intro__panel--top {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  transform-origin: bottom;
+  border-bottom: 1px dashed var(--crease);
+}
+.intro__panel--bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  transform-origin: top;
+  border-top: 1px dashed var(--crease);
+  background: var(--paper-alt);
+}
+.intro__paper i { display: block; height: 4px; margin: 6px 0; border-radius: 2px; background: #E6E3DA; }
+.intro__paper i.l-title { width: 55%; height: 6px; background: var(--ink); }
+.intro__paper i.l-accent { width: 35%; background: var(--accent); }
+.intro__paper i.l-60 { width: 60%; }
+.intro__paper i.l-70 { width: 70%; }
+.intro__paper i.l-75 { width: 75%; }
+.intro__paper i.l-80 { width: 80%; }
+
+/* Universe: flies in from the top right with a light trail */
+.intro__trail {
+  display: none;
+  position: absolute;
+  right: 6%;
+  top: 6%;
+  z-index: 1;
+  width: 46%;
+  height: 2px;
+  transform-origin: right;
+  transform: rotate(-38deg);
+  background: linear-gradient(90deg, transparent, rgba(147, 197, 253, 0.95));
+  opacity: 0;
+}
+[data-theme="universe"] .intro__trail { display: block; }
+
+/* 3-second timeline */
+.intro.is-playing .intro__env { animation: introEnvLight 3s cubic-bezier(0.23, 1, 0.32, 1) both; }
+.intro.is-playing .intro__env--flap { animation: introEnvLight 3s cubic-bezier(0.23, 1, 0.32, 1) both, introFlapZ 3s linear both; }
+.intro.is-playing .env-seal { animation: introSeal 3s ease both; }
+.intro.is-playing .env-flap { animation: introFlap 3s ease-in-out both; }
+.intro.is-playing .intro__paper-wrap { animation: introArriveLight 3s cubic-bezier(0.23, 1, 0.32, 1) both; }
+.intro.is-playing .intro__paper { animation: introPaper 3s cubic-bezier(0.23, 1, 0.32, 1) both; }
+.intro.is-playing .intro__panel--top { animation: introTop 3s cubic-bezier(0.3, 1.25, 0.5, 1) both; }
+.intro.is-playing .intro__panel--bottom { animation: introBottom 3s cubic-bezier(0.3, 1.25, 0.5, 1) both; }
+[data-theme="universe"] .intro.is-playing .intro__env { animation-name: introEnvSpace; }
+[data-theme="universe"] .intro.is-playing .intro__env--flap { animation-name: introEnvSpace, introFlapZ; }
+[data-theme="universe"] .intro.is-playing .intro__paper-wrap { animation-name: introArriveSpace; }
+[data-theme="universe"] .intro.is-playing .intro__trail { animation: introTrail 3s ease-out both; }
+
+@keyframes introEnvLight {
+  0%       { transform: translateY(70px); opacity: 0; }
+  17%, 66% { transform: none; opacity: 1; }
+  88%, 100% { transform: translateY(110px); opacity: 0; }
+}
+@keyframes introEnvSpace {
+  0%       { transform: translate(230px, -220px) rotate(-24deg) scale(0.45); opacity: 0; }
+  6%       { opacity: 1; }
+  22%, 66% { transform: none; opacity: 1; }
+  88%, 100% { transform: translateY(110px); opacity: 0; }
+}
+/* The paper travels with the envelope but only shows once the envelope is fully opaque */
+@keyframes introArriveLight {
+  0%          { transform: translateY(70px); opacity: 0; }
+  17%         { transform: none; opacity: 0; }
+  17.5%, 100% { transform: none; opacity: 1; }
+}
+@keyframes introArriveSpace {
+  0%        { transform: translate(230px, -220px) rotate(-24deg) scale(0.45); opacity: 0; }
+  6%        { opacity: 0; }
+  6.5%      { opacity: 1; }
+  22%, 100% { transform: none; opacity: 1; }
+}
+@keyframes introTrail {
+  0%        { opacity: 0; }
+  6%, 16%   { opacity: 1; }
+  26%, 100% { opacity: 0; }
+}
+@keyframes introSeal {
+  0%, 20%   { transform: scale(1); opacity: 1; }
+  26%, 100% { transform: scale(0); opacity: 0; }
+}
+@keyframes introFlap {
+  0%, 24%   { transform: rotateX(0deg); }
+  36%, 100% { transform: rotateX(180deg); }
+}
+/* The flap drops behind the paper while it opens */
+@keyframes introFlapZ {
+  0%, 30%   { z-index: 4; }
+  31%, 100% { z-index: 1; }
+}
+@keyframes introPaper {
+  0%, 36%   { transform: translateY(0); }
+  54%, 78%  { transform: translateY(-104px); }
+  95%, 100% { transform: translateY(-78px) scale(1.14); }
+}
+@keyframes introTop {
+  0%, 54%   { transform: rotateX(-180deg); }
+  68%, 100% { transform: rotateX(0deg); }
+}
+@keyframes introBottom {
+  0%, 64%   { transform: rotateX(180deg); }
+  79%, 100% { transform: rotateX(0deg); }
+}
+
+/* Skip: jump to the final frame */
+.intro.is-done * { animation: none !important; }
+.intro.is-done .intro__env { opacity: 0; transform: translateY(110px); }
+.intro.is-done .intro__env--flap { z-index: 1; }
+.intro.is-done .env-flap { transform: rotateX(180deg); }
+.intro.is-done .env-seal { opacity: 0; }
+.intro.is-done .intro__paper-wrap { opacity: 1; transform: none; }
+.intro.is-done .intro__paper { transform: translateY(-78px) scale(1.14); }
+.intro.is-done .intro__panel--top,
+.intro.is-done .intro__panel--bottom { transform: none; }
+.intro.is-done .intro__trail { opacity: 0; }
