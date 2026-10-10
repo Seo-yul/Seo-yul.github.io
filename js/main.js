@@ -23,10 +23,14 @@
   call('intro', 'init');
 
   /* Deep link (#section): open up to that panel and jump there */
-  var target = foldFromHash();
-  if (target) {
-    if (Site.fold) Site.fold.openThrough(target.id);
-    target.scrollIntoView({ block: 'start', behavior: 'instant' });
+  try {
+    var target = foldFromHash();
+    if (target) {
+      if (Site.fold) Site.fold.openThrough(target.id);
+      target.scrollIntoView({ block: 'start', behavior: 'instant' });
+    }
+  } catch (e) {
+    if (window.console) console.error(e);
   }
   window.addEventListener('hashchange', function () {
     var f = foldFromHash();
