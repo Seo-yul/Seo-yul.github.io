@@ -1,0 +1,42 @@
+{
+  "gate": {
+    "h": 784,
+    "night": true,
+    "w": 1100
+  },
+  "home": {
+    "h": 783,
+    "night": true,
+    "w": 1100
+  },
+  "lab": {
+    "h": 969,
+    "night": true,
+    "w": 1100
+  },
+  "launch": {
+    "h": 820,
+    "night": true,
+    "w": 1100
+  },
+  "plaza": {
+    "h": 820,
+    "night": true,
+    "w": 1100
+  },
+  "post": {
+    "h": 820,
+    "night": true,
+    "w": 1100
+  },
+  "tech": {
+    "h": 822,
+    "night": true,
+    "w": 1100
+  },
+  "walker": {
+    "frames": 2,
+    "h": 200,
+    "w": 111
+  }
+}

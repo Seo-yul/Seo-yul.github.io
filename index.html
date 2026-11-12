@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light" data-lang="en">
+<html lang="en" data-theme="day" data-lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,263 +9,233 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☁️</text></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Poppins:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Poppins:wght@400;500;600;700&display=swap" /></noscript>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Unbounded:wght@500;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Unbounded:wght@500;700;800&display=swap" /></noscript>
   <script>
-    /* Decide theme, language and intro before first paint to avoid a flash */
+    /* Decide theme and language before first paint to avoid a flash */
     window.Site = window.Site || {};
-    Site.decideIntro = function (o) { return !o.seen && !o.hash && !o.reduced; };
     Site.loadKoFonts = function () {
       if (document.getElementById('ko-fonts')) return;
       var link = document.createElement('link');
       link.id = 'ko-fonts';
       link.rel = 'stylesheet';
-      link.href = 'https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Noto+Sans+KR:wght@400..700&family=Noto+Serif+KR:wght@400&display=swap';
+      link.href = 'https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Noto+Sans+KR:wght@400..900&display=swap';
       document.head.appendChild(link);
     };
     (function () {
-      var d = document.documentElement, theme = null, lang = null, seen = true;
+      var d = document.documentElement, theme = null, lang = null;
       d.classList.add('js');
       try {
         theme = localStorage.getItem('theme');
         lang = localStorage.getItem('lang');
-        seen = sessionStorage.getItem('introSeen') === '1';
-      } catch (e) { /* storage unavailable: open without the intro */ }
-      if (theme === 'universe') d.setAttribute('data-theme', 'universe');
+      } catch (e) { /* storage unavailable: use the defaults */ }
+      /* 'universe' is the old name of the night theme */
+      var night = theme === 'night' || theme === 'universe' ||
+        (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      d.setAttribute('data-theme', night ? 'night' : 'day');
       if (lang === 'ko') { d.setAttribute('data-lang', 'ko'); d.setAttribute('lang', 'ko'); Site.loadKoFonts(); }
-      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (Site.decideIntro({ seen: seen, hash: location.hash, reduced: reduced })) d.classList.add('intro-pending');
-      /* Failsafe: if the scripts have not taken over after 4s, drop the intro and show every panel unfolded */
-      setTimeout(function () {
-        d.classList.remove('intro-pending');
-        if (!(Site.fold && Site.fold.ready)) d.classList.remove('js');
-      }, 4000);
+      /* Failsafe: if the scripts have not taken over after 4s, show the page without the animations */
+      setTimeout(function () { if (!(Site.town && Site.town.ready)) d.classList.remove('js'); }, 4000);
     })();
   </script>
   <link rel="stylesheet" href="css/tokens.css" />
-  <link rel="stylesheet" href="css/backgrounds.css" />
-  <link rel="stylesheet" href="css/paper.css" />
+  <link rel="stylesheet" href="css/art.css" />
+  <link rel="stylesheet" href="css/town.css" />
   <link rel="stylesheet" href="css/objects.css" />
-  <link rel="stylesheet" href="css/intro.css" />
 </head>
 <body>
-  <canvas id="star-canvas" class="bg-universe" aria-hidden="true"></canvas>
-  <div class="nebula bg-universe" aria-hidden="true"></div>
-  <div class="dust-layer bg-universe" aria-hidden="true"></div>
-  <div class="shooting-stars bg-universe" aria-hidden="true">
-    <span class="shooting-star"></span><span class="shooting-star"></span><span class="shooting-star"></span><span class="shooting-star"></span><span class="shooting-star"></span>
-  </div>
-  <svg class="svg-defs" aria-hidden="true" focusable="false">
-    <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" /><feColorMatrix type="saturate" values="0" /></filter>
-  </svg>
-  <div id="grain-overlay" class="bg-light" aria-hidden="true"></div>
-
-  <div class="controls">
-    <button class="lang-toggle" id="lang-toggle" type="button" data-i18n-aria="ui.lang" aria-label="Switch language"><span class="lang-toggle__label">EN</span></button>
-    <button class="theme-toggle" id="theme-toggle" type="button" data-i18n-aria="ui.theme" aria-label="Toggle theme">
-      <span class="theme-toggle__icon theme-toggle__sun" aria-hidden="true">&#x2600;&#xFE0F;</span>
-      <span class="theme-toggle__icon theme-toggle__universe" aria-hidden="true">&#x2B50;</span>
-    </button>
-  </div>
-
-  <div id="intro" class="intro" hidden>
-    <div class="intro__stage" aria-hidden="true">
-      <div class="intro__trail"></div>
-      <div class="intro__env intro__env--back"><div class="env-back"></div></div>
-      <div class="intro__env intro__env--flap"><div class="env-flap"></div></div>
-      <div class="intro__paper-wrap">
-        <div class="intro__paper">
-          <div class="intro__panel intro__panel--top"><i class="l-title"></i><i></i><i class="l-70"></i></div>
-          <div class="intro__panel intro__panel--mid"><i class="l-accent"></i><i></i><i class="l-80"></i><i class="l-60"></i></div>
-          <div class="intro__panel intro__panel--bottom"><i class="l-accent"></i><i></i><i class="l-75"></i></div>
-        </div>
-      </div>
-      <div class="intro__env intro__env--front"><div class="env-front"></div></div>
-      <div class="intro__env intro__env--seal"><div class="env-seal"></div></div>
+  <header class="topbar">
+    <a class="brand" href="#top"><span class="brand__pin" aria-hidden="true"></span><span data-i18n="hero.name">Seoyul Yoon</span></a>
+    <nav class="nav" data-i18n-aria="tabs.label" aria-label="Sections">
+      <ul class="nav__list" role="list">
+        <li><a class="nav__link" href="#about" data-i18n="tab.about">About</a></li>
+        <li><a class="nav__link" href="#tech" data-i18n="tab.tech">Tech</a></li>
+        <li><a class="nav__link" href="#projects" data-i18n="tab.projects">Projects</a></li>
+        <li><a class="nav__link" href="#activities" data-i18n="tab.activities">Activities</a></li>
+        <li><a class="nav__link" href="#certifications" data-i18n="tab.certs">Certs</a></li>
+      </ul>
+    </nav>
+    <div class="controls">
+      <button class="ctrl lang-toggle" id="lang-toggle" type="button" data-i18n-aria="ui.lang" aria-label="Switch language"><span class="lang-toggle__label">EN</span></button>
+      <button class="ctrl theme-toggle" id="theme-toggle" type="button" data-i18n-aria="ui.theme" aria-label="Toggle theme">
+        <svg class="theme-toggle__icon theme-toggle__sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>
+        <svg class="theme-toggle__icon theme-toggle__moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>
+      </button>
     </div>
-    <button type="button" class="intro__skip" data-i18n="intro.skip">Skip</button>
+  </header>
+
+  <div class="world" id="top">
+    <svg class="route" aria-hidden="true" focusable="false"><path class="route__edge" /><path class="route__fill" /><path class="route__line" /></svg>
+    <div class="lamps" aria-hidden="true"></div>
+
+    <section class="hero" aria-labelledby="hero-name">
+      <div class="town"><!-- art:town --><svg class="art town__svg" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMax meet" aria-hidden="true" focusable="false"><g class="sky-day"><circle class="sun" cx="1430" cy="90" r="34"/></g><g class="sky-night"><path class="moon" d="M1440 62a38 38 0 1 0 34 56a30 30 0 1 1 -34 -56z"/><circle class="star twinkle tw-0 ns" cx="120" cy="50" r="2.6"/><circle class="star twinkle tw-1 ns" cx="260" cy="110" r="1.8"/><circle class="star twinkle tw-2 ns" cx="420" cy="40" r="1.8"/><circle class="star twinkle tw-0 ns" cx="560" cy="95" r="1.8"/><circle class="star twinkle tw-1 ns" cx="700" cy="30" r="2.6"/><circle class="star twinkle tw-2 ns" cx="980" cy="60" r="1.8"/><circle class="star twinkle tw-0 ns" cx="1120" cy="110" r="1.8"/><circle class="star twinkle tw-1 ns" cx="1260" cy="40" r="1.8"/><circle class="star twinkle tw-2 ns" cx="1540" cy="150" r="2.6"/><circle class="star twinkle tw-0 ns" cx="80" cy="140" r="1.8"/><circle class="star twinkle tw-1 ns" cx="1360" cy="140" r="1.8"/><circle class="star twinkle tw-2 ns" cx="860" cy="120" r="1.8"/><circle class="star twinkle tw-0 ns" cx="-120" cy="70" r="2.6"/><circle class="star twinkle tw-1 ns" cx="-320" cy="150" r="1.8"/><circle class="star twinkle tw-2 ns" cx="-520" cy="50" r="1.8"/><circle class="star twinkle tw-0 ns" cx="1700" cy="70" r="1.8"/><circle class="star twinkle tw-1 ns" cx="1880" cy="140" r="2.6"/><circle class="star twinkle tw-2 ns" cx="2080" cy="60" r="1.8"/></g><g class="drift"><path class="cloud" d="M226.4 100a10.8 10.8 0 0 1 9.6 -14.4a14.4 14.4 0 0 1 26.4 -7.2a12 12 0 0 1 21.6 7.2a9.6 9.6 0 0 1 12 14.4z"/><path class="cloud" d="M972 60a9 9 0 0 1 8 -12a12 12 0 0 1 22 -6a10 10 0 0 1 18 6a8 8 0 0 1 10 12z"/><path class="cloud" d="M597.6 60a7.2 7.2 0 0 1 6.4 -9.6a9.6 9.6 0 0 1 17.6 -4.8a8 8 0 0 1 14.4 4.8a6.4 6.4 0 0 1 8 9.6z"/><path class="cloud" d="M-290.8 110a9.9 9.9 0 0 1 8.8 -13.2a13.2 13.2 0 0 1 24.2 -6.6a11 11 0 0 1 19.8 6.6a8.8 8.8 0 0 1 11 13.2z"/><path class="cloud" d="M1786.4 100a10.8 10.8 0 0 1 9.6 -14.4a14.4 14.4 0 0 1 26.4 -7.2a12 12 0 0 1 21.6 7.2a9.6 9.6 0 0 1 12 14.4z"/></g><g class="balloon"><path class="flag2" d="M1180 130c-26 0-40-20-40-40c0-24 18-42 40-42s40 18 40 42c0 20-14 40-40 40z"/><path class="flag1 ns" d="M1180 48c-9 10-13 26-13 42c0 18 6 30 13 40c7-10 13-22 13-40c0-16-4-32-13-42z"/><path class="ln" d="M1180 130c-26 0-40-20-40-40c0-24 18-42 40-42s40 18 40 42c0 20-14 40-40 40z M1167 90c0 18 6 30 13 40c7-10 13-22 13-40c0-16-4-32-13-42c-9 10-13 26-13 42z"/><path class="ln" d="M1170 129L1173 146"/><path class="ln" d="M1190 129L1187 146"/><rect class="wood-l" x="1170" y="146" width="20" height="13" rx="2"/></g><path class="ground-back" d="M-1400 200C-1000 150 -600 230 -300 210S-100 230 -20 212C160 160 300 180 430 200S700 150 820 140S1100 170 1250 150S1480 120 1620 140C1900 120 2300 180 2600 150S2900 140 3000 160V1700H-1400Z"/><path class="ground-front" d="M-1400 250C-1100 220 -800 300 -500 280S-200 300 -20 262C200 215 360 250 520 232S860 196 1040 210S1380 190 1620 200C1900 180 2200 240 2500 220S2800 200 3000 220V1700H-1400Z"/><clipPath id="town-ground"><path d="M-1400 250C-1100 220 -800 300 -500 280S-200 300 -20 262C200 215 360 250 520 232S860 196 1040 210S1380 190 1620 200C1900 180 2200 240 2500 220S2800 200 3000 220V1700H-1400Z"/></clipPath><g clip-path="url(#town-ground)"><path class="road" d="M-521.7 -370L2682.6 1480L2647.9 1500L-556.4 -350Z"/><path class="road" d="M2327.5 -505L2362.1 -485L-668.9 1265L-703.6 1245Z"/><path class="road" d="M2665.3 -310L2699.9 -290L-331.2 1460L-365.8 1440Z"/><path class="roadline" d="M-529.1 -356L-517 -349L-519.6 -347.5L-531.7 -354.5Z"/><path class="roadline" d="M-503.1 -341L-491 -334L-493.6 -332.5L-505.7 -339.5Z"/><path class="roadline" d="M-477.1 -326L-465 -319L-467.6 -317.5L-479.7 -324.5Z"/><path class="roadline" d="M-451.1 -311L-439 -304L-441.6 -302.5L-453.7 -309.5Z"/><path class="roadline" d="M-425.2 -296L-413 -289L-415.6 -287.5L-427.8 -294.5Z"/><path class="roadline" d="M-399.2 -281L-387.1 -274L-389.6 -272.5L-401.8 -279.5Z"/><path class="roadline" d="M-373.2 -266L-361.1 -259L-363.7 -257.5L-375.8 -264.5Z"/><path class="roadline" d="M-347.2 -251L-335.1 -244L-337.7 -242.5L-349.8 -249.5Z"/><path class="roadline" d="M-321.2 -236L-309.1 -229L-311.7 -227.5L-323.8 -234.5Z"/><path class="roadline" d="M-295.3 -221L-283.1 -214L-285.7 -212.5L-297.9 -219.5Z"/><path class="roadline" d="M-269.3 -206L-257.1 -199L-259.7 -197.5L-271.9 -204.5Z"/><path class="roadline" d="M-243.3 -191L-231.2 -184L-233.8 -182.5L-245.9 -189.5Z"/><path class="roadline" d="M-217.3 -176L-205.2 -169L-207.8 -167.5L-219.9 -174.5Z"/><path class="roadline" d="M-191.3 -161L-179.2 -154L-181.8 -152.5L-193.9 -159.5Z"/><path class="roadline" d="M-165.3 -146L-153.2 -139L-155.8 -137.5L-167.9 -144.5Z"/><path class="roadline" d="M-139.4 -131L-127.2 -124L-129.8 -122.5L-142 -129.5Z"/><path class="roadline" d="M-113.4 -116L-101.3 -109L-103.9 -107.5L-116 -114.5Z"/><path class="roadline" d="M-87.4 -101.1L-75.3 -94.1L-77.9 -92.6L-90 -99.6Z"/><path class="roadline" d="M-61.4 -86.1L-49.3 -79.1L-51.9 -77.6L-64 -84.6Z"/><path class="roadline" d="M-35.4 -71.1L-23.3 -64.1L-25.9 -62.6L-38 -69.6Z"/><path class="roadline" d="M-9.5 -56.1L2.7 -49.1L0.1 -47.6L-12.1 -54.6Z"/><path class="roadline" d="M16.5 -41.1L28.6 -34L26 -32.5L13.9 -39.6Z"/><path class="roadline" d="M42.5 -26L54.6 -19L52 -17.5L39.9 -24.5Z"/><path class="roadline" d="M68.5 -11L80.6 -4L78 -2.5L65.9 -9.5Z"/><path class="roadline" d="M94.5 4L106.6 11L104 12.5L91.9 5.5Z"/><path class="roadline" d="M120.4 19L132.6 26L130 27.5L117.8 20.5Z"/><path class="roadline" d="M146.4 34L158.5 41L155.9 42.5L143.8 35.5Z"/><path class="roadline" d="M172.4 49L184.5 56L181.9 57.5L169.8 50.5Z"/><path class="roadline" d="M198.4 64L210.5 71L207.9 72.5L195.8 65.5Z"/><path class="roadline" d="M224.4 79L236.5 86L233.9 87.5L221.8 80.5Z"/><path class="roadline" d="M250.3 94L262.5 101L259.9 102.5L247.7 95.5Z"/><path class="roadline" d="M276.3 109L288.4 116L285.9 117.5L273.7 110.5Z"/><path class="roadline" d="M302.3 124L314.4 131L311.8 132.5L299.7 125.5Z"/><path class="roadline" d="M328.3 139L340.4 146L337.8 147.5L325.7 140.5Z"/><path class="roadline" d="M354.3 154L366.4 161L363.8 162.5L351.7 155.5Z"/><path class="roadline" d="M380.2 169L392.4 176L389.8 177.5L377.6 170.5Z"/><path class="roadline" d="M406.2 184L418.4 191L415.8 192.5L403.6 185.5Z"/><path class="roadline" d="M432.2 199L444.3 206L441.7 207.5L429.6 200.5Z"/><path class="roadline" d="M458.2 214L470.3 221L467.7 222.5L455.6 215.5Z"/><path class="roadline" d="M484.2 229L496.3 236L493.7 237.5L481.6 230.5Z"/><path class="roadline" d="M510.2 244L522.3 251L519.7 252.5L507.6 245.5Z"/><path class="roadline" d="M536.1 259L548.3 266L545.7 267.5L533.5 260.5Z"/><path class="roadline" d="M562.1 274L574.2 281L571.6 282.5L559.5 275.5Z"/><path class="roadline" d="M588.1 289L600.2 296L597.6 297.5L585.5 290.5Z"/><path class="roadline" d="M614.1 304L626.2 311L623.6 312.5L611.5 305.5Z"/><path class="roadline" d="M640.1 319L652.2 326L649.6 327.5L637.5 320.5Z"/><path class="roadline" d="M666 334L678.2 341L675.6 342.5L663.4 335.5Z"/><path class="roadline" d="M692 349L704.1 356L701.5 357.5L689.4 350.5Z"/><path class="roadline" d="M718 364L730.1 371L727.5 372.5L715.4 365.5Z"/><path class="roadline" d="M744 379L756.1 386L753.5 387.5L741.4 380.5Z"/><path class="roadline" d="M770 394L782.1 401L779.5 402.5L767.4 395.5Z"/><path class="roadline" d="M795.9 409L808.1 416L805.5 417.5L793.3 410.5Z"/><path class="roadline" d="M821.9 424L834 431L831.4 432.5L819.3 425.5Z"/><path class="roadline" d="M847.9 439L860 446L857.4 447.5L845.3 440.5Z"/><path class="roadline" d="M873.9 454L886 461L883.4 462.5L871.3 455.5Z"/><path class="roadline" d="M899.9 469L912 476L909.4 477.5L897.3 470.5Z"/><path class="roadline" d="M925.8 484L938 491L935.4 492.5L923.2 485.5Z"/><path class="roadline" d="M951.8 499L963.9 506L961.4 507.5L949.2 500.5Z"/><path class="roadline" d="M977.8 514L989.9 521L987.3 522.5L975.2 515.5Z"/><path class="roadline" d="M1003.8 529L1015.9 536L1013.3 537.5L1001.2 530.5Z"/><path class="roadline" d="M1029.8 544L1041.9 551L1039.3 552.5L1027.2 545.5Z"/><path class="roadline" d="M1055.7 559L1067.9 566L1065.3 567.5L1053.1 560.5Z"/><path class="roadline" d="M1081.7 574L1093.9 581L1091.3 582.5L1079.1 575.5Z"/><path class="roadline" d="M1107.7 589L1119.8 596L1117.2 597.5L1105.1 590.5Z"/><path class="roadline" d="M1133.7 604L1145.8 611L1143.2 612.5L1131.1 605.5Z"/><path class="roadline" d="M1159.7 619L1171.8 626L1169.2 627.5L1157.1 620.5Z"/><path class="roadline" d="M1185.7 634L1197.8 641L1195.2 642.5L1183.1 635.5Z"/><path class="roadline" d="M1211.6 649L1223.8 656L1221.2 657.5L1209 650.5Z"/><path class="roadline" d="M1237.6 664L1249.7 671L1247.1 672.5L1235 665.5Z"/><path class="roadline" d="M1263.6 679L1275.7 686L1273.1 687.5L1261 680.5Z"/><path class="roadline" d="M1289.6 694L1301.7 701L1299.1 702.5L1287 695.5Z"/><path class="roadline" d="M1315.6 709L1327.7 716L1325.1 717.5L1313 710.5Z"/><path class="roadline" d="M1341.5 724L1353.7 731L1351.1 732.5L1338.9 725.5Z"/><path class="roadline" d="M1367.5 739L1379.6 746L1377 747.5L1364.9 740.5Z"/><path class="roadline" d="M1393.5 754L1405.6 761L1403 762.5L1390.9 755.5Z"/><path class="roadline" d="M1419.5 769L1431.6 776L1429 777.5L1416.9 770.5Z"/><path class="roadline" d="M1445.5 784L1457.6 791L1455 792.5L1442.9 785.5Z"/><path class="roadline" d="M1471.4 799L1483.6 806L1481 807.5L1468.8 800.5Z"/><path class="roadline" d="M1497.4 814L1509.5 821L1506.9 822.5L1494.8 815.5Z"/><path class="roadline" d="M1523.4 829L1535.5 836L1532.9 837.5L1520.8 830.5Z"/><path class="roadline" d="M1549.4 844L1561.5 851L1558.9 852.5L1546.8 845.5Z"/><path class="roadline" d="M1575.4 859L1587.5 866L1584.9 867.5L1572.8 860.5Z"/><path class="roadline" d="M1601.3 874L1613.5 881L1610.9 882.5L1598.7 875.5Z"/><path class="roadline" d="M1627.3 889L1639.4 896L1636.9 897.5L1624.7 890.5Z"/><path class="roadline" d="M1653.3 904L1665.4 911L1662.8 912.5L1650.7 905.5Z"/><path class="roadline" d="M1679.3 919L1691.4 926L1688.8 927.5L1676.7 920.5Z"/><path class="roadline" d="M1705.3 934L1717.4 941L1714.8 942.5L1702.7 935.5Z"/><path class="roadline" d="M1731.2 949L1743.4 956L1740.8 957.5L1728.6 950.5Z"/><path class="roadline" d="M1757.2 964L1769.4 971L1766.8 972.5L1754.6 965.5Z"/><path class="roadline" d="M1783.2 979L1795.3 986L1792.7 987.5L1780.6 980.5Z"/><path class="roadline" d="M1809.2 994L1821.3 1001L1818.7 1002.5L1806.6 995.5Z"/><path class="roadline" d="M1835.2 1009L1847.3 1016L1844.7 1017.5L1832.6 1010.5Z"/><path class="roadline" d="M1861.2 1024L1873.3 1031L1870.7 1032.5L1858.6 1025.5Z"/><path class="roadline" d="M1887.1 1039L1899.3 1046L1896.7 1047.5L1884.5 1040.5Z"/><path class="roadline" d="M1913.1 1054L1925.2 1061L1922.6 1062.5L1910.5 1055.5Z"/><path class="roadline" d="M1939.1 1069L1951.2 1076L1948.6 1077.5L1936.5 1070.5Z"/><path class="roadline" d="M1965.1 1084L1977.2 1091L1974.6 1092.5L1962.5 1085.5Z"/><path class="roadline" d="M1991.1 1099L2003.2 1106L2000.6 1107.5L1988.5 1100.5Z"/><path class="roadline" d="M2017 1114L2029.2 1121L2026.6 1122.5L2014.4 1115.5Z"/><path class="roadline" d="M2043 1129L2055.1 1136L2052.5 1137.5L2040.4 1130.5Z"/><path class="roadline" d="M2069 1144L2081.1 1151L2078.5 1152.5L2066.4 1145.5Z"/><path class="roadline" d="M2095 1159L2107.1 1166L2104.5 1167.5L2092.4 1160.5Z"/><path class="roadline" d="M2121 1174L2133.1 1181L2130.5 1182.5L2118.4 1175.5Z"/><path class="roadline" d="M2146.9 1189L2159.1 1196L2156.5 1197.5L2144.3 1190.5Z"/><path class="roadline" d="M2172.9 1204L2185 1211L2182.4 1212.5L2170.3 1205.5Z"/><path class="roadline" d="M2198.9 1219L2211 1226L2208.4 1227.5L2196.3 1220.5Z"/><path class="roadline" d="M2224.9 1234L2237 1241L2234.4 1242.5L2222.3 1235.5Z"/><path class="roadline" d="M2250.9 1249L2263 1256L2260.4 1257.5L2248.3 1250.5Z"/><path class="roadline" d="M2276.8 1264L2289 1271L2286.4 1272.5L2274.2 1265.5Z"/><path class="roadline" d="M2302.8 1279L2314.9 1286L2312.4 1287.5L2300.2 1280.5Z"/><path class="roadline" d="M2328.8 1294L2340.9 1301L2338.3 1302.5L2326.2 1295.5Z"/><path class="roadline" d="M2354.8 1309L2366.9 1316L2364.3 1317.5L2352.2 1310.5Z"/><path class="roadline" d="M2380.8 1324L2392.9 1331L2390.3 1332.5L2378.2 1325.5Z"/><path class="roadline" d="M2406.7 1339L2418.9 1346L2416.3 1347.5L2404.1 1340.5Z"/><path class="roadline" d="M2432.7 1354L2444.9 1361L2442.3 1362.5L2430.1 1355.5Z"/><path class="roadline" d="M2458.7 1369L2470.8 1376L2468.2 1377.5L2456.1 1370.5Z"/><path class="roadline" d="M2484.7 1384L2496.8 1391L2494.2 1392.5L2482.1 1385.5Z"/><path class="roadline" d="M2510.7 1399L2522.8 1406L2520.2 1407.5L2508.1 1400.5Z"/><path class="roadline" d="M2536.7 1414L2548.8 1421L2546.2 1422.5L2534.1 1415.5Z"/><path class="roadline" d="M2562.6 1429L2574.8 1436L2572.2 1437.5L2560 1430.5Z"/><path class="roadline" d="M2588.6 1444L2600.7 1451L2598.1 1452.5L2586 1445.5Z"/><path class="roadline" d="M2614.6 1459L2626.7 1466L2624.1 1467.5L2612 1460.5Z"/><path class="roadline" d="M2640.6 1474L2652.7 1481L2650.1 1482.5L2638 1475.5Z"/></g><path class="trunk" d="M740.9 120L740.9 107.2L744.4 107.2L744.4 120Z"/><circle class="leaf" cx="742.7" cy="98.4" r="11.2"/><path class="hl" d="M736.3 96.8a6.4 6.4 0 0 1 4.8 -5.6" fill="none"/><path class="trunk" d="M949.1 240L949.1 233L951.9 233L951.9 240Z"/><path class="leaf3" d="M950.5 203.6C954 213.4 958.9 226 958.9 230.9C958.9 235.8 942.1 235.8 942.1 230.9C942.1 226 947 213.4 950.5 203.6Z"/><g class="place-in" style="--i:2"><image class="place-img" href="assets/town/tech-day.webp" data-day="assets/town/tech-day.webp" data-night="assets/town/tech-night.webp" x="630.1" y="156.9" width="259.8" height="194.1"/></g><g class="place-in" style="--i:1"><image class="place-img" href="assets/town/home-day.webp" data-day="assets/town/home-day.webp" data-night="assets/town/home-night.webp" x="387.6" y="286.1" width="259.8" height="184.9"/></g><path class="trunk" d="M871 405L871 393.8L874.1 393.8L874.1 405Z"/><circle class="leaf" cx="872.6" cy="386.1" r="9.8"/><path class="hl" d="M867 384.7a5.6 5.6 0 0 1 4.2 -4.9" fill="none"/><path class="trunk" d="M1260.9 420L1260.9 413L1263.7 413L1263.7 420Z"/><path class="leaf3" d="M1262.3 383.6C1265.8 393.4 1270.7 406 1270.7 410.9C1270.7 415.8 1253.9 415.8 1253.9 410.9C1253.9 406 1258.8 393.4 1262.3 383.6Z"/><path class="mint-l" d="M107 427L141.7 447L141.7 421L107 401Z"/><path class="mint-r" d="M171.1 430L141.7 447L141.7 421L171.1 404Z"/><path class="mint-t" d="M136.5 384L171.1 404L141.7 421L107 401Z"/><path class="win" d="M113.1 421.5L120.9 426L120.9 417L113.1 412.5Z"/><path class="win" d="M127.8 430L135.6 434.5L135.6 425.5L127.8 421Z"/><path class="mint-r" d="M171.1 404L141.7 421L156.4 398.5Z"/><path class="coral-b" d="M136.5 383.5L176.3 406.5L159 400L119.1 377Z"/><path class="coral-f" d="M119.1 377L159 400L141.7 426.5L101.8 403.5Z"/><g class="place-in" style="--i:3"><image class="place-img" href="assets/town/lab-day.webp" data-day="assets/town/lab-day.webp" data-night="assets/town/lab-night.webp" x="937.5" y="299.7" width="259.8" height="228.9"/></g><path class="trunk" d="M1747.5 470L1747.5 458.8L1750.5 458.8L1750.5 470Z"/><circle class="leaf" cx="1749" cy="451.1" r="9.8"/><path class="hl" d="M1743.4 449.7a5.6 5.6 0 0 1 4.2 -4.9" fill="none"/><path class="trunk" d="M-100.9 500L-100.9 487.2L-97.3 487.2L-97.3 500Z"/><circle class="leaf" cx="-99.1" cy="478.4" r="11.2"/><path class="hl" d="M-105.5 476.8a6.4 6.4 0 0 1 4.8 -5.6" fill="none"/><path class="trunk" d="M1698 549.5L1698 541.5L1701.2 541.5L1701.2 549.5Z"/><path class="leaf3" d="M1699.6 507.9C1703.6 519.1 1709.2 533.5 1709.2 539.1C1709.2 544.7 1690 544.7 1690 539.1C1690 533.5 1695.6 519.1 1699.6 507.9Z"/><path class="yellow-l" d="M1951.7 552L1986.3 572L1986.3 546L1951.7 526Z"/><path class="yellow-r" d="M2015.7 555L1986.3 572L1986.3 546L2015.7 529Z"/><path class="yellow-t" d="M1981.1 509L2015.7 529L1986.3 546L1951.7 526Z"/><path class="win" d="M1957.7 546.5L1965.5 551L1965.5 542L1957.7 537.5Z"/><path class="win" d="M1972.4 555L1980.2 559.5L1980.2 550.5L1972.4 546Z"/><path class="yellow-r" d="M2015.7 529L1986.3 546L2001 523.5Z"/><path class="lav-b" d="M1981.1 508.5L2020.9 531.5L2003.6 525L1963.8 502Z"/><path class="lav-f" d="M1963.8 502L2003.6 525L1986.3 551.5L1946.5 528.5Z"/><path class="trunk" d="M975.3 585L975.3 579L977.7 579L977.7 585Z"/><path class="leaf3" d="M976.5 553.8C979.5 562.2 983.7 573 983.7 577.2C983.7 581.4 969.3 581.4 969.3 577.2C969.3 573 973.5 562.2 976.5 553.8Z"/><g class="place-in" style="--i:5"><image class="place-img" href="assets/town/plaza-day.webp" data-day="assets/town/plaza-day.webp" data-night="assets/town/plaza-night.webp" x="677.7" y="484.9" width="259.8" height="193.7"/></g><path class="trunk" d="M1217.8 605L1217.8 599L1220.2 599L1220.2 605Z"/><path class="leaf3" d="M1219 573.8C1222 582.2 1226.2 593 1226.2 597.2C1226.2 601.4 1211.8 601.4 1211.8 597.2C1211.8 593 1216 582.2 1219 573.8Z"/><path class="trunk" d="M1572.7 620L1572.7 613L1575.5 613L1575.5 620Z"/><path class="leaf3" d="M1574.1 583.6C1577.6 593.4 1582.5 606 1582.5 610.9C1582.5 615.8 1565.7 615.8 1565.7 610.9C1565.7 606 1570.6 593.4 1574.1 583.6Z"/><g class="place-in" style="--i:4"><image class="place-img" href="assets/town/gate-day.webp" data-day="assets/town/gate-day.webp" data-night="assets/town/gate-night.webp" x="1253.6" y="525.9" width="259.8" height="185.2"/></g><path class="trunk" d="M-540.6 640L-540.6 632L-537.4 632L-537.4 640Z"/><path class="leaf3" d="M-539 598.4C-535 609.6 -529.4 624 -529.4 629.6C-529.4 635.2 -548.6 635.2 -548.6 629.6C-548.6 624 -543 609.6 -539 598.4Z"/><path class="trunk" d="M-315.4 650L-315.4 638.8L-312.3 638.8L-312.3 650Z"/><circle class="leaf" cx="-313.9" cy="631.1" r="9.8"/><path class="hl" d="M-319.5 629.7a5.6 5.6 0 0 1 4.2 -4.9" fill="none"/><path class="lav-l" d="M1613.9 657L1648.5 677L1648.5 651L1613.9 631Z"/><path class="lav-r" d="M1678 660L1648.5 677L1648.5 651L1678 634Z"/><path class="lav-t" d="M1643.3 614L1678 634L1648.5 651L1613.9 631Z"/><path class="win" d="M1620 651.5L1627.8 656L1627.8 647L1620 642.5Z"/><path class="win" d="M1634.7 660L1642.5 664.5L1642.5 655.5L1634.7 651Z"/><path class="lav-r" d="M1678 634L1648.5 651L1663.3 628.5Z"/><path class="green-b" d="M1643.3 613.5L1683.2 636.5L1665.9 630L1626 607Z"/><path class="green-f" d="M1626 607L1665.9 630L1648.5 656.5L1608.7 633.5Z"/><path class="peach-l" d="M-229.9 666.5L-195.2 686.5L-195.2 660.5L-229.9 640.5Z"/><path class="peach-r" d="M-165.8 669.5L-195.2 686.5L-195.2 660.5L-165.8 643.5Z"/><path class="peach-t" d="M-200.4 623.5L-165.8 643.5L-195.2 660.5L-229.9 640.5Z"/><path class="win" d="M-223.8 661L-216 665.5L-216 656.5L-223.8 652Z"/><path class="win" d="M-209.1 669.5L-201.3 674L-201.3 665L-209.1 660.5Z"/><path class="peach-r" d="M-165.8 643.5L-195.2 660.5L-180.5 638Z"/><path class="green-b" d="M-200.4 623L-160.6 646L-177.9 639.5L-217.7 616.5Z"/><path class="green-f" d="M-217.7 616.5L-177.9 639.5L-195.2 666L-235.1 643Z"/><path class="trunk" d="M1814.8 680L1814.8 667.2L1818.3 667.2L1818.3 680Z"/><circle class="leaf" cx="1816.6" cy="658.4" r="11.2"/><path class="hl" d="M1810.2 656.8a6.4 6.4 0 0 1 4.8 -5.6" fill="none"/><path class="trunk" d="M776.1 720L776.1 714L778.5 714L778.5 720Z"/><path class="leaf3" d="M777.3 688.8C780.3 697.2 784.5 708 784.5 712.2C784.5 716.4 770.1 716.4 770.1 712.2C770.1 708 774.3 697.2 777.3 688.8Z"/><path class="trunk" d="M1477 755L1477 742.2L1480.6 742.2L1480.6 755Z"/><circle class="leaf" cx="1478.8" cy="733.4" r="11.2"/><path class="hl" d="M1472.4 731.8a6.4 6.4 0 0 1 4.8 -5.6" fill="none"/><g class="place-in" style="--i:6"><image class="place-img" href="assets/town/launch-day.webp" data-day="assets/town/launch-day.webp" data-night="assets/town/launch-night.webp" x="993.8" y="667.4" width="259.8" height="193.7"/></g><path class="trunk" d="M914.3 800L914.3 788.8L917.4 788.8L917.4 800Z"/><circle class="leaf" cx="915.9" cy="781.1" r="9.8"/><path class="hl" d="M910.3 779.7a5.6 5.6 0 0 1 4.2 -4.9" fill="none"/><path class="trunk" d="M2109.2 810L2109.2 797.2L2112.8 797.2L2112.8 810Z"/><circle class="leaf" cx="2111" cy="788.4" r="11.2"/><path class="hl" d="M2104.6 786.8a6.4 6.4 0 0 1 4.8 -5.6" fill="none"/><path class="blue-l" d="M1820 817L1854.7 837L1854.7 811L1820 791Z"/><path class="blue-r" d="M1884.1 820L1854.7 837L1854.7 811L1884.1 794Z"/><path class="blue-t" d="M1849.5 774L1884.1 794L1854.7 811L1820 791Z"/><path class="win" d="M1826.1 811.5L1833.9 816L1833.9 807L1826.1 802.5Z"/><path class="win" d="M1840.8 820L1848.6 824.5L1848.6 815.5L1840.8 811Z"/><path class="blue-r" d="M1884.1 794L1854.7 811L1869.4 788.5Z"/><path class="coral-b" d="M1849.5 773.5L1889.3 796.5L1872 790L1832.1 767Z"/><path class="coral-f" d="M1832.1 767L1872 790L1854.7 816.5L1814.8 793.5Z"/><path class="trunk" d="M-301.6 850L-301.6 842L-298.4 842L-298.4 850Z"/><path class="leaf3" d="M-300 808.4C-296 819.6 -290.4 834 -290.4 839.6C-290.4 845.2 -309.6 845.2 -309.6 839.6C-309.6 834 -304 819.6 -300 808.4Z"/><path class="trunk" d="M1624.5 890L1624.5 878.8L1627.6 878.8L1627.6 890Z"/><circle class="leaf" cx="1626" cy="871.1" r="9.8"/><path class="hl" d="M1620.4 869.7a5.6 5.6 0 0 1 4.2 -4.9" fill="none"/><path class="trunk" d="M1832.5 890L1832.5 883L1835.3 883L1835.3 890Z"/><path class="leaf3" d="M1833.9 853.6C1837.4 863.4 1842.3 876 1842.3 880.9C1842.3 885.8 1825.5 885.8 1825.5 880.9C1825.5 876 1830.4 863.4 1833.9 853.6Z"/><g class="place-in" style="--i:7"><image class="place-img" href="assets/town/post-day.webp" data-day="assets/town/post-day.webp" data-night="assets/town/post-night.webp" x="1309.9" y="796.9" width="259.8" height="193.7"/></g><path class="trunk" d="M1226.3 920L1226.3 913L1229.1 913L1229.1 920Z"/><path class="leaf3" d="M1227.7 883.6C1231.2 893.4 1236.1 906 1236.1 910.9C1236.1 915.8 1219.3 915.8 1219.3 910.9C1219.3 906 1224.2 893.4 1227.7 883.6Z"/><path class="trunk" d="M1200.4 985L1200.4 975.4L1203 975.4L1203 985Z"/><circle class="leaf" cx="1201.7" cy="968.8" r="8.4"/><path class="hl" d="M1196.9 967.6a4.8 4.8 0 0 1 3.6 -4.2" fill="none"/><g class="cars"><path class="red-l" d="M553 266.5L582.5 283.5L582.5 274.5L553 257.5Z"/><path class="red-r" d="M596.3 275.5L582.5 283.5L582.5 274.5L596.3 266.5Z"/><path class="red-t" d="M566.9 249.5L596.3 266.5L582.5 274.5L553 257.5Z"/><path class="glass-l" d="M562.1 261.3L575.1 268.8L575.1 260.8L562.1 253.3Z"/><path class="glass-r" d="M586.4 262.3L575.1 268.8L575.1 260.8L586.4 254.3Z"/><path class="glass-t" d="M573.4 246.8L586.4 254.3L575.1 260.8L562.1 253.3Z"/><path class="lamp" d="M594.6 272.5L592 274L592 271L594.6 269.5Z"/><path class="lamp" d="M586.8 277L584.2 278.5L584.2 275.5L586.8 274Z"/><circle class="dark-l" r="4" transform="matrix(0.9 0.5 0 1 559.1 269)"/><circle class="dark-l" r="4" transform="matrix(0.9 0.5 0 1 576.4 279)"/><path class="yellow-l" d="M1350.6 746L1380.1 763L1380.1 754L1350.6 737Z"/><path class="yellow-r" d="M1393.9 755L1380.1 763L1380.1 754L1393.9 746Z"/><path class="yellow-t" d="M1364.5 729L1393.9 746L1380.1 754L1350.6 737Z"/><path class="glass-l" d="M1359.7 740.8L1372.7 748.3L1372.7 740.3L1359.7 732.8Z"/><path class="glass-r" d="M1384 741.8L1372.7 748.3L1372.7 740.3L1384 733.8Z"/><path class="glass-t" d="M1371 726.3L1384 733.8L1372.7 740.3L1359.7 732.8Z"/><path class="lamp" d="M1392.2 752L1389.6 753.5L1389.6 750.5L1392.2 749Z"/><path class="lamp" d="M1384.4 756.5L1381.8 758L1381.8 755L1384.4 753.5Z"/><circle class="dark-l" r="4" transform="matrix(0.9 0.5 0 1 1356.7 748.5)"/><circle class="dark-l" r="4" transform="matrix(0.9 0.5 0 1 1374 758.5)"/></g><a class="pin" href="#about" tabindex="-1" style="--i:7"><g transform="translate(517.5 290.1)"><g class="pin__bob"><path class="pin-body" d="M0 0C-3 -8 -15 -14 -15 -27A15 15 0 1 1 15 -27C15 -14 3 -8 0 0Z"/><circle class="white" cy="-27" r="9"/><text class="pin__num" y="-23" text-anchor="middle">1</text></g></g></a><a class="pin" href="#tech" tabindex="-1" style="--i:8"><g transform="translate(760 160.9)"><g class="pin__bob"><path class="pin-body" d="M0 0C-3 -8 -15 -14 -15 -27A15 15 0 1 1 15 -27C15 -14 3 -8 0 0Z"/><circle class="white" cy="-27" r="9"/><text class="pin__num" y="-23" text-anchor="middle">2</text></g></g></a><a class="pin" href="#projects" tabindex="-1" style="--i:9"><g transform="translate(1067.4 303.7)"><g class="pin__bob"><path class="pin-body" d="M0 0C-3 -8 -15 -14 -15 -27A15 15 0 1 1 15 -27C15 -14 3 -8 0 0Z"/><circle class="white" cy="-27" r="9"/><text class="pin__num" y="-23" text-anchor="middle">3</text></g></g></a><a class="pin" href="#project-apim" tabindex="-1" style="--i:10"><g transform="translate(1383.5 529.9)"><g class="pin__bob"><path class="pin-body" d="M0 0C-3 -8 -15 -14 -15 -27A15 15 0 1 1 15 -27C15 -14 3 -8 0 0Z"/><circle class="white" cy="-27" r="9"/><text class="pin__num" y="-23" text-anchor="middle">4</text></g></g></a><a class="pin" href="#activities" tabindex="-1" style="--i:11"><g transform="translate(807.6 488.9)"><g class="pin__bob"><path class="pin-body" d="M0 0C-3 -8 -15 -14 -15 -27A15 15 0 1 1 15 -27C15 -14 3 -8 0 0Z"/><circle class="white" cy="-27" r="9"/><text class="pin__num" y="-23" text-anchor="middle">5</text></g></g></a><a class="pin" href="#certifications" tabindex="-1" style="--i:12"><g transform="translate(1123.7 671.4)"><g class="pin__bob"><path class="pin-body" d="M0 0C-3 -8 -15 -14 -15 -27A15 15 0 1 1 15 -27C15 -14 3 -8 0 0Z"/><circle class="white" cy="-27" r="9"/><text class="pin__num" y="-23" text-anchor="middle">6</text></g></g></a><a class="pin" href="#closing" tabindex="-1" style="--i:13"><g transform="translate(1439.8 800.9)"><g class="pin__bob"><path class="pin-body" d="M0 0C-3 -8 -15 -14 -15 -27A15 15 0 1 1 15 -27C15 -14 3 -8 0 0Z"/><circle class="white" cy="-27" r="9"/><text class="pin__num" y="-23" text-anchor="middle">7</text></g></g></a></svg><!-- /art:town --></div>
+      <div class="hero__text">
+        <p class="hero__kicker" aria-hidden="true">WELCOME TO CAREER TOWN</p>
+        <div class="hero__head">
+          <img class="hero__photo" src="assets/profile.jpeg" alt="Seoyul Yoon" width="160" height="160" />
+          <h1 class="hero__name" id="hero-name" tabindex="-1" data-i18n="hero.name">Seoyul Yoon</h1>
+        </div>
+        <p class="hero__role"><span data-i18n="hero.role">AI Platform Engineer</span> @ SK AX</p>
+        <p class="hero__tagline" data-i18n="hero.tagline">A platform engineer who learns from the community and proves it in production.</p>
+          <div class="socials">
+          <a class="social" href="https://github.com/Seo-yul" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12Z"/></svg>
+          </a>
+          <a class="social" href="https://www.linkedin.com/in/yoon-seoyul/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          </a>
+          <a class="social" href="mailto:seoyul@devops.ai.kr" aria-label="Email">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,7 12,13 2,7"/></svg>
+          </a>
+          </div>
+      </div>
+      <div class="start" aria-hidden="true"><span class="start__sign">START</span><span class="start__hint">SCROLL TO WALK</span></div>
+    </section>
+
+    <main class="journey">
+      <section class="stop stop--left" id="about" aria-labelledby="about-title">
+        <div class="stop__art"><!-- art:home --><img class="art art-img" src="assets/town/home-day.webp" data-day="assets/town/home-day.webp" data-night="assets/town/home-night.webp" width="1100" height="783" alt="" loading="lazy" decoding="async" /><!-- /art:home --><span class="stop__door" aria-hidden="true"></span></div>
+        <div class="stop__card card">
+          <p class="card__kicker" aria-hidden="true"><span class="card__pin">01</span>HOME</p>
+          <aside class="note"><p data-i18n="quote.main">I don't just modernize systems — I build the culture around it.</p></aside>
+          <h2 class="card__title" id="about-title" data-i18n="about.title">About</h2>
+          <p class="prose" data-i18n="about.p1">AI Platform Engineer with deep roots in the Kubernetes ecosystem, infrastructure automation, and observability. I design and build platforms for developing, deploying, and operating AI agents and workloads reliably in production.</p>
+          <p class="prose" data-i18n="about.p2">These days I'm active in the open-source agentic AI community, helping bridge the gap between cutting-edge technology and practical enterprise adoption. I believe the best infrastructure is the kind nobody has to think about.</p>
+          <p class="prose" data-i18n="about.p3">At work, I drive enterprise AX (AI Transformation): running AI workloads effectively on cloud-native infrastructure and leading AI adoption across organizations.</p>
+        </div>
+      </section>
+
+      <section class="stop stop--right" id="tech" aria-labelledby="tech-title">
+        <div class="stop__art"><!-- art:tech --><img class="art art-img" src="assets/town/tech-day.webp" data-day="assets/town/tech-day.webp" data-night="assets/town/tech-night.webp" width="1100" height="822" alt="" loading="lazy" decoding="async" /><!-- /art:tech --><span class="stop__door" aria-hidden="true"></span></div>
+        <div class="stop__card card">
+          <p class="card__kicker" aria-hidden="true"><span class="card__pin">02</span>WORKSHOP</p>
+          <h2 class="card__title" id="tech-title" data-i18n="tech.title">Tech Stack</h2>
+          <dl class="tech">
+          <div class="tech__row"><dt data-i18n="tech.cat1">Languages &amp; Frameworks</dt><dd><span class="chip">Go</span><span class="chip">Operator SDK</span><span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">LangGraph</span><span class="chip">Java</span></dd></div>
+          <div class="tech__row"><dt data-i18n="tech.cat2">Container &amp; Orchestration</dt><dd><span class="chip">Kubernetes</span><span class="chip">Podman</span><span class="chip">Helm</span></dd></div>
+          <div class="tech__row"><dt data-i18n="tech.cat3">Observability</dt><dd><span class="chip">Fluent Bit</span><span class="chip">OpenTelemetry</span><span class="chip">Prometheus</span><span class="chip">Grafana</span><span class="chip">Datadog</span></dd></div>
+          <div class="tech__row"><dt data-i18n="tech.cat4">Infrastructure as Code</dt><dd><span class="chip">Terraform</span><span class="chip">Ansible</span></dd></div>
+          <div class="tech__row"><dt data-i18n="tech.cat5">CI / CD</dt><dd><span class="chip">GitHub Actions</span></dd></div>
+          </dl>
+        </div>
+      </section>
+
+      <section class="stop stop--left" id="projects" aria-labelledby="projects-title">
+        <div class="stop__art"><!-- art:lab --><img class="art art-img" src="assets/town/lab-day.webp" data-day="assets/town/lab-day.webp" data-night="assets/town/lab-night.webp" width="1100" height="969" alt="" loading="lazy" decoding="async" /><!-- /art:lab --><span class="stop__door" aria-hidden="true"></span></div>
+        <div class="stop__card card">
+          <p class="card__kicker" aria-hidden="true"><span class="card__pin">03</span>AGENT LAB</p>
+          <h2 class="card__title" id="projects-title" data-i18n="projects.title">Projects</h2>
+          <article class="project">
+          <h3 class="project__title">AXGENTICWire Core Agent Studio</h3>
+          <p class="project__period" data-i18n="project1.period">2025.05 — Present</p>
+          <p class="prose" data-i18n="project1.desc">Engineered MCP Server Builder enabling OpenAPI-to-MCP specification conversion. Streamlined AI agent development workflow for enterprise teams.</p>
+          <ul class="highlights" role="list">
+          <li data-i18n="project1.h1">Cut MCP server development per service from ~1 day to under 10 minutes with OpenAPI-based generation</li>
+          <li data-i18n="project1.h2">Automated daily system inspections through the final judgment step with an AI agent, cutting ~2 hours to under 10 minutes</li>
+          <li data-i18n="project1.h3">Designed OAuth authorization for MCP clients to block out-of-scope actions</li>
+          <li data-i18n="project1.h4">Expanded adoption to large-enterprise groupware and drove global business expansion</li>
+          </ul>
+          <ul class="project__tags" role="list"><li class="chip">FastAPI</li><li class="chip">Go Operator</li><li class="chip">MCP</li><li class="chip">AI Agent</li><li class="chip">Kubernetes</li></ul>
+          <div class="inks">
+          <div class="ink"><b class="ink__value">OpenAPI → MCP → AI Agent</b><small class="ink__label" data-i18n="project1.metric.label">AI Transformation</small></div>
+          </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="stop stop--right" id="project-apim" aria-labelledby="apim-title">
+        <div class="stop__art"><!-- art:gate --><img class="art art-img" src="assets/town/gate-day.webp" data-day="assets/town/gate-day.webp" data-night="assets/town/gate-night.webp" width="1100" height="784" alt="" loading="lazy" decoding="async" /><!-- /art:gate --><span class="stop__door" aria-hidden="true"></span></div>
+        <div class="stop__card card">
+          <p class="card__kicker" aria-hidden="true"><span class="card__pin">04</span>API GATEWAY</p>
+          <article class="project">
+          <h3 class="project__title" id="apim-title">Modernization Platform APIM</h3>
+          <p class="project__period" data-i18n="project2.period">2021.01 — 2025.04</p>
+          <p class="prose" data-i18n="project2.desc">Architected and implemented Kubernetes-native API gateway management platform. Centralized API lifecycle management across multi-cluster environments.</p>
+          <ul class="highlights" role="list">
+          <li data-i18n="project2.h1">Improved event processing performance by 66%+ and cut latency from 500ms to 200ms by migrating Java to Go</li>
+          <li data-i18n="project2.h2">Resolved 3s+ latency and OOM by redesigning rate limiting from MariaDB to Redis</li>
+          <li data-i18n="project2.h3">Validated platform reliability at 2,000 RPS sustained for 8 hours with a custom load-testing tool</li>
+          <li data-i18n="project2.h4">Reduced AWS EKS cloud costs by 10%+ with ARM-based architecture and autoscaling</li>
+          </ul>
+          <ul class="project__tags" role="list"><li class="chip">Kubernetes</li><li class="chip">API Gateway</li><li class="chip">Platform Engineering</li></ul>
+          <div class="inks">
+          <div class="ink"><b class="ink__value">3d → 1d</b><small class="ink__label" data-i18n="project2.m1.label">Delivery Time</small></div>
+          <div class="ink"><b class="ink__value">60%</b><small class="ink__label" data-i18n="project2.m2.label">Build time reduced</small></div>
+          <div class="ink"><b class="ink__value">500 → 200ms</b><small class="ink__label" data-i18n="project2.m3.label">Event latency</small></div>
+          </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="stop stop--left" id="activities" aria-labelledby="activities-title">
+        <div class="stop__art"><!-- art:plaza --><img class="art art-img" src="assets/town/plaza-day.webp" data-day="assets/town/plaza-day.webp" data-night="assets/town/plaza-night.webp" width="1100" height="820" alt="" loading="lazy" decoding="async" /><!-- /art:plaza --><span class="stop__door" aria-hidden="true"></span></div>
+        <div class="stop__card card">
+          <p class="card__kicker" aria-hidden="true"><span class="card__pin">05</span>COMMUNITY PLAZA</p>
+          <h2 class="card__title" id="activities-title" data-i18n="activities.title">Activities</h2>
+          <ul class="nametags" role="list">
+          <li><button class="obj nametag nametag--speaker" type="button" aria-haspopup="dialog" data-kicker="obj.mcp.kicker" data-title="obj.mcp.title" data-meta="obj.mcp.meta" data-desc="obj.mcp.desc"><span class="nametag__role" data-i18n="obj.mcp.kicker">SPEAKER</span><span class="nametag__name" data-i18n="obj.mcp.title">MCP Dev Summit Seoul</span><span class="nametag__date" data-i18n="obj.mcp.meta">Aug 2026</span></button></li>
+          <li><button class="obj nametag nametag--organizer" type="button" aria-haspopup="dialog" data-kicker="obj.aaif.kicker" data-title="obj.aaif.title" data-meta="obj.aaif.meta" data-desc="obj.aaif.desc"><span class="nametag__role" data-i18n="obj.aaif.kicker">ORGANIZER</span><span class="nametag__name" data-i18n="obj.aaif.title">AAIF Seoul Chapter</span><span class="nametag__date" data-i18n="obj.aaif.meta">2026–Present</span></button></li>
+          <li><button class="obj nametag nametag--member" type="button" aria-haspopup="dialog" data-kicker="obj.k8s.kicker" data-title="obj.k8s.title" data-meta="obj.k8s.meta" data-desc="obj.k8s.desc"><span class="nametag__role" data-i18n="obj.k8s.kicker">MEMBER</span><span class="nametag__name" data-i18n="obj.k8s.title">Kubernetes Organization</span><span class="nametag__date" data-i18n="obj.k8s.meta">Sep 2022–Jul 2025</span></button></li>
+          <li><button class="obj nametag nametag--ambassador" type="button" aria-haspopup="dialog" data-kicker="obj.ncp.kicker" data-title="obj.ncp.title" data-meta="obj.ncp.meta" data-desc="obj.ncp.desc"><span class="nametag__role" data-i18n="obj.ncp.kicker">AMBASSADOR</span><span class="nametag__name" data-i18n="obj.ncp.title">NAVER Cloud Platform Tech Ambassador</span><span class="nametag__date" data-i18n="obj.ncp.meta">Jun 2023–Feb 2026</span></button></li>
+          <li><button class="obj nametag nametag--organizer" type="button" aria-haspopup="dialog" data-kicker="obj.gophercon.kicker" data-title="obj.gophercon.title" data-meta="obj.gophercon.meta" data-desc="obj.gophercon.desc"><span class="nametag__role" data-i18n="obj.gophercon.kicker">ORGANIZER</span><span class="nametag__name" data-i18n="obj.gophercon.title">GopherCon Korea</span><span class="nametag__date" data-i18n="obj.gophercon.meta">2023, 2024</span></button></li>
+          <li><button class="obj nametag nametag--organizer" type="button" aria-haspopup="dialog" data-kicker="obj.kcd.kicker" data-title="obj.kcd.title" data-meta="obj.kcd.meta" data-desc="obj.kcd.desc" data-img="certi/KCD-Korea-2023-Organizer-72.png" data-img-alt="KCD Korea 2023 Organizer badge"><span class="nametag__role" data-i18n="obj.kcd.kicker">ORGANIZER</span><span class="nametag__name" data-i18n="obj.kcd.title">KCD Korea 2023</span><span class="nametag__date" data-i18n="obj.kcd.meta">2023</span></button></li>
+          <li><button class="obj nametag nametag--speaker" type="button" aria-haspopup="dialog" data-kicker="obj.datadog.kicker" data-title="obj.datadog.title" data-meta="obj.datadog.meta" data-desc="obj.datadog.desc"><span class="nametag__role" data-i18n="obj.datadog.kicker">SPEAKER</span><span class="nametag__name" data-i18n="obj.datadog.title">Datadog User Group Korea</span><span class="nametag__date" data-i18n="obj.datadog.meta">Feb 2025</span></button></li>
+          <li><button class="obj nametag nametag--speaker" type="button" aria-haspopup="dialog" data-kicker="obj.awskrug.kicker" data-title="obj.awskrug.title" data-meta="obj.awskrug.meta" data-desc="obj.awskrug.desc"><span class="nametag__role" data-i18n="obj.awskrug.kicker">SPEAKER</span><span class="nametag__name" data-i18n="obj.awskrug.title">AWS Korea User Group</span><span class="nametag__date" data-i18n="obj.awskrug.meta">Jun 2022</span></button></li>
+          </ul>
+          <h3 class="card__sub" data-i18n="act.award">Award</h3>
+          <ul class="seals" role="list">
+          <li><button class="obj seal" type="button" aria-haspopup="dialog" data-kicker="obj.kind.award" data-title="obj.skms.title" data-meta="obj.skms.meta" data-desc="obj.skms.desc"><span class="seal__disc" aria-hidden="true">2025</span><span class="seal__name" data-i18n="obj.skms.title">SKMS Practice Award</span></button></li>
+          <li><button class="obj seal" type="button" aria-haspopup="dialog" data-kicker="obj.kind.award" data-title="obj.osca.title" data-meta="obj.osca.meta" data-desc="obj.osca.desc"><span class="seal__disc" aria-hidden="true">2022</span><span class="seal__name" data-i18n="obj.osca.title">Excellence Award</span></button></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="stop stop--right" id="certifications" aria-labelledby="certs-title">
+        <div class="stop__art"><!-- art:launch --><img class="art art-img" src="assets/town/launch-day.webp" data-day="assets/town/launch-day.webp" data-night="assets/town/launch-night.webp" width="1100" height="820" alt="" loading="lazy" decoding="async" /><!-- /art:launch --><span class="stop__door" aria-hidden="true"></span></div>
+        <div class="stop__card card">
+          <p class="card__kicker" aria-hidden="true"><span class="card__pin">06</span>LAUNCH PAD</p>
+          <h2 class="card__title" id="certs-title" data-i18n="certs.title">Certifications</h2>
+          <ul class="stamps" role="list">
+          <li><button class="obj stamp stamp--big" type="button" aria-haspopup="dialog" data-kicker="obj.kind.cert" data-title="obj.kubestronaut.title" data-meta="obj.kubestronaut.meta" data-desc="obj.kubestronaut.desc"><span class="stamp__in" style="--stamp:#326CE5"><img class="stamp__badge" src="certi/kubestronaut-stacked-white.svg" alt="" width="46" height="46" /><b class="stamp__code">Kubestronaut</b><small class="stamp__issuer">CNCF</small></span></button></li>
+          <li><button class="obj stamp" type="button" aria-haspopup="dialog" data-kicker="obj.kind.cert" data-title="obj.cks.title" data-meta="obj.cks.meta"><span class="stamp__in" style="--stamp:#2557B5"><img class="stamp__badge" src="certi/cks-white.svg" alt="" width="34" height="34" /><b class="stamp__code">CKS</b><small class="stamp__issuer">Kubernetes</small></span></button></li>
+          <li><button class="obj stamp" type="button" aria-haspopup="dialog" data-kicker="obj.kind.cert" data-title="obj.kcsa.title" data-meta="obj.kcsa.meta"><span class="stamp__in" style="--stamp:#2F5FC4"><img class="stamp__badge" src="certi/kcsa-white.svg" alt="" width="34" height="34" /><b class="stamp__code">KCSA</b><small class="stamp__issuer">Kubernetes</small></span></button></li>
+          <li><button class="obj stamp" type="button" aria-haspopup="dialog" data-kicker="obj.kind.cert" data-title="obj.kcna.title" data-meta="obj.kcna.meta"><span class="stamp__in" style="--stamp:#2B66D1"><img class="stamp__badge" src="certi/kcna-white.svg" alt="" width="34" height="34" /><b class="stamp__code">KCNA</b><small class="stamp__issuer">Kubernetes</small></span></button></li>
+          <li><button class="obj stamp" type="button" aria-haspopup="dialog" data-kicker="obj.kind.cert" data-title="obj.ckad.title" data-meta="obj.ckad.meta"><span class="stamp__in" style="--stamp:#1E4FA8"><img class="stamp__badge" src="certi/ckad-white.svg" alt="" width="34" height="34" /><b class="stamp__code">CKAD</b><small class="stamp__issuer">Kubernetes</small></span></button></li>
+          <li><button class="obj stamp" type="button" aria-haspopup="dialog" data-kicker="obj.kind.cert" data-title="obj.cka.title" data-meta="obj.cka.meta"><span class="stamp__in" style="--stamp:#2557B5"><img class="stamp__badge" src="certi/cka-white.svg" alt="" width="34" height="34" /><b class="stamp__code">CKA</b><small class="stamp__issuer">Kubernetes</small></span></button></li>
+          <li><button class="obj stamp" type="button" aria-haspopup="dialog" data-kicker="obj.kind.cert" data-title="obj.dea.title" data-meta="obj.dea.meta"><span class="stamp__in" style="--stamp:#A94F2F"><b class="stamp__code">DEA</b><small class="stamp__issuer">AWS</small></span></button></li>
+          <li><button class="obj stamp" type="button" aria-haspopup="dialog" data-kicker="obj.kind.cert" data-title="obj.soa.title" data-meta="obj.soa.meta"><span class="stamp__in" style="--stamp:#9A4728"><b class="stamp__code">SOA</b><small class="stamp__issuer">AWS</small></span></button></li>
+          <li><button class="obj stamp" type="button" aria-haspopup="dialog" data-kicker="obj.kind.cert" data-title="obj.dva.title" data-meta="obj.dva.meta"><span class="stamp__in" style="--stamp:#8C4526"><b class="stamp__code">DVA</b><small class="stamp__issuer">AWS</small></span></button></li>
+          <li><button class="obj stamp" type="button" aria-haspopup="dialog" data-kicker="obj.kind.cert" data-title="obj.saa.title" data-meta="obj.saa.meta"><span class="stamp__in" style="--stamp:#7E3E22"><b class="stamp__code">SAA</b><small class="stamp__issuer">AWS</small></span></button></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="stop stop--left" id="closing" aria-labelledby="closing-sign">
+        <div class="stop__art"><!-- art:post --><img class="art art-img" src="assets/town/post-day.webp" data-day="assets/town/post-day.webp" data-night="assets/town/post-night.webp" width="1100" height="820" alt="" loading="lazy" decoding="async" /><!-- /art:post --><span class="stop__door" aria-hidden="true"></span></div>
+        <div class="stop__card card closing">
+          <p class="card__kicker" aria-hidden="true"><span class="card__pin">07</span>POST OFFICE</p>
+          <p class="closing__quote" data-i18n="footer.quote">“AI runs on infrastructure, but transformation runs on people. Open-source communities taught me that the best technology is built together.”</p>
+          <p class="closing__sign" id="closing-sign" data-i18n="closing.sign">Sincerely, Seoyul</p>
+          <p class="closing__ps"><span data-i18n="closing.ps">P.S. Always happy to chat —</span> <a href="mailto:seoyul@devops.ai.kr">seoyul@devops.ai.kr</a></p>
+          <div class="socials socials--small">
+          <a class="social" href="https://github.com/Seo-yul" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12Z"/></svg>
+          </a>
+          <a class="social" href="https://www.linkedin.com/in/yoon-seoyul/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- art:walker --><div class="walker walker--sprite" aria-hidden="true" style="--frames:2;--ratio:0.5550"><span class="walker__sprite"></span></div><!-- /art:walker -->
   </div>
 
-  <main class="desk">
-    <article class="letter">
-      <nav class="tabs" data-i18n-aria="tabs.label" aria-label="Sections">
-        <ul class="tabs__list" role="list">
-          <li><a class="tab tab--1" href="#about" data-i18n="tab.about">About</a></li>
-          <li><a class="tab tab--2" href="#tech" data-i18n="tab.tech">Tech</a></li>
-          <li><a class="tab tab--3" href="#projects" data-i18n="tab.projects">Projects</a></li>
-          <li><a class="tab tab--4" href="#activities" data-i18n="tab.activities">Activities</a></li>
-          <li><a class="tab tab--5" href="#certifications" data-i18n="tab.certs">Certs</a></li>
-        </ul>
-      </nav>
-
-      <section class="fold is-open" id="hero" aria-labelledby="hero-name">
-        <div class="sheet">
-          <div class="sheet__content hero">
-            <figure class="polaroid">
-              <img class="polaroid__photo" src="assets/profile.jpeg" alt="Seoyul Yoon" width="160" height="160" />
-              <figcaption class="polaroid__cap" data-i18n="polaroid.cap">Seoyul</figcaption>
-            </figure>
-            <div class="hero__text">
-              <h1 class="hero__name" id="hero-name" tabindex="-1" data-i18n="hero.name">Seoyul Yoon</h1>
-              <p class="hero__role"><span data-i18n="hero.role">AI Platform Engineer</span> @ SK AX</p>
-              <p class="hero__tagline" data-i18n="hero.tagline">A platform engineer who learns from the community and proves it in production.</p>
-              <div class="socials">
-                <a class="social" href="https://github.com/Seo-yul" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12Z"/></svg>
-                </a>
-                <a class="social" href="https://www.linkedin.com/in/yoon-seoyul/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-                </a>
-                <a class="social" href="mailto:seoyul@devops.ai.kr" aria-label="Email">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,7 12,13 2,7"/></svg>
-                </a>
-              </div>
-            </div>
-            <div class="postmark" aria-hidden="true">
-              <span class="postmark__text postmark__text--light">SEOUL<br />· 2026 ·<br />KOREA</span>
-              <span class="postmark__text postmark__text--space">SEOUL<br />✦ 2026 ✦<br />ORBIT</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="fold" id="about" aria-labelledby="about-title">
-        <div class="sheet">
-          <div class="sheet__content">
-            <aside class="postit"><p data-i18n="quote.main">I don't just modernize systems — I build the culture around it.</p></aside>
-            <h2 class="panel-label" id="about-title" data-i18n="about.title">About</h2>
-            <p class="prose" data-i18n="about.p1">AI Platform Engineer with deep roots in the Kubernetes ecosystem, infrastructure automation, and observability. I design and build platforms for developing, deploying, and operating AI agents and workloads reliably in production.</p>
-            <p class="prose" data-i18n="about.p2">These days I'm active in the open-source agentic AI community, helping bridge the gap between cutting-edge technology and practical enterprise adoption. I believe the best infrastructure is the kind nobody has to think about.</p>
-            <p class="prose" data-i18n="about.p3">At work, I drive enterprise AX (AI Transformation): running AI workloads effectively on cloud-native infrastructure and leading AI adoption across organizations.</p>
-          </div>
-        </div>
-      </section>
-
-      <section class="fold" id="tech" aria-labelledby="tech-title">
-        <div class="sheet">
-          <div class="sheet__content">
-            <h2 class="panel-label" id="tech-title" data-i18n="tech.title">Tech Stack</h2>
-            <dl class="tech">
-              <div class="tech__row"><dt data-i18n="tech.cat1">Languages &amp; Frameworks</dt><dd><span class="chip">Go</span><span class="chip">Operator SDK</span><span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">LangGraph</span><span class="chip">Java</span></dd></div>
-              <div class="tech__row"><dt data-i18n="tech.cat2">Container &amp; Orchestration</dt><dd><span class="chip">Kubernetes</span><span class="chip">Podman</span><span class="chip">Helm</span></dd></div>
-              <div class="tech__row"><dt data-i18n="tech.cat3">Observability</dt><dd><span class="chip">Fluent Bit</span><span class="chip">OpenTelemetry</span><span class="chip">Prometheus</span><span class="chip">Grafana</span><span class="chip">Datadog</span></dd></div>
-              <div class="tech__row"><dt data-i18n="tech.cat4">Infrastructure as Code</dt><dd><span class="chip">Terraform</span><span class="chip">Ansible</span></dd></div>
-              <div class="tech__row"><dt data-i18n="tech.cat5">CI / CD</dt><dd><span class="chip">GitHub Actions</span></dd></div>
-            </dl>
-          </div>
-        </div>
-      </section>
-
-      <section class="fold" id="projects" aria-labelledby="projects-title">
-        <div class="sheet">
-          <div class="sheet__content">
-            <h2 class="panel-label" id="projects-title" data-i18n="projects.title">Projects</h2>
-            <article class="project">
-              <h3 class="project__title">AXGENTICWire Core Agent Studio</h3>
-              <p class="project__period" data-i18n="project1.period">2025.05 — Present</p>
-              <p class="prose" data-i18n="project1.desc">Engineered MCP Server Builder enabling OpenAPI-to-MCP specification conversion. Streamlined AI agent development workflow for enterprise teams.</p>
-              <ul class="highlights" role="list">
-                <li data-i18n="project1.h1">Cut MCP server development per service from ~1 day to under 10 minutes with OpenAPI-based generation</li>
-                <li data-i18n="project1.h2">Automated daily system inspections through the final judgment step with an AI agent, cutting ~2 hours to under 10 minutes</li>
-                <li data-i18n="project1.h3">Designed OAuth authorization for MCP clients to block out-of-scope actions</li>
-                <li data-i18n="project1.h4">Expanded adoption to large-enterprise groupware and drove global business expansion</li>
-              </ul>
-              <ul class="project__tags" role="list"><li class="chip">FastAPI</li><li class="chip">Go Operator</li><li class="chip">MCP</li><li class="chip">AI Agent</li><li class="chip">Kubernetes</li></ul>
-              <div class="inks">
-                <div class="ink"><b class="ink__value">OpenAPI → MCP → AI Agent</b><small class="ink__label" data-i18n="project1.metric.label">AI Transformation</small></div>
-              </div>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section class="fold" id="project-apim" aria-labelledby="apim-title">
-        <div class="sheet">
-          <div class="sheet__content">
-            <article class="project">
-              <h3 class="project__title" id="apim-title">Modernization Platform APIM</h3>
-              <p class="project__period" data-i18n="project2.period">2021.01 — 2025.04</p>
-              <p class="prose" data-i18n="project2.desc">Architected and implemented Kubernetes-native API gateway management platform. Centralized API lifecycle management across multi-cluster environments.</p>
-              <ul class="highlights" role="list">
-                <li data-i18n="project2.h1">Improved event processing performance by 66%+ and cut latency from 500ms to 200ms by migrating Java to Go</li>
-                <li data-i18n="project2.h2">Resolved 3s+ latency and OOM by redesigning rate limiting from MariaDB to Redis</li>
-                <li data-i18n="project2.h3">Validated platform reliability at 2,000 RPS sustained for 8 hours with a custom load-testing tool</li>
-                <li data-i18n="project2.h4">Reduced AWS EKS cloud costs by 10%+ with ARM-based architecture and autoscaling</li>
-              </ul>
-              <ul class="project__tags" role="list"><li class="chip">Kubernetes</li><li class="chip">API Gateway</li><li class="chip">Platform Engineering</li></ul>
-              <div class="inks">
-                <div class="ink"><b class="ink__value">3d → 1d</b><small class="ink__label" data-i18n="project2.m1.label">Delivery Time</small></div>
-                <div class="ink"><b class="ink__value">60%</b><small class="ink__label" data-i18n="project2.m2.label">Build time reduced</small></div>
-                <div class="ink"><b class="ink__value">500 → 200ms</b><small class="ink__label" data-i18n="project2.m3.label">Event latency</small></div>
-              </div>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section class="fold" id="activities" aria-labelledby="activities-title">
-        <div class="sheet">
-          <div class="sheet__content">
-            <h2 class="panel-label" id="activities-title" data-i18n="activities.title">Activities</h2>
-            <ul class="nametags" role="list">
-              <li><button class="obj nametag nametag--speaker" type="button" aria-haspopup="dialog" data-kicker="obj.mcp.kicker" data-title="obj.mcp.title" data-meta="obj.mcp.meta" data-desc="obj.mcp.desc"><span class="nametag__role" data-i18n="obj.mcp.kicker">SPEAKER</span><span class="nametag__name" data-i18n="obj.mcp.title">MCP Dev Summit Seoul</span><span class="nametag__date" data-i18n="obj.mcp.meta">Aug 2026</span></button></li>
-              <li><button class="obj nametag nametag--organizer" type="button" aria-haspopup="dialog" data-kicker="obj.aaif.kicker" data-title="obj.aaif.title" data-meta="obj.aaif.meta" data-desc="obj.aaif.desc"><span class="nametag__role" data-i18n="obj.aaif.kicker">ORGANIZER</span><span class="nametag__name" data-i18n="obj.aaif.title">AAIF Seoul Chapter</span><span class="nametag__date" data-i18n="obj.aaif.meta">2026–Present</span></button></li>
-              <li><button class="obj nametag nametag--member" type="button" aria-haspopup="dialog" data-kicker="obj.k8s.kicker" data-title="obj.k8s.title" data-meta="obj.k8s.meta" data-desc="obj.k8s.desc"><span class="nametag__role" data-i18n="obj.k8s.kicker">MEMBER</span><span class="nametag__name" data-i18n="obj.k8s.title">Kubernetes Organization</span><span class="nametag__date" data-i18n="obj.k8s.meta">Sep 2022–Jul 2025</span></button></li>
-              <li><button class="obj nametag nametag--ambassador" type="button" aria-haspopup="dialog" data-kicker="obj.ncp.kicker" data-title="obj.ncp.title" data-meta="obj.ncp.meta" data-desc="obj.ncp.desc"><span class="nametag__role" data-i18n="obj.ncp.kicker">AMBASSADOR</span><span class="nametag__name" data-i18n="obj.ncp.title">NAVER Cloud Platform Tech Ambassador</span><span class="nametag__date" data-i18n="obj.ncp.meta">Jun 2023–Feb 2026</span></button></li>
-              <li><button class="obj nametag nametag--organizer" type="button" aria-haspopup="dialog" data-kicker="obj.gophercon.kicker" data-title="obj.gophercon.title" data-meta="obj.gophercon.meta" data-desc="obj.gophercon.desc"><span class="nametag__role" data-i18n="obj.gophercon.kicker">ORGANIZER</span><span class="nametag__name" data-i18n="obj.gophercon.title">GopherCon Korea</span><span class="nametag__date" data-i18n="obj.gophercon.meta">2023, 2024</span></button></li>
-              <li><button class="obj nametag nametag--organizer" type="button" aria-haspopup="dialog" data-kicker="obj.kcd.kicker" data-title="obj.kcd.title" data-meta="obj.kcd.meta" data-desc="obj.kcd.desc" data-img="certi/KCD-Korea-2023-Organizer-72.png" data-img-alt="KCD Korea 2023 Organizer badge"><span class="nametag__role" data-i18n="obj.kcd.kicker">ORGANIZER</span><span class="nametag__name" data-i18n="obj.kcd.title">KCD Korea 2023</span><span class="nametag__date" data-i18n="obj.kcd.meta">2023</span></button></li>
-              <li><button class="obj nametag nametag--speaker" type="button" aria-haspopup="dialog" data-kicker="obj.datadog.kicker" data-title="obj.datadog.title" data-meta="obj.datadog.meta" data-desc="obj.datadog.desc"><span class="nametag__role" data-i18n="obj.datadog.kicker">SPEAKER</span><span class="nametag__name" data-i18n="obj.datadog.title">Datadog User Group Korea</span><span class="nametag__date" data-i18n="obj.datadog.meta">Feb 2025</span></button></li>
-              <li><button class="obj nametag nametag--speaker" type="button" aria-haspopup="dialog" data-kicker="obj.awskrug.kicker" data-title="obj.awskrug.title" data-meta="obj.awskrug.meta" data-desc="obj.awskrug.desc"><span class="nametag__role" data-i18n="obj.awskrug.kicker">SPEAKER</span><span class="nametag__name" data-i18n="obj.awskrug.title">AWS Korea User Group</span><span class="nametag__date" data-i18n="obj.awskrug.meta">Jun 2022</span></button></li>
-            </ul>
-            <h3 class="panel-label panel-label--sub" data-i18n="act.award">Award</h3>
-            <ul class="seals" role="list">
-              <li><button class="obj seal" type="button" aria-haspopup="dialog" data-kicker="obj.kind.award" data-title="obj.skms.title" data-meta="obj.skms.meta" data-desc="obj.skms.desc"><span class="seal__disc" aria-hidden="true">2025</span><span class="seal__name" data-i18n="obj.skms.title">SKMS Practice Award</span></button></li>
-              <li><button class="obj seal" type="button" aria-haspopup="dialog" data-kicker="obj.kind.award" data-title="obj.osca.title" data-meta="obj.osca.meta" data-desc="obj.osca.desc"><span class="seal__disc" aria-hidden="true">2022</span><span class="seal__name" data-i18n="obj.osca.title">Excellence Award</span></button></li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <section class="fold" id="certifications" aria-labelledby="certs-title">
-        <div class="sheet">
-          <div class="sheet__content">
-            <h2 class="panel-label" id="certs-title" data-i18n="certs.title">Certifications</h2>
-            <ul class="stamps" role="list">
-              <li><button class="obj stamp stamp--big" type="button" aria-haspopup="dialog" data-kicker="obj.kind.cert" data-title="obj.kubestronaut.title" data-meta="obj.kubestronaut.meta" data-desc="obj.kubestronaut.desc"><span class="stamp__in" style="--stamp:#326CE5"><img class="stamp__badge" src="certi/kubestronaut-stacked-white.svg" alt="" width="46" height="46" /><b class="stamp__code">Kubestronaut</b><small class="stamp__issuer">CNCF</small></span></button></li>
-              <li><button class="obj stamp" type="button" aria-haspopup="dialog" data-kicker="obj.kind.cert" data-title="obj.cks.title" data-meta="obj.cks.meta"><span class="stamp__in" style="--stamp:#2557B5"><img class="stamp__badge" src="certi/cks-white.svg" alt="" width="34" height="34" /><b class="stamp__code">CKS</b><small class="stamp__issuer">Kubernetes</small></span></button></li>
-              <li><button class="obj stamp" type="button" aria-haspopup="dialog" data-kicker="obj.kind.cert" data-title="obj.kcsa.title" data-meta="obj.kcsa.meta"><span class="stamp__in" style="--stamp:#2F5FC4"><img class="stamp__badge" src="certi/kcsa-white.svg" alt="" width="34" height="34" /><b class="stamp__code">KCSA</b><small class="stamp__issuer">Kubernetes</small></span></button></li>
-              <li><button class="obj stamp" type="button" aria-haspopup="dialog" data-kicker="obj.kind.cert" data-title="obj.kcna.title" data-meta="obj.kcna.meta"><span class="stamp__in" style="--stamp:#2B66D1"><img class="stamp__badge" src="certi/kcna-white.svg" alt="" width="34" height="34" /><b class="stamp__code">KCNA</b><small class="stamp__issuer">Kubernetes</small></span></button></li>
-              <li><button class="obj stamp" type="button" aria-haspopup="dialog" data-kicker="obj.kind.cert" data-title="obj.ckad.title" data-meta="obj.ckad.meta"><span class="stamp__in" style="--stamp:#1E4FA8"><img class="stamp__badge" src="certi/ckad-white.svg" alt="" width="34" height="34" /><b class="stamp__code">CKAD</b><small class="stamp__issuer">Kubernetes</small></span></button></li>
-              <li><button class="obj stamp" type="button" aria-haspopup="dialog" data-kicker="obj.kind.cert" data-title="obj.cka.title" data-meta="obj.cka.meta"><span class="stamp__in" style="--stamp:#2557B5"><img class="stamp__badge" src="certi/cka-white.svg" alt="" width="34" height="34" /><b class="stamp__code">CKA</b><small class="stamp__issuer">Kubernetes</small></span></button></li>
-              <li><button class="obj stamp" type="button" aria-haspopup="dialog" data-kicker="obj.kind.cert" data-title="obj.dea.title" data-meta="obj.dea.meta"><span class="stamp__in" style="--stamp:#A94F2F"><b class="stamp__code">DEA</b><small class="stamp__issuer">AWS</small></span></button></li>
-              <li><button class="obj stamp" type="button" aria-haspopup="dialog" data-kicker="obj.kind.cert" data-title="obj.soa.title" data-meta="obj.soa.meta"><span class="stamp__in" style="--stamp:#9A4728"><b class="stamp__code">SOA</b><small class="stamp__issuer">AWS</small></span></button></li>
-              <li><button class="obj stamp" type="button" aria-haspopup="dialog" data-kicker="obj.kind.cert" data-title="obj.dva.title" data-meta="obj.dva.meta"><span class="stamp__in" style="--stamp:#8C4526"><b class="stamp__code">DVA</b><small class="stamp__issuer">AWS</small></span></button></li>
-              <li><button class="obj stamp" type="button" aria-haspopup="dialog" data-kicker="obj.kind.cert" data-title="obj.saa.title" data-meta="obj.saa.meta"><span class="stamp__in" style="--stamp:#7E3E22"><b class="stamp__code">SAA</b><small class="stamp__issuer">AWS</small></span></button></li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <section class="fold" id="closing" aria-labelledby="closing-sign">
-        <div class="sheet">
-          <div class="sheet__content closing">
-            <p class="closing__quote" data-i18n="footer.quote">“AI runs on infrastructure, but transformation runs on people. Open-source communities taught me that the best technology is built together.”</p>
-            <p class="closing__sign" id="closing-sign" data-i18n="closing.sign">Sincerely, Seoyul</p>
-            <p class="closing__ps"><span data-i18n="closing.ps">P.S. Always happy to chat —</span> <a href="mailto:seoyul@devops.ai.kr">seoyul@devops.ai.kr</a></p>
-            <div class="socials socials--small">
-              <a class="social" href="https://github.com/Seo-yul" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12Z"/></svg>
-              </a>
-              <a class="social" href="https://www.linkedin.com/in/yoon-seoyul/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-    </article>
+  <footer class="footer">
     <p class="copyright" data-i18n="footer.copy">© 2026 Seoyul Yoon</p>
-  </main>
+  </footer>
 
   <dialog id="obj-dialog" class="obj-dialog" aria-labelledby="obj-dialog-title">
     <div class="obj-dim"></div>
@@ -284,12 +254,13 @@
     </div>
   </dialog>
 
+  <!-- art:lamp --><template id="lamp-tpl"><svg class="lamp-post" viewBox="-14 -52 28 54" aria-hidden="true" focusable="false"><circle class="lamp-glow ns" cx="0" cy="-37" r="13"/><path class="dark-l" d="M-1.3 0L-1.3 -33L1.3 -33L1.3 0Z"/><rect class="lamp" x="-4" y="-42" width="8" height="9" rx="2.5"/><path class="dark-t" d="M-5.5 -42L5.5 -42L0 -46Z"/></svg></template><!-- /art:lamp -->
+
   <script defer src="js/i18n.js"></script>
   <script defer src="js/theme.js"></script>
-  <script defer src="js/fold.js"></script>
-  <script defer src="js/tabs.js"></script>
+  <script defer src="js/nav.js"></script>
   <script defer src="js/objects.js"></script>
-  <script defer src="js/intro.js"></script>
+  <script defer src="js/town.js"></script>
   <script defer src="js/main.js"></script>
 </body>
 </html>
